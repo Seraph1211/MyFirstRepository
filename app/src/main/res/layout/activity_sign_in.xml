@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F4F4"
+    tools:context=".bottomnavigation.home.sign.SignInActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_background_blue"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <ImageButton
+            android:id="@+id/buttonSignInBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/back_white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="每日签到"
+            android:textColor="#FFFFFF"
+            android:textSize="25sp" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:id="@+id/linearlayout1"
+        android:layout_width="match_parent"
+        android:layout_height="152dp"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:background="@drawable/shape_background_blue"
+        android:orientation="vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout1"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/shape_shadow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="34dp"
+            android:text=" 我的积分 "
+            android:textColor="#ACA8A8"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textAvailableCredits"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="36dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:text="2000"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <Button
+            android:id="@+id/buttonSignIn"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="169dp"
+            android:layout_marginLeft="169dp"
+            android:layout_marginEnd="9dp"
+            android:layout_marginRight="9dp"
+            android:background="@drawable/shape_corner_orange"
+            android:text="立即签到"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/buttonToStore"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/buttonToStore"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:background="@drawable/shape_corner_blue"
+            android:text="积分商城"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBaseline_toBaselineOf="@+id/buttonSignIn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/buttonSignIn" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="0dp"
+        android:layout_height="160dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/shape_shadow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/constraintLayout1"
+        app:layout_constraintVertical_bias="0.09">
+
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="已连续签到  "
+            android:textColor="@android:color/black"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textSignInNumber"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:text="3天"
+            android:textColor="#3F59E2"
+            android:textSize="22sp"
+            app:layout_constraintStart_toEndOf="@id/text1"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="98dp"
+            tools:layout_editor_absoluteY="5dp" />
+
+        <TextView
+            android:id="@+id/text3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="提示信息:巴拉巴拉巴拉巴拉"
+            android:textSize="10sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text1"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="35dp" />
+
+        <ImageView
+            android:id="@+id/imageCheck1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="13dp"
+            android:background="@drawable/check_gray"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text3"
+            tools:layout_editor_absoluteX="4dp"
+            tools:layout_editor_absoluteY="65dp" />
+
+        <ImageView
+            android:id="@+id/imageCheck2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="7dp"
+            android:background="@drawable/check_gray"
+            app:layout_constraintStart_toEndOf="@id/imageCheck1"
+            app:layout_constraintTop_toBottomOf="@id/text3"
+            tools:layout_editor_absoluteX="51dp"
+            tools:layout_editor_absoluteY="65dp" />
+
+        <ImageView
+            android:id="@+id/imageCheck3"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="7dp"
+            android:background="@drawable/check_gray"
+            app:layout_constraintStart_toEndOf="@id/imageCheck2"
+            app:layout_constraintTop_toBottomOf="@id/text3"
+            tools:layout_editor_absoluteX="101dp"
+            tools:layout_editor_absoluteY="65dp" />
+
+        <ImageView
+            android:id="@+id/imageCheck4"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="7dp"
+            android:background="@drawable/check_gray"
+            app:layout_constraintStart_toEndOf="@id/imageCheck3"
+            app:layout_constraintTop_toBottomOf="@id/text3"
+            tools:layout_editor_absoluteX="146dp"
+            tools:layout_editor_absoluteY="65dp" />
+
+        <ImageView
+            android:id="@+id/imageCheck5"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="7dp"
+            android:background="@drawable/check_gray"
+            app:layout_constraintStart_toEndOf="@id/imageCheck4"
+            app:layout_constraintTop_toBottomOf="@id/text3"
+            tools:layout_editor_absoluteX="205dp"
+            tools:layout_editor_absoluteY="65dp" />
+
+        <ImageView
+            android:id="@+id/imageCheck6"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="7dp"
+            android:background="@drawable/check_gray"
+            app:layout_constraintStart_toEndOf="@id/imageCheck5"
+            app:layout_constraintTop_toBottomOf="@id/text3"
+            tools:layout_editor_absoluteX="264dp"
+            tools:layout_editor_absoluteY="65dp" />
+
+        <ImageView
+            android:id="@+id/imageCheck7"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="7dp"
+            android:background="@drawable/check_gray"
+            app:layout_constraintStart_toEndOf="@id/imageCheck6"
+            app:layout_constraintTop_toBottomOf="@id/text3"
+            tools:layout_editor_absoluteX="316dp"
+            tools:layout_editor_absoluteY="65dp" />
+
+        <TextView
+            android:layout_width="42dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="12dp"
+            android:text="第1天"
+            android:textColor="@android:color/darker_gray"
+            app:layout_constraintTop_toBottomOf="@+id/imageCheck1"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <TextView
+            android:layout_width="42dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:textColor="@android:color/darker_gray"
+            android:text="第2天"
+            app:layout_constraintLeft_toLeftOf="@+id/imageCheck2"
+            app:layout_constraintTop_toBottomOf="@+id/imageCheck1" />
+
+        <TextView
+            android:layout_width="42dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:textColor="@android:color/darker_gray"
+            android:text="第3天"
+            app:layout_constraintLeft_toLeftOf="@+id/imageCheck3"
+            app:layout_constraintTop_toBottomOf="@+id/imageCheck1" />
+
+        <TextView
+            android:layout_width="42dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:textColor="@android:color/darker_gray"
+            android:text="第4天"
+            app:layout_constraintLeft_toLeftOf="@+id/imageCheck4"
+            app:layout_constraintTop_toBottomOf="@+id/imageCheck1" />
+
+        <TextView
+            android:layout_width="42dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:textColor="@android:color/darker_gray"
+            android:text="第5天"
+            app:layout_constraintLeft_toLeftOf="@+id/imageCheck5"
+            app:layout_constraintTop_toBottomOf="@+id/imageCheck1" />
+
+        <TextView
+            android:id="@+id/text9"
+            android:layout_width="42dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:textColor="@android:color/darker_gray"
+            android:text="第6天"
+            app:layout_constraintLeft_toLeftOf="@+id/imageCheck6"
+            app:layout_constraintTop_toBottomOf="@+id/imageCheck1" />
+
+        <TextView
+            android:layout_width="42dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:textColor="@android:color/darker_gray"
+            android:text="第3天"
+            app:layout_constraintLeft_toLeftOf="@+id/imageCheck7"
+            app:layout_constraintTop_toBottomOf="@+id/imageCheck1" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout3"
+        android:layout_width="0dp"
+        android:layout_height="230dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/shape_shadow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/constraintLayout1"
+        app:layout_constraintVertical_bias="0.858">
+
+        <TextView
+            android:text="签 到 规 则"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="190dp"
+            android:textColor="@android:color/darker_gray"
+            android:padding="10dp"
+            android:textSize="10sp"
+            android:text="         二月二，龙抬头。暮色里，小镇名叫泥瓶巷的僻静地方，有位孤苦伶仃的清瘦少年，此时他正按照习俗，一手持蜡烛，一手持桃枝，照耀房梁、墙壁、木床等处，用桃枝敲敲打打，试图借此驱赶蛇蝎、蜈蚣等，嘴里念念有词，是这座小镇祖祖辈辈传下来的老话：二月二，烛照梁，桃打墙，人间蛇虫无处藏。
+少年姓陈，名平安，爹娘早逝。小镇的瓷器极负盛名，本朝开国以来，就担当起“奉诏监烧献陵祭器”的重任，有朝廷官员常年驻扎此地，监理官窑事务。无依无靠的少年，很早就当起了烧瓷的窑匠，起先只能做些杂事粗活，跟着一个脾气糟糕的半路师傅，辛苦熬了几年，刚刚琢磨到一点烧瓷的门道，结果世事无常，小镇突然失去了官窑造办这张护身符，小镇周边数十座形若卧龙的窑炉，一夜之间全部被官府勒令关闭熄火。
+  陈平安放下新折的那根桃枝，吹灭蜡烛，走出屋子后，坐在台阶上，仰头望去，星空璀璨。"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+    </android.support.constraint.ConstraintLayout>
+
+
+</android.support.constraint.ConstraintLayout>
