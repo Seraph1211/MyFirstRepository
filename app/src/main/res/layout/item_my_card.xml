@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:layout_margin="5dp"
+    android:orientation="horizontal"
+    android:background="@drawable/shape_shadow">
+
+    <TextView
+        android:id="@+id/textCardValue"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="Value"
+        android:textColor="#F44336"
+        android:gravity="center"
+        android:textSize="25sp"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:id="@+id/textCardName"
+            android:gravity="center|left"
+            android:textColor="#0A0A0A"
+            android:text="三花聚顶红包"
+            android:layout_marginLeft="5dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:id="@+id/textCardMerchant"
+            android:text="仅限吕小布的小蛋糕店使用"
+            android:gravity="center|left"
+            android:textColor="#888886"
+            android:layout_marginLeft="5dp"
+            android:textSize="8dp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:id="@+id/textCardExpirationTime"
+            android:text="2020-10-1过期"
+            android:gravity="center|left"
+            android:textColor="#888886"
+            android:layout_marginLeft="5dp"
+            android:textSize="8dp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:id="@+id/textCardSill"
+            android:text="满30元可用"
+            android:gravity="center|left"
+            android:textColor="#888886"
+            android:layout_marginLeft="5dp"
+            android:textSize="8dp"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginRight="5dp"
+        android:layout_weight="1">
+
+        <Button
+            android:id="@+id/buttonUseCard"
+            android:text="立 即 使 用"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@drawable/shape_button_red"
+            android:textColor="#ffffff"
+            android:layout_marginLeft="3dp"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>
