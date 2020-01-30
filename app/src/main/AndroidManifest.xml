@@ -12,8 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".bottomnavigation.userinfo.cardpackage.CardPackageActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        <activity android:name=".bottomnavigation.userinfo.merchant.MerchantActivity"></activity>
+        <activity android:name=".bottomnavigation.userinfo.team.TeamActivity" />
+        <activity
+            android:name=".bottomnavigation.userinfo.cardpackage.CardPackageActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".bottomnavigation.home.store.CommodityInfoActivity" />
         <activity android:name=".bottomnavigation.home.sign.SignInActivity" />
         <activity

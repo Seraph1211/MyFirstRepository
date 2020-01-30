@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="340dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:background="@drawable/shape_gray_stroke">
+
+                <ImageView
+                    android:padding="10dp"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/account"/>
+
+                <EditText
+                    android:id="@+id/editMerchantName"
+                    android:hint="商户名"
+                    android:paddingLeft="20dp"
+                    android:textSize="25sp"
+                    android:background="@drawable/shape_gray_stroke"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="340dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:background="@drawable/shape_gray_stroke">
+
+                <ImageView
+                    android:padding="17dp"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/password"/>
+
+                <EditText
+                    android:id="@+id/editMerchantPassword1"
+                    android:hint="密码"
+                    android:inputType="textPassword"
+                    android:paddingLeft="20dp"
+                    android:textSize="25sp"
+                    android:background="@drawable/shape_gray_stroke"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="340dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:background="@drawable/shape_gray_stroke">
+
+                <ImageView
+                    android:padding="17dp"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/password"/>
+
+                <EditText
+                    android:id="@+id/editMerchantPassword2"
+                    android:hint="确认密码"
+                    android:inputType="textPassword"
+                    android:paddingLeft="20dp"
+                    android:textSize="25sp"
+                    android:background="@drawable/shape_gray_stroke"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="340dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:background="@drawable/shape_gray_stroke">
+
+                <ImageView
+                    android:padding="17dp"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/phone"/>
+
+                <EditText
+                    android:id="@+id/editMerchantPhoneNumber"
+                    android:hint="联系电话"
+                    android:paddingLeft="20dp"
+                    android:textSize="25sp"
+                    android:background="@drawable/shape_gray_stroke"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="340dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:background="@drawable/shape_gray_stroke">
+
+                <ImageView
+                    android:padding="15dp"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/email"/>
+
+                <EditText
+                    android:id="@+id/editMerchantEmail"
+                    android:hint="电子邮箱"
+                    android:paddingLeft="20dp"
+                    android:textSize="25sp"
+                    android:background="@drawable/shape_gray_stroke"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="340dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:background="@drawable/shape_gray_stroke">
+
+                <ImageView
+                    android:padding="15dp"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/address"/>
+
+                <EditText
+                    android:id="@+id/editMerchantAddress"
+                    android:hint="联系地址"
+                    android:paddingLeft="20dp"
+                    android:textSize="25sp"
+                    android:background="@drawable/shape_gray_stroke"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="340dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:background="@drawable/shape_gray_stroke">
+
+                <ImageView
+                    android:padding="15dp"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/introduce"/>
+
+                <EditText
+                    android:id="@+id/editMerchantIntroduce"
+                    android:hint="商家简介"
+                    android:paddingLeft="20dp"
+                    android:textSize="25sp"
+                    android:background="@drawable/shape_gray_stroke"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/editSecurityCodeRegister"
+                    android:paddingLeft="20dp"
+                    android:textSize="25sp"
+                    android:hint="验证码"
+                    android:layout_width="200dp"
+                    android:layout_height="60dp"
+                    android:background="@drawable/shape_gray_stroke"/>
+
+                <ImageView
+                    android:id="@+id/imageSecurityCodeRegister"
+                    android:layout_width="160dp"
+                    android:layout_height="80dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@android:color/holo_orange_light"/>
+
+            </LinearLayout>
+
+            <Button
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/buttonRegisterMerchant"
+                android:layout_width="240dp"
+                android:layout_height="80dp"
+                android:text="注 册"
+                android:textSize="25sp"/>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

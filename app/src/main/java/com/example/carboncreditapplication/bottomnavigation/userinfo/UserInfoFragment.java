@@ -20,7 +20,9 @@ import com.bumptech.glide.Glide;
 import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.beans.CarbonCreditsInfoBean;
 import com.example.carboncreditapplication.beans.UserInfoBean;
+import com.example.carboncreditapplication.bottomnavigation.BottomNavigationActivity;
 import com.example.carboncreditapplication.bottomnavigation.userinfo.cardpackage.CardPackageActivity;
+import com.example.carboncreditapplication.bottomnavigation.userinfo.team.TeamActivity;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.google.gson.Gson;
 
@@ -48,10 +50,9 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
     private ImageView imageJumpToCallUs;  //联系方式入口
 
 
+
     private UserInfoBean userInfoBean;
     private CarbonCreditsInfoBean carbonCreditsInfoBean;
-
-
 
 
     @Nullable
@@ -185,7 +186,10 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
                 Toast.makeText(view.getContext(), "Merchant In !", Toast.LENGTH_SHORT).show();
                 break;
             }
-
+            case R.id.imageJumpToTeam:{
+                Toast.makeText(view.getContext(), "Team !", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getContext(), TeamActivity.class));
+            }
             default:break;
         }
     }

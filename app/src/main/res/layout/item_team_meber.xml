@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:orientation="horizontal"
+    >
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageMemberHeadPortrait"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/girl"
+        android:layout_gravity="center"
+        android:padding="12dp"
+        />
+
+    <TextView
+        android:id="@+id/textMemberName"
+        android:gravity="center|left"
+        android:paddingLeft="10dp"
+        android:text="看书"
+        android:textColor="@android:color/black"
+        android:maxLines="1"
+        android:layout_width="222dp"
+        android:textSize="16dp"
+        android:layout_height="match_parent"
+        />
+
+    <Button
+        android:id="@+id/buttonSendCredits"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:text="赠送积分"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/shape_button_orange"
+        android:textColor="#ffffff"/>
+
+</LinearLayout>
