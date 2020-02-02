@@ -39,7 +39,7 @@ public class GameFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_game, container, false);
         imageView = view.findViewById(R.id.imageView2);
-        queryCommodityInfoTestDrive(view);
+        //queryCommodityInfoTestDrive(view);
 
         return view;
     }
@@ -71,7 +71,7 @@ public class GameFragment extends Fragment {
                     @Override
                     public void run() {
                         Glide.with(GameFragment.this)
-                                .load(commodityBean.getCommodityResultBean().getCommodityPicture())
+                                .load("https://i0.hdslb.com/bfs/archive/1ca6eb4bb8a7f9103e22a5820c827e3718259bce.jpg@1100w_484h_1c_100q.jpg")
                                 .error(R.drawable.error)
                                 .placeholder(R.drawable.img3)
                                 .into(imageView);

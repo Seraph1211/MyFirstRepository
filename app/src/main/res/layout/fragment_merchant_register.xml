@@ -15,7 +15,7 @@
 
             <LinearLayout
                 android:layout_width="340dp"
-                android:layout_height="80dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="20dp"
                 android:layout_gravity="center_horizontal"
                 android:orientation="horizontal"
@@ -23,7 +23,7 @@
 
                 <ImageView
                     android:padding="10dp"
-                    android:layout_width="80dp"
+                    android:layout_width="60dp"
                     android:layout_height="match_parent"
                     android:src="@drawable/account"/>
 
@@ -40,7 +40,7 @@
 
             <LinearLayout
                 android:layout_width="340dp"
-                android:layout_height="80dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="20dp"
                 android:layout_gravity="center_horizontal"
                 android:orientation="horizontal"
@@ -48,7 +48,7 @@
 
                 <ImageView
                     android:padding="17dp"
-                    android:layout_width="80dp"
+                    android:layout_width="60dp"
                     android:layout_height="match_parent"
                     android:src="@drawable/password"/>
 
@@ -66,7 +66,7 @@
 
             <LinearLayout
                 android:layout_width="340dp"
-                android:layout_height="80dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="20dp"
                 android:layout_gravity="center_horizontal"
                 android:orientation="horizontal"
@@ -74,7 +74,7 @@
 
                 <ImageView
                     android:padding="17dp"
-                    android:layout_width="80dp"
+                    android:layout_width="60dp"
                     android:layout_height="match_parent"
                     android:src="@drawable/password"/>
 
@@ -92,7 +92,7 @@
 
             <LinearLayout
                 android:layout_width="340dp"
-                android:layout_height="80dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="20dp"
                 android:layout_gravity="center_horizontal"
                 android:orientation="horizontal"
@@ -100,7 +100,7 @@
 
                 <ImageView
                     android:padding="17dp"
-                    android:layout_width="80dp"
+                    android:layout_width="60dp"
                     android:layout_height="match_parent"
                     android:src="@drawable/phone"/>
 
@@ -117,7 +117,7 @@
 
             <LinearLayout
                 android:layout_width="340dp"
-                android:layout_height="80dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="20dp"
                 android:layout_gravity="center_horizontal"
                 android:orientation="horizontal"
@@ -125,7 +125,7 @@
 
                 <ImageView
                     android:padding="15dp"
-                    android:layout_width="80dp"
+                    android:layout_width="60dp"
                     android:layout_height="match_parent"
                     android:src="@drawable/email"/>
 
@@ -142,7 +142,7 @@
 
             <LinearLayout
                 android:layout_width="340dp"
-                android:layout_height="80dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="20dp"
                 android:layout_gravity="center_horizontal"
                 android:orientation="horizontal"
@@ -150,7 +150,7 @@
 
                 <ImageView
                     android:padding="15dp"
-                    android:layout_width="80dp"
+                    android:layout_width="60dp"
                     android:layout_height="match_parent"
                     android:src="@drawable/address"/>
 
@@ -167,7 +167,7 @@
 
             <LinearLayout
                 android:layout_width="340dp"
-                android:layout_height="80dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="20dp"
                 android:layout_gravity="center_horizontal"
                 android:orientation="horizontal"
@@ -175,7 +175,7 @@
 
                 <ImageView
                     android:padding="15dp"
-                    android:layout_width="80dp"
+                    android:layout_width="60dp"
                     android:layout_height="match_parent"
                     android:src="@drawable/introduce"/>
 
@@ -191,27 +191,27 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="40dp"
                 android:layout_marginTop="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <EditText
-                    android:layout_gravity="center_vertical"
+                    android:layout_gravity="center_vertical|bottom"
                     android:id="@+id/editSecurityCodeRegister"
                     android:paddingLeft="20dp"
                     android:textSize="25sp"
                     android:hint="验证码"
-                    android:layout_width="200dp"
-                    android:layout_height="60dp"
+                    android:layout_width="160dp"
+                    android:layout_height="40dp"
                     android:background="@drawable/shape_gray_stroke"/>
 
                 <ImageView
                     android:id="@+id/imageSecurityCodeRegister"
-                    android:layout_width="160dp"
-                    android:layout_height="80dp"
-                    android:layout_marginLeft="10dp"
+                    android:layout_width="120dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="40dp"
                     android:src="@android:color/holo_orange_light"/>
 
             </LinearLayout>

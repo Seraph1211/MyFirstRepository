@@ -22,6 +22,7 @@ import com.example.carboncreditapplication.beans.CarbonCreditsInfoBean;
 import com.example.carboncreditapplication.beans.UserInfoBean;
 import com.example.carboncreditapplication.bottomnavigation.BottomNavigationActivity;
 import com.example.carboncreditapplication.bottomnavigation.userinfo.cardpackage.CardPackageActivity;
+import com.example.carboncreditapplication.bottomnavigation.userinfo.merchant.MerchantActivity;
 import com.example.carboncreditapplication.bottomnavigation.userinfo.team.TeamActivity;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.google.gson.Gson;
@@ -48,6 +49,7 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
     private ImageView imageJumpToMerchantIn;  //商家入口
     private ImageView imageJumpToHelpInfo;  //帮助信息入口
     private ImageView imageJumpToCallUs;  //联系方式入口
+    private ImageView imageJumpToTeam;  //队伍入口
 
 
 
@@ -147,6 +149,7 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
         imageJumpToCardPackage = view.findViewById(R.id.imageJumpToCardPackage);
         imageJumpToHelpInfo = view.findViewById(R.id.imageJumpToHelp);
         imageJumpToMerchantIn = view.findViewById(R.id.imageJumpToMerchant);
+        imageJumpToTeam = view.findViewById(R.id.imageJumpToTeam);
 
         //注册监听器
         buttonGetCredits.setOnClickListener(this);
@@ -154,6 +157,7 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
         imageJumpToHelpInfo.setOnClickListener(this);
         imageJumpToCardPackage.setOnClickListener(this);
         imageJumpToCallUs.setOnClickListener(this);
+        imageJumpToTeam.setOnClickListener(this);
 
         userInfoBean = new UserInfoBean();
         carbonCreditsInfoBean = new CarbonCreditsInfoBean();
@@ -184,6 +188,7 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
             }
             case R.id.imageJumpToMerchant:{
                 Toast.makeText(view.getContext(), "Merchant In !", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getContext(), MerchantActivity.class));
                 break;
             }
             case R.id.imageJumpToTeam:{

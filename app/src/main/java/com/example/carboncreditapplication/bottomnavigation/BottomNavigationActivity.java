@@ -45,7 +45,6 @@ public class BottomNavigationActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     setFragment(new HomeFragment());
-
                     Log.d(TAG,"onNavigationItemSelected: you clicked home");
                     return true;
                 case R.id.navigation_game:
@@ -118,7 +117,7 @@ public class BottomNavigationActivity extends AppCompatActivity {
 
     public void queryCommodityInfoTestDrive(){
 
-        HttpUtils.getInfo("http://121.36.4.52:8090/commodity/getCommodityList?page_no=1&page_size=10", new Callback() {
+        HttpUtils.getInfo("http://121.36.4.52:8090/good/getgoods?page_no=1&page_size=10&good_type=1", new Callback() {
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(Call call, IOException e) {
@@ -130,9 +129,15 @@ public class BottomNavigationActivity extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 Log.d(TAG, "onResponse: 请求成功！");
                 Log.d(TAG, "onResponse: "+response.body().string());
+
             }
         });
 
     }
 
 }
+
+/*
+ * 排行榜：{"result":[{"carbonCredits":1,"nickname":"小明","userImagePath":"https://i.loli.net/2020/01/16/q9HUiEuzDrCJLOZ.jpgs","userRank":1}],"status_code":"0000","status_msg":"处理成功"}
+ * 商品：{"result":[{"commodity_id":1,"commodity_introduce":"green home","commodity_name":"守护地球","commodity_picture":"https://i.loli.net/2020/01/16/q65HkVWYveuXQzP.jpg","commodity_price":1.0,"commodity_price_original":1000000.0,"discount":[{"sill":100,"type":1,"value":100}],"discount_useful":1}],"status_code":"0000","status_msg":"处理成功"}
+ */

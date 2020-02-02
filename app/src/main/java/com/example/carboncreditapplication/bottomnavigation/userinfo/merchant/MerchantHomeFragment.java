@@ -1,5 +1,6 @@
 package com.example.carboncreditapplication.bottomnavigation.userinfo.merchant;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,14 +13,17 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.carboncreditapplication.R;
+import com.example.carboncreditapplication.beans.MerchantBean;
 
 public class MerchantHomeFragment extends Fragment implements View.OnClickListener{
     View view;
+    private MerchantActivity activity;
     private ImageView imageMerchantHome;
     private ImageView imageMerchantScan;  //扫一扫
     private ImageView imageMerchantAddTicket;  //添加券
     private ImageView imageMerchantInfo;  //商家个人信息中心
     private RecyclerView recyclerAddedTickets;  //在首页展示的已添加的优惠券，目前不清楚要展示什么，暂时搁置
+    private MerchantBean bean = null;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -31,6 +35,8 @@ public class MerchantHomeFragment extends Fragment implements View.OnClickListen
     }
 
     public void initView(){
+        activity = (MerchantActivity) getActivity();
+
         imageMerchantHome = view.findViewById(R.id.imageMerchantHome);
         imageMerchantAddTicket = view.findViewById(R.id.imageMerchantAddCard);
         imageMerchantScan = view.findViewById(R.id.imageMerchantScan);
@@ -54,8 +60,11 @@ public class MerchantHomeFragment extends Fragment implements View.OnClickListen
             }
             case R.id.imageMerchantInfo:{
                 Toast.makeText(getContext(), "商家信息！", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getContext(), MerchantInfoActivity.class));
                 break;
             }
         }
     }
+
+
 }

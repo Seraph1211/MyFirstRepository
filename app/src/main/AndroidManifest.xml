@@ -13,6 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".bottomnavigation.userinfo.merchant.MerchantActivity"></activity>
+        <activity android:name=".bottomnavigation.userinfo.merchant.MerchantInfoActivity"/>
+        <activity android:name=".bottomnavigation.userinfo.merchant.SetMerchantInfoActivity"/>
         <activity android:name=".bottomnavigation.userinfo.team.TeamActivity" />
         <activity
             android:name=".bottomnavigation.userinfo.cardpackage.CardPackageActivity"
