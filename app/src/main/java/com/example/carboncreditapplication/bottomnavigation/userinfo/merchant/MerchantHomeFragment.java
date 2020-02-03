@@ -56,6 +56,7 @@ public class MerchantHomeFragment extends Fragment implements View.OnClickListen
             }
             case R.id.imageMerchantAddCard:{
                 Toast.makeText(getContext(), "添加优惠券！", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getContext(), AddGoodsActivity.class));
                 break;
             }
             case R.id.imageMerchantInfo:{

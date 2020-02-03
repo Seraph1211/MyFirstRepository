@@ -20,15 +20,15 @@ import okhttp3.Response;
 public class HttpUtils {
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static final String TAG = "HttpUtils";
-    public static String basicUrl = "http：//121.36.4.52:8090";
-    public static final String carbonCreditsInfoUrl = "http://121.36.4.52:8090/carbonCredits/getCreditsInfo?user_id=";
-    public static final String userInfoUrl = "http://121.36.4.52:8090/user/getUserInfo?user_id=";
-    public static final String monthlyReportInfoUrl = "http://121.36.4.52:8090/user/getMonthlyReport?user_id=1&city_id=3202";
-    public static final String userRankingInfoUrl = "http://121.36.4.52:8090/user/getUserRankingList?user_id=1&city_id=3202";
-    public static final String cardpackageUrl = "http://121.36.4.52:8090/user/getUserCoupon?user_id=1&page_no=1&page_size=10";
-    public static final String friendsInfoUrl = "http://121.36.4.52:8090/user/getFriendInfo?user_id=1";
-    public static final String teamInfoUrl = "http://121.36.4.52:8090/user/getTeamInfo?user_id=1";
-    public static final String commidityInfoUrl = "http://121.36.4.52:8090/commodity/getCommodityList?page_no=1&page_size=10";
+    public static String basicUrl = "http：//121.36.4.52:8090/carbon_credits_system";
+    public static final String carbonCreditsInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/carbonCredits/getCreditsInfo?user_id=";
+    public static final String userInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getUserInfo?user_id=";
+    public static final String monthlyReportInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getMonthlyReport?user_id=1&city_id=3202";
+    public static final String userRankingInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getUserRankingList?user_id=1&city_id=3202";
+    public static final String cardpackageUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getUserCoupon?user_id=1&page_no=1&page_size=10";
+    public static final String friendsInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/carbon_credits_system/user/getFriendInfo?user_id=1";
+    public static final String teamInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getTeamInfo?user_id=1";
+    public static final String commodityInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/good/getgoods?page_no=1&page_size=10&good_type=1";
 
     //private static final TAG = "HttpUtils";
     public static void postJson(){

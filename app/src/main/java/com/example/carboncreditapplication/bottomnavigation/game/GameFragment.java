@@ -39,14 +39,14 @@ public class GameFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_game, container, false);
         imageView = view.findViewById(R.id.imageView2);
-        //queryCommodityInfoTestDrive(view);
+        queryCommodityInfoTestDrive(view);
 
         return view;
     }
 
     public void queryCommodityInfoTestDrive(final View view){
 
-        HttpUtils.getInfo("http://121.36.4.52:8090/commodity/getCommodityList?page_no=1&page_size=10", new Callback() {
+        HttpUtils.getInfo("http://121.36.4.52:8090/carbon_credits_system/good/getGoods?page_no=1&page_size=5&good_type=2", new Callback() {
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(Call call, IOException e) {

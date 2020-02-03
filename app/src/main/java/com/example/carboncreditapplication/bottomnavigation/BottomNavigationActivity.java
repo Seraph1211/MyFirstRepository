@@ -50,7 +50,7 @@ public class BottomNavigationActivity extends AppCompatActivity {
                 case R.id.navigation_game:
                     setFragment(new GameFragment());
                     Log.d(TAG, "onNavigationItemSelected: you clicked game");
-                    queryCommodityInfoTestDrive();
+                    //queryCommodityInfoTestDrive();
                     return true;
                 case R.id.navigation_my_credits:
                     setFragment(new UserInfoFragment());
@@ -138,6 +138,8 @@ public class BottomNavigationActivity extends AppCompatActivity {
 }
 
 /*
- * 排行榜：{"result":[{"carbonCredits":1,"nickname":"小明","userImagePath":"https://i.loli.net/2020/01/16/q9HUiEuzDrCJLOZ.jpgs","userRank":1}],"status_code":"0000","status_msg":"处理成功"}
- * 商品：{"result":[{"commodity_id":1,"commodity_introduce":"green home","commodity_name":"守护地球","commodity_picture":"https://i.loli.net/2020/01/16/q65HkVWYveuXQzP.jpg","commodity_price":1.0,"commodity_price_original":1000000.0,"discount":[{"sill":100,"type":1,"value":100}],"discount_useful":1}],"status_code":"0000","status_msg":"处理成功"}
+ *
+ *  排行榜：{"result":[{"carbonCredits":1,"nickname":"小明","userImagePath":"https://i.loli.net/2020/01/16/q9HUiEuzDrCJLOZ.jpgs","userRank":1}],"status_code":"0000","status_msg":"处理成功"}
+ *  碳积分抵押型商品：{"result":{"commodity":[{"carbon_credits_need":12,"commodity_id":1,"commodity_introduce":"test2","commodity_name":"test2","commodity_picture":"122315","commodity_price":2,"commodity_price_original":1,"commodity_type":1,"remaining":20},{"carbon_credits_need":1,"commodity_id":2,"commodity_introduce":"test","commodity_name":"test","commodity_picture":"...","commodity_price":1,"commodity_price_original":1,"commodity_type":1,"remaining":1},{"carbon_credits_need":12,"commodity_id":3,"commodity_introduce":"test2","commodity_name":"test2","commodity_picture":"122315","commodity_price":2,"commodity_price_original":1,"commodity_type":0,"remaining":20}]},"msg_code":"0000","page_total":1,"msg_message":"处理成功"}
+ *
  */
