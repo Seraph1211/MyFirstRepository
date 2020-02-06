@@ -29,7 +29,10 @@ public class HttpUtils {
     public static final String friendsInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/carbon_credits_system/user/getFriendInfo?user_id=1";
     public static final String teamInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getTeamInfo?user_id=1";
     public static final String commodityInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/good/getGoods?page_no=1&page_size=10&good_type=1";
-    public static final String merchantHomeUrl = "http://121.36.4.52:8090/carbon_credits_system/Merchant/home";
+    public static final String merchantHomeUrl = "http://121.36.4.52:8090/carbon_credits_system/Merchant/home?userId=1";
+    public static final String emailSecurityCodeUrl = "http://121.36.4.52:8090/carbon_credits_system/Merchant/emailCode";
+    public static final String merchantSignUpUrl = "http://121.36.4.52:8090/carbon_credits_system/Merchant/signUp";
+    public static final String merchantLoginUrl = "http://121.36.4.52:8090/carbon_credits_system/Merchant/login";
 
     //private static final TAG = "HttpUtils";
     public static void postJson(){
@@ -84,6 +87,8 @@ public class HttpUtils {
         String JSONString = new Gson().toJson(map);
 
         RequestBody formBody = RequestBody.create(JSON, JSONString);
+
+        Log.d(TAG, "postMap: "+JSONString);
 
         Request request = new Request.Builder()
                 .url(address)

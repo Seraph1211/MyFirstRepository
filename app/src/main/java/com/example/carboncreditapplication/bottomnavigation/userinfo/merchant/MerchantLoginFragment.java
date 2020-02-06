@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +13,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.carboncreditapplication.R;
+import com.example.carboncreditapplication.utils.Base64Utils;
+import com.example.carboncreditapplication.utils.HttpUtils;
+import com.example.carboncreditapplication.utils.UserInfo;
+
+import java.io.IOException;
+import java.util.HashMap;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class MerchantLoginFragment extends Fragment {
+    private static final String TAG = "MerchantLogin";
     View view;
     private EditText editPasswordLogin;
     private EditText editSecurityCodeLogin;
@@ -22,20 +34,34 @@ public class MerchantLoginFragment extends Fragment {
 
     private String passwordLogin;
     private String securityCodeLogin;
+    private String base64Code;
+
+    MerchantActivity activity;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_merchant_login, container, false);
 
+        initView();
 
         return view;
     }
 
     //初始化各控件
     public void initView(){
+        activity = (MerchantActivity)getActivity();
+
         editPasswordLogin = view.findViewById(R.id.editMerchantPasswordLogin);
         editSecurityCodeLogin = view.findViewById(R.id.editSecurityCodeLogin);
         buttonMerchantLogin = view.findViewById(R.id.buttonLoginMerchant);
+        imageSecurityCodeLogin = view.findViewById(R.id.imageSecurityCodeLogin);
+
+        if(activity.getBase64Code()!=null){
+            base64Code = activity.getBase64Code();
+            Base64Utils.loadBase64Image(base64Code, imageSecurityCodeLogin);
+
+        }
+        Log.d(TAG, "initView: base64Code="+base64Code);
 
         /**
          * 注册监听事件
@@ -44,7 +70,8 @@ public class MerchantLoginFragment extends Fragment {
         buttonMerchantLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                getEditTextData();
+                postLoginInfo();
             }
         });
     }
@@ -55,9 +82,26 @@ public class MerchantLoginFragment extends Fragment {
         securityCodeLogin = editSecurityCodeLogin.getText().toString();
     }
 
-    //从服务端获取验证码图片的64base字符串，并转换成图片加载到image中, 异步
-    public void getSecurityCodeImage(){
+    public void postLoginInfo(){
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("userId", UserInfo.userId);
+        map.put("merchantPassword", passwordLogin);
+        map.put("imageCode", securityCodeLogin);
+        Log.d(TAG, "postLoginInfo: map:"+map.get("merchantPassword"));
+        HttpUtils.postMap(HttpUtils.merchantLoginUrl + "?rememberMe="+true, map, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d(TAG, "onFailure: ");
+            }
 
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseContent = response.body().string();
+                Log.d(TAG, "onResponse: responseContent="+responseContent);
+
+
+            }
+        });
     }
 
 }

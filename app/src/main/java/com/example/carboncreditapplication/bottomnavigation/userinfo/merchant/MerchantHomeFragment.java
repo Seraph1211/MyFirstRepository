@@ -21,6 +21,7 @@ import android.widget.VideoView;
 import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.beans.CouponResultBean;
 import com.example.carboncreditapplication.beans.MerchantBean;
+import com.example.carboncreditapplication.utils.Base64Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,8 @@ public class MerchantHomeFragment extends Fragment implements View.OnClickListen
 
         initView();
         initRecyclerView();
+
+        //Base64Utils.loadBase64Image("data:image/jpg;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAAAjCAIAAACmdes6AAABRUlEQVR42u3Yyw3CMAwGYEsMwBbswSAwBafeOHNg5FKEQFacOL8TN01RqhyqKJX8KQ+7obnXhyjf4h/uiIR+OP/dM0iDNEiDNEj9JqsWpMt0S7Xo+PvzkW3WisGNpGAUGBi6tWhoSkLiJupjLxWQ+CxZN0k7EqiVC09WqL2feDiJwxxIp+nMmxyRHeBF8lJRELROWnWWlEV4OF6XFoz8dMr+tUjIXsompXKSEnfZqtNTE5Jqg0UoQ/95qkg1J3uUhP+rp0hSu7yTMhsFU2SqHkw3EEHceVJ0QkwevMwzkaInIWfId1K2DU4qK1tx0jvQryrYQhpJqkCSyVNG4qroIuQvEMnRU0PiKpSUUlWWraZUq5M4TPajpPpK3J0kz3e+o7YkZbOtXiugJFM62paUpDrWqZ3eEBX/SnRHsp7dg9QBade3rS+1zQqnEpXIrwAAAABJRU5ErkJggg==", imageMerchantHome);
 
         return view;
     }
@@ -77,9 +80,6 @@ public class MerchantHomeFragment extends Fragment implements View.OnClickListen
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerAddedGoods.setLayoutManager(layoutManager);
         recyclerAddedGoods.setAdapter(goodsAdapter);
-        Log.d(TAG, "initRecyclerView: recyclerView="+recyclerAddedGoods.toString());
-        Log.d(TAG, "initRecyclerView: adapter="+goodsAdapter.toString());
-        Log.d(TAG, "initRecyclerView: recyclerView's adapter="+recyclerAddedGoods.getAdapter());
     }
 
     @Override

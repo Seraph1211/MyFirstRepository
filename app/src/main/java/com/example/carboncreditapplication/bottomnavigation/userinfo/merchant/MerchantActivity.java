@@ -1,6 +1,7 @@
 package com.example.carboncreditapplication.bottomnavigation.userinfo.merchant;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
@@ -16,11 +17,15 @@ import android.widget.Toast;
 
 import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.utils.HttpUtils;
+import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
+import com.example.carboncreditapplication.utils.UserInfo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ConcurrentModificationException;
+import java.util.HashMap;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -35,6 +40,7 @@ import okhttp3.Response;
 
 public class MerchantActivity extends AppCompatActivity {
 
+    private Context context = MerchantActivity.this;
     private static final String TAG = "MerchantActivity";
     private TextView textMerchant;
 
@@ -47,9 +53,8 @@ public class MerchantActivity extends AppCompatActivity {
 
         initView();
 
-        //queryMerchantInfo();
+        queryMerchantInfo();
 
-        setFragment(new MerchantHomeFragment());
 
     }
 
@@ -63,8 +68,17 @@ public class MerchantActivity extends AppCompatActivity {
      * 已注册但已超出登录时限：登录界面
      * 已注册且未超出登录时限：商家首页
      */
-    public void setFragment(){
-
+    public void setFragment(String result){
+        //根据服务器返回的结果来选择加载的碎片
+        if(!TextUtils.isEmpty(result)){
+            if(result.equals("未注册")){
+                setFragment(new MerchantRegisterFragment());
+            }else if(result.equals("已注册")){
+                setFragment(new MerchantLoginFragment());
+            }else{
+                setFragment(new MerchantHomeFragment());
+            }
+        }
     }
 
     public void setFragment(Fragment fragment){
@@ -74,12 +88,22 @@ public class MerchantActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    public TextView getTextMerchant() {
-        return textMerchant;
-    }
-
     public void queryMerchantInfo(){
-        HttpUtils.getInfo(HttpUtils.merchantHomeUrl, new Callback() {
+        HashMap<String, Object> map = new HashMap<>();
+        String token = MySharedPreferencesUtils.getString(MerchantActivity.this, "token");
+        if(token.equals("empty")){
+            //则新建一个token（为空）并用sp存起来
+            MySharedPreferencesUtils.putString(MerchantActivity.this, "token", "");
+        }
+        int userId = MySharedPreferencesUtils.getInt(context, "user_id");
+        if(userId==-1){
+            MySharedPreferencesUtils.putInt(context, "user_id", UserInfo.userId);
+        }
+
+        //map.put("user_id", userId);
+        map.put("token", token);
+
+        HttpUtils.postMap(HttpUtils.merchantHomeUrl, map, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.d(TAG, "onFailure: ");
@@ -87,66 +111,47 @@ public class MerchantActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.d(TAG, "onResponse: ");
                 String responseContent = response.body().string();
                 Log.d(TAG, "onResponse: responseContent="+responseContent);
 
                 String result = null;
-
                 //使用JSONObject解析服务器返回的json字符串
-                JSONObject jsonObject = new JSONObject();
-                try {
-                    result = jsonObject.getString("result");
-
-                    if(!result.equals("自动登陆成功")){
-                        base64Code = jsonObject.getString("image");
+                if (!TextUtils.isEmpty(responseContent)){
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseContent);
+                        result = jsonObject.getString("merchantResult");
+                        if(!TextUtils.isEmpty(result)){
+                            if(result.equals("已注册") || result.equals("未注册")){
+                                base64Code = jsonObject.getString("image");
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Log.d(TAG, "onResponse: 使用JSONObject解析数据时出错！");
+                        Toast.makeText(MerchantActivity.this, "从服务器获取数据失败!", Toast.LENGTH_SHORT).show();
                     }
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.d(TAG, "onResponse: 使用JSONObject解析数据时出错！");
-                    Toast.makeText(MerchantActivity.this, "从服务器获取数据失败!", Toast.LENGTH_SHORT).show();
+                    setFragment(result);
+                    //setFragment(new MerchantRegisterFragment());
+
+                }else {
+                    MerchantActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MerchantActivity.this, "访问网络数据失败，请重试", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
 
-                //根据服务器返回的结果来选择加载的碎片
-                if(!TextUtils.isEmpty(result)){
-                    if(result.equals("自动登陆成功")){
-                        setFragment(new MerchantHomeFragment());
-                    }else if(result.equals("已注册")){
-                        setFragment(new MerchantLoginFragment());
-                    }else if(result.equals("未注册")){
-                        setFragment(new MerchantRegisterFragment());
-                    }
-                }
 
 
             }
         });
     }
 
-    public String getToken(){
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MerchantActivity.this);
-        String tokenContent = preferences.getString("token", "empty");
-
-        if(tokenContent.equals("empty")){  //没有存储的token信息
-            //则新建一个token（为空）并用sp存起来
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString("token", "");
-            editor.apply();
-            return "";
-        }
-
-        return tokenContent;
+    public TextView getTextMerchant() {
+        return textMerchant;
     }
-
-    public void setToken(String tokenContent){
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MerchantActivity.this);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("token", tokenContent);
-        editor.apply();
-        Log.d(TAG, "setToken: "+preferences.getString("token", "Empty"));
-    }
-
     public String getBase64Code(){
         return base64Code;
     }

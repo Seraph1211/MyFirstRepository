@@ -66,8 +66,8 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
 
         initView();
 
-        queryCarbonCreditsInfo();
-        queryUserInfo();
+        //queryCarbonCreditsInfo();
+        //queryUserInfo();
 
         return view;
     }
