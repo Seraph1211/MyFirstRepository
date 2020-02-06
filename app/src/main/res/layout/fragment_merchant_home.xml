@@ -115,16 +115,12 @@
         android:paddingLeft="15dp"
         android:textSize="22sp"/>
 
-    <ScrollView
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewGoodsAdded"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerViewCardsAdded"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
-
-    </ScrollView>
 
 
 

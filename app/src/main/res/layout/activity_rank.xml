@@ -31,7 +31,8 @@
         android:layout_height="200dp"
         android:src="@drawable/img12"/>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="478dp"
         android:orientation="vertical">

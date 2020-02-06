@@ -3,20 +3,18 @@ package com.example.carboncreditapplication.beans;
 import java.util.List;
 
 /**
- * 商家首页(MerchantHomeFragment)，用于加载商家已发布的优惠券
+ * 卡包，展示用户已拥有的卡券
  */
-public class CouponResultBean {
+public class CardPackageBean {
 
     /**
-     * result : {"coupon":[{"coupon__type":1,"coupon_cost":32,"coupon_id":3,"coupon_name":"test3","expiration_time":1580801535000,"sill":20,"user_store_id":0,"user_type":1,"value":10}]}
+     * result : {"coupon_bag":[{"count":0,"coupon_cost":12,"coupon_id":1,"coupon_name":"test1","coupon_type":0,"sill":2,"user_store_id":0,"user_type":0,"value":10},{"count":0,"coupon_cost":10,"coupon_id":2,"coupon_name":"test2","coupon_type":0,"sill":5,"user_store_id":0,"user_type":0,"value":10}],"page_total":1}
      * msg_code : 0000
-     * page_total : 1
      * msg_message : 处理成功
      */
 
     private ResultBean result;
     private String msg_code;
-    private int page_total;
     private String msg_message;
 
     public ResultBean getResult() {
@@ -35,14 +33,6 @@ public class CouponResultBean {
         this.msg_code = msg_code;
     }
 
-    public int getPage_total() {
-        return page_total;
-    }
-
-    public void setPage_total(int page_total) {
-        this.page_total = page_total;
-    }
-
     public String getMsg_message() {
         return msg_message;
     }
@@ -52,45 +42,59 @@ public class CouponResultBean {
     }
 
     public static class ResultBean {
-        private List<CouponBean> coupon;
+        /**
+         * coupon_bag : [{"count":0,"coupon_cost":12,"coupon_id":1,"coupon_name":"test1","coupon_type":0,"sill":2,"user_store_id":0,"user_type":0,"value":10},{"count":0,"coupon_cost":10,"coupon_id":2,"coupon_name":"test2","coupon_type":0,"sill":5,"user_store_id":0,"user_type":0,"value":10}]
+         * page_total : 1
+         */
 
-        public List<CouponBean> getCoupon() {
-            return coupon;
+        private int page_total;
+        private List<CouponBagBean> coupon_bag;
+
+        public int getPage_total() {
+            return page_total;
         }
 
-        public void setCoupon(List<CouponBean> coupon) {
-            this.coupon = coupon;
+        public void setPage_total(int page_total) {
+            this.page_total = page_total;
         }
 
-        public static class CouponBean {
+        public List<CouponBagBean> getCoupon_bag() {
+            return coupon_bag;
+        }
+
+        public void setCoupon_bag(List<CouponBagBean> coupon_bag) {
+            this.coupon_bag = coupon_bag;
+        }
+
+        public static class CouponBagBean {
             /**
-             * coupon__type : 1
-             *              * coupon_cost : 32
-             *              * coupon_id : 3
-             *              * coupon_name : test3
-             *              * expiration_time : 1580801535000
-             *              * sill : 20
-             *              * user_store_id : 0
-             *              * user_type : 1
-             *              * value : 10
+             * count : 0
+             * coupon_cost : 12
+             * coupon_id : 1
+             * coupon_name : test1
+             * coupon_type : 0
+             * sill : 2
+             * user_store_id : 0
+             * user_type : 0
+             * value : 10
              */
 
-            private int coupon__type;
-            private int coupon_cost;
+            private int count;  //剩余数量
+            private int coupon_cost;  //所需积分
             private int coupon_id;
-            private String coupon_name;
-            private long expiration_time;
-            private int sill;
-            private int user_store_id;
-            private int user_type;
-            private int value;
+            private String coupon_name;  //名称
+            private int coupon_type;  //种类0~4
+            private int sill;  //门槛
+            private int user_store_id;  //对应的商店
+            private int user_type;  //
+            private int value;  //价值
 
-            public int getCoupon__type() {
-                return coupon__type;
+            public int getCount() {
+                return count;
             }
 
-            public void setCoupon__type(int coupon__type) {
-                this.coupon__type = coupon__type;
+            public void setCount(int count) {
+                this.count = count;
             }
 
             public int getCoupon_cost() {
@@ -117,12 +121,12 @@ public class CouponResultBean {
                 this.coupon_name = coupon_name;
             }
 
-            public long getExpiration_time() {
-                return expiration_time;
+            public int getCoupon_type() {
+                return coupon_type;
             }
 
-            public void setExpiration_time(long expiration_time) {
-                this.expiration_time = expiration_time;
+            public void setCoupon_type(int coupon_type) {
+                this.coupon_type = coupon_type;
             }
 
             public int getSill() {

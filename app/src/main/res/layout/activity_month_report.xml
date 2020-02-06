@@ -98,6 +98,7 @@
                         tools:layout_editor_absoluteY="95dp" />
 
                     <TextView
+                        android:id="@+id/textCarbonDioxideReductionLastMonth"
                         android:layout_width="119dp"
                         android:layout_height="82dp"
                         android:layout_gravity="bottom"
@@ -109,6 +110,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:id="@+id/textCarbonDioxideReductionThisMonth"
                         android:layout_width="125dp"
                         android:layout_height="86dp"
                         android:layout_gravity="bottom"
@@ -185,6 +187,7 @@
                         tools:layout_editor_absoluteY="95dp" />
 
                     <TextView
+                        android:id="@+id/textUserRankLastMonth"
                         android:layout_width="119dp"
                         android:layout_height="82dp"
                         android:layout_gravity="bottom"
@@ -196,6 +199,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:id="@+id/textUserRankThisMonth"
                         android:layout_width="125dp"
                         android:layout_height="86dp"
                         android:layout_gravity="bottom"
@@ -233,7 +237,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Title"
+                        android:text="出行情况对比"
                         android:textColor="#FFFFFF"
                         android:layout_marginLeft="10dp"
                         android:layout_gravity="center_vertical"
@@ -266,7 +270,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Title"
+                        android:text="本月出行情况"
                         android:textColor="#FFFFFF"
                         android:layout_marginLeft="10dp"
                         android:layout_gravity="center_vertical"

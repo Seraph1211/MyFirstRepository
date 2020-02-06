@@ -50,8 +50,9 @@
 
     <ImageView
         android:id="@+id/imageView5"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
         android:src="@drawable/rank_credit"
         app:layout_constraintStart_toEndOf="@id/text_ranking_credits"
         app:layout_constraintTop_toTopOf="parent" />

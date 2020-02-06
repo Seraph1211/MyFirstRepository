@@ -7,14 +7,25 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
 
 import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.bottomnavigation.BottomNavigationActivity;
+import com.example.carboncreditapplication.bottomnavigation.home.store.Store2Activity;
+import com.example.carboncreditapplication.utils.HttpUtils;
+import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class RankActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener{
+    private static final String TAG = "RankActivity";
     private TabLayout mTab;
     private FrameLayout mFrame;
 
@@ -27,7 +38,13 @@ public class RankActivity extends AppCompatActivity implements TabLayout.OnTabSe
         initTab();
         mTab.setOnTabSelectedListener(this);
 
+        queryRankInfo();
+
         setFragment(new TotalRankFragment());
+
+        Log.d(TAG, "onCreate: testKey4="+ MySharedPreferencesUtils.getInt(RankActivity.this, "testKey"));
+        MySharedPreferencesUtils.putInt(RankActivity.this, "testKey", 3);
+        Log.d(TAG, "onCreate: testKey5="+MySharedPreferencesUtils.getInt(RankActivity.this, "testKey"));
     }
 
     private void initView() {
@@ -47,8 +64,6 @@ public class RankActivity extends AppCompatActivity implements TabLayout.OnTabSe
         fragmentTransaction.replace(R.id.rank_frame, fragment);
         fragmentTransaction.commit();
     }
-
-
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
@@ -83,5 +98,23 @@ public class RankActivity extends AppCompatActivity implements TabLayout.OnTabSe
             }
 
         }
+    }
+
+    public void queryRankInfo(){
+        HttpUtils.getInfo(HttpUtils.userRankingInfoUrl, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d(TAG, "onFailure: ");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.d(TAG, "onResponse: ");
+                String responseContent = response.body().string();
+                Log.d(TAG, "onResponse: responseContent="+responseContent);
+
+
+            }
+        });
     }
 }

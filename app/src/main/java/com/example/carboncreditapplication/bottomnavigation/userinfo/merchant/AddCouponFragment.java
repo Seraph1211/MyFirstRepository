@@ -44,8 +44,9 @@ public class AddCouponFragment extends Fragment {
     private EditText editCouponValue;
     private TextView textCouponExpirationTime;
 
-    View view;
-    AddGoodsActivity activity;
+    private View view;
+    private AddGoodsActivity activity;
+    private Date date = new Date();
 
 
     @Override
@@ -69,7 +70,6 @@ public class AddCouponFragment extends Fragment {
         textCouponExpirationTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Date date = new Date();
 
                 showDatePickerDialog(activity, 2, textCouponExpirationTime, date);
 

@@ -11,13 +11,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.carboncreditapplication.R;
-import com.example.carboncreditapplication.beans.CardInfoBean;
+import com.example.carboncreditapplication.beans.CardPackageBean;
 
 import java.util.List;
 
 public class CardPackageRecyclerViewAdapter extends RecyclerView.Adapter<CardPackageRecyclerViewAdapter.CardViewHolder> {
     private Context context;
-    private List<CardInfoBean> cardInfoBeanList;
+    private List<CardPackageBean.ResultBean.CouponBagBean> cardInfoBeanList;
 
 
     static class CardViewHolder extends RecyclerView.ViewHolder{
@@ -41,7 +41,7 @@ public class CardPackageRecyclerViewAdapter extends RecyclerView.Adapter<CardPac
         }
     }
 
-    public CardPackageRecyclerViewAdapter(Context context, List<CardInfoBean> cardInfoBeanList){
+    public CardPackageRecyclerViewAdapter(Context context, List<CardPackageBean.ResultBean.CouponBagBean> cardInfoBeanList){
         this.context = context;
         this.cardInfoBeanList = cardInfoBeanList;
     }
@@ -57,10 +57,10 @@ public class CardPackageRecyclerViewAdapter extends RecyclerView.Adapter<CardPac
     //多个属性未设置
     @Override
     public void onBindViewHolder(@NonNull CardViewHolder cardViewHolder, int i) {
-        final CardInfoBean cardInfoBean = cardInfoBeanList.get(i);
-        cardViewHolder.textCardName.setText(cardInfoBean.getCardInfoResultBean().getCardList().getCardName());
+        final CardPackageBean.ResultBean.CouponBagBean couponBagBean= cardInfoBeanList.get(i);
+        cardViewHolder.textCardName.setText(couponBagBean.getCoupon_name());
 
-        /*尚未设置的属性
+        /*尚未设置的属性  超多的 couponBagBean
         cardViewHolder.textCardValue.setText(String.);
         cardViewHolder.textCardMerchant.setText(cardInfoBean.getCardInfoResultBean().getCardList().getUseStoreId());
         cardViewHolder.textCardExpirationTime.setText(cardInfoBean.getCardInfoResultBean().getCardList().getDateTime().toString());

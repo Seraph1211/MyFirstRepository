@@ -41,6 +41,36 @@ public class UserInfoBean {
         private int carbonCreditsMonth; //本月获取的碳积分
         @SerializedName("user_rank")
         private int userRank;  //本月个人碳积分所在城市排行
+        @SerializedName("is_store")
+        private int isStore;  //是否是商家 0-否，1-是
+        @SerializedName("sign_in_today")
+        private int signInToday;  //今日是否已签到 0-否，1-是{"result":{"carbon_credits_Total":100,"carbon_credits_today":0,"carbon_credits_unclaimed":0,"carbon_credits_useful":0,"mileage_bike_today":0,"mileage_bike_total":0,"mileage_bus_today":0,"mileage_bus_total":0,"mileage_subway_today":160,"mileage_subway_total":160,"mileage_walk_today":0,"mileage_walk_total":0},"msg_code":"0000","msg_message":"处理成功"}
+        @SerializedName("team_id")
+        private int teamId;  //-1表示没有加入任何队伍
+
+        public int getTeamId(){
+            return this.teamId;
+        }
+
+        public void setTeamId(int teamId){
+            this.teamId = teamId;
+        }
+
+        public int getIsStore() {
+            return isStore;
+        }
+
+        public void setIsStore(int isStore) {
+            this.isStore = isStore;
+        }
+
+        public int getSignInToday() {
+            return signInToday;
+        }
+
+        public void setSignInToday(int signInToday) {
+            this.signInToday = signInToday;
+        }
 
         public String getNickname() {
             return nickname;

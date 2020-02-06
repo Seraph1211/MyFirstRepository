@@ -12,7 +12,7 @@ public class Base64Utils {
 
     private static final String TAG = "Base64Utils";
 
-    public void loadBase64Image(String base64String, ImageView imageView){
+    public static void loadBase64Image(String base64String, ImageView imageView){
         Log.d(TAG, "loadBase64Image: ");
         //将Base64编码字符串解码成Bitmap
         byte[] decodedString = Base64.decode(base64String.split(",")[1], Base64.DEFAULT);
@@ -21,7 +21,7 @@ public class Base64Utils {
         imageView.setImageBitmap(decodedByte);
     }
 
-    public String encodeImageToBase64String(Bitmap bitmap) {
+    public static String encodeImageToBase64String(Bitmap bitmap) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         //读取图片到ByteArrayOutputStream
         bitmap.compress(Bitmap.CompressFormat.PNG, 40, outputStream); //参数如果为100那么就不压缩

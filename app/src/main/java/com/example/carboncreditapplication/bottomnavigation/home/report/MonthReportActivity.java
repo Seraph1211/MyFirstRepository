@@ -1,12 +1,20 @@
 package com.example.carboncreditapplication.bottomnavigation.home.report;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.carboncreditapplication.R;
+import com.example.carboncreditapplication.beans.MonthReportBean;
+import com.example.carboncreditapplication.utils.HttpUtils;
+import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +36,12 @@ import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.ColumnChartView;
 import lecho.lib.hellocharts.view.LineChartView;
 import lecho.lib.hellocharts.view.PieChartView;
-import lecho.lib.hellocharts.*;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class MonthReportActivity extends AppCompatActivity {
+    private static final String TAG = "MonthReportActivity";
 
     /*
     二氧化碳减排量折线统计图
@@ -65,9 +76,16 @@ public class MonthReportActivity extends AppCompatActivity {
     String[] columnLabels = {"地铁", "公交", "骑行", "步行"};
     int[] columnValues = {15000, 21500, 5200, 6022};
     List<Column> columns = new ArrayList<>();
-    List<SubcolumnValue> subcolumnValues;
+    List<SubcolumnValue> subColumnValues;
     List<AxisValue> axisValues = new ArrayList<>();
 
+
+    private TextView textCarbonDioxideReductionLastMonth;  //上月二氧化碳减排量
+    private TextView textCarbonDioxideReductionThisMonth;  //本月二氧化碳减排量
+    private TextView textUserRankLastMonth;  //上月排名
+    private TextView textUserRankThisMonth;  //本月排名
+
+    MonthReportBean monthReportBean = null;  //bean
 
 
     @Override
@@ -75,6 +93,13 @@ public class MonthReportActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_month_report);
 
+        init();
+
+        queryReportInfo();
+
+    }
+
+    public void init(){
         lineChartOfCarbonReduce = findViewById(R.id.lineChartOfCarbonReduce);
         initLineChartOfCarbonReduce();
 
@@ -86,8 +111,12 @@ public class MonthReportActivity extends AppCompatActivity {
 
         columnChart = findViewById(R.id.columnChart);
         initColumnChart();
-    }
 
+        textCarbonDioxideReductionLastMonth = findViewById(R.id.textCarbonDioxideReductionLastMonth);
+        textCarbonDioxideReductionThisMonth = findViewById(R.id.textCarbonDioxideReductionThisMonth);
+        textUserRankLastMonth = findViewById(R.id.textUserRankLastMonth);
+        textUserRankThisMonth = findViewById(R.id.textUserRankThisMonth);
+    }
 
     /**
      * 初始化折线统计图
@@ -264,10 +293,10 @@ public class MonthReportActivity extends AppCompatActivity {
      */
     private void initColumnChart(){
         for(int i=0; i<columnLabels.length; i++){
-            subcolumnValues = new ArrayList<>();
+            subColumnValues = new ArrayList<>();
             SubcolumnValue value = new SubcolumnValue(columnValues[i], ChartUtils.pickColor());
-            subcolumnValues.add(value);
-            Column column = new Column(subcolumnValues);
+            subColumnValues.add(value);
+            Column column = new Column(subColumnValues);
             column.setHasLabels(true);
             column.setHasLabelsOnlyForSelected(false);
             columns.add(column);
@@ -306,4 +335,56 @@ public class MonthReportActivity extends AppCompatActivity {
 
 
     }
+
+    public void queryReportInfo(){
+        HttpUtils.getInfo(HttpUtils.monthlyReportInfoUrl, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d(TAG, "onFailure: ");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseContent = response.body().string();
+                Log.d(TAG, "onResponse: responseContent="+responseContent);
+
+                monthReportBean = new Gson().fromJson(responseContent, MonthReportBean.class);
+
+                //更新TextView的数据
+                textCarbonDioxideReductionLastMonth.setText(String.valueOf(monthReportBean.getResult().getCO2_reduction_last_month()));
+                textCarbonDioxideReductionThisMonth.setText(String.valueOf(monthReportBean.getResult().getCO2_reduction_this_month()));
+                textUserRankLastMonth.setText(String.valueOf(monthReportBean.getResult().getUser_rank_last_month()));
+                textUserRankThisMonth.setText(String.valueOf(monthReportBean.getResult().getUser_rank_this_month()));
+
+                //更新饼状图数据:地铁、公交、骑行、步行
+                pieValues[0] = monthReportBean.getResult().getMileage_subway();
+                pieValues[1] = monthReportBean.getResult().getMileage_bus();
+                pieValues[2] = monthReportBean.getResult().getMileage_bike();
+                pieValues[3] = monthReportBean.getResult().getMileage_walk();
+                //initPieChart();
+
+                //更新柱状图数据,顺序同上
+                columnValues[0] = monthReportBean.getResult().getMileage_subway();
+                columnValues[1] = monthReportBean.getResult().getMileage_bus();
+                columnValues[2] = monthReportBean.getResult().getMileage_bike();
+                columnValues[3] = monthReportBean.getResult().getMileage_walk();
+                //initColumnChart();
+
+                MonthReportActivity activity = MonthReportActivity.this;
+
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        initColumnChart();
+                        initPieChart();
+                    }
+                });
+
+                //折线统计图数据服务端尚未给出！
+
+
+            }
+        });
+    }
+
 }

@@ -25,10 +25,11 @@ public class HttpUtils {
     public static final String userInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getUserInfo?user_id=";
     public static final String monthlyReportInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getMonthlyReport?user_id=1&city_id=3202";
     public static final String userRankingInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getUserRankingList?user_id=1&city_id=3202";
-    public static final String cardpackageUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getUserCoupon?user_id=1&page_no=1&page_size=10";
+    public static final String cardPackageUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getUserCoupon?user_id=1&page_no=1&page_size=50";
     public static final String friendsInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/carbon_credits_system/user/getFriendInfo?user_id=1";
     public static final String teamInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getTeamInfo?user_id=1";
-    public static final String commodityInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/good/getgoods?page_no=1&page_size=10&good_type=1";
+    public static final String commodityInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/good/getGoods?page_no=1&page_size=10&good_type=1";
+    public static final String merchantHomeUrl = "http://121.36.4.52:8090/carbon_credits_system/Merchant/home";
 
     //private static final TAG = "HttpUtils";
     public static void postJson(){
@@ -74,6 +75,22 @@ public class HttpUtils {
                 Log.d("http", "onResponse: responseContent:"+responseContent);
             }
         });
+    }
+
+    //将数据封装成HashMap发送给服务器
+    public static void postMap(String address, HashMap map, okhttp3.Callback callback){
+        OkHttpClient client = new OkHttpClient();
+
+        String JSONString = new Gson().toJson(map);
+
+        RequestBody formBody = RequestBody.create(JSON, JSONString);
+
+        Request request = new Request.Builder()
+                .url(address)
+                .post(formBody)
+                .build();
+
+        client.newCall(request).enqueue(callback);
     }
 
     //异步请求

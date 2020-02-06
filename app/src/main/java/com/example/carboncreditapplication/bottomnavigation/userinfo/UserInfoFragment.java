@@ -20,7 +20,6 @@ import com.bumptech.glide.Glide;
 import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.beans.CarbonCreditsInfoBean;
 import com.example.carboncreditapplication.beans.UserInfoBean;
-import com.example.carboncreditapplication.bottomnavigation.BottomNavigationActivity;
 import com.example.carboncreditapplication.bottomnavigation.userinfo.cardpackage.CardPackageActivity;
 import com.example.carboncreditapplication.bottomnavigation.userinfo.merchant.MerchantActivity;
 import com.example.carboncreditapplication.bottomnavigation.userinfo.team.TeamActivity;
@@ -38,11 +37,11 @@ import static android.support.constraint.Constraints.TAG;
 
 public class UserInfoFragment extends Fragment implements View.OnClickListener{
 
-    private TextView userName;  //用户昵称
+    private TextView textUserName;  //用户昵称
     private CircleImageView headPortrait;  //用户头像
-    private TextView userTotalCarbonCredits;  //总碳积分
-    private TextView userAvailableCredits;    //可用碳积分
-    private TextView userReadyToGetCredits;   //待领取的碳积分
+    private TextView textUserTotalCarbonCredits;  //总碳积分
+    private TextView textUserAvailableCredits;    //可用碳积分
+    private TextView textUserReadyToGetCredits;   //待领取的碳积分
     private Button buttonGetCredits;  //按钮，领取碳积分
     private View view;
     private ImageView imageJumpToCardPackage;  //卡包入口
@@ -52,9 +51,12 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
     private ImageView imageJumpToTeam;  //队伍入口
 
 
+    private int availableCarbonCredits;
+    private int totalCarbonCredits;
+    private int readyToGetCarbonCredits;
 
-    private UserInfoBean userInfoBean;
-    private CarbonCreditsInfoBean carbonCreditsInfoBean;
+    private UserInfoBean userInfoBean;  //用户信息
+    private CarbonCreditsInfoBean carbonCreditsInfoBean;  //用户碳积分信息
 
 
     @Nullable
@@ -62,12 +64,15 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_user_info, container, false);
 
-        init(view);
+        initView();
+
+        queryCarbonCreditsInfo();
+        queryUserInfo();
 
         return view;
     }
 
-    public void queryUserInfo(final View view){
+    public void queryUserInfo(){
       HttpUtils.getInfo(HttpUtils.userInfoUrl, 1, new Callback() {
            @Override
            public void onFailure(Call call, IOException e) {
@@ -77,17 +82,17 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
            @Override
            public void onResponse(Call call, Response response) throws IOException {
                String responseContent = response.body().string();
-               Log.d(TAG, "onResponse: userInfo's responseContent: "+responseContent);
+               Log.i(TAG, "onResponse: userInfo's responseContent: "+responseContent);
 
                if(!TextUtils.isEmpty(responseContent)){
                    userInfoBean = new Gson().fromJson(responseContent, UserInfoBean.class);
-                   Log.d(TAG, "onResponse: UserInfoBean: "+userInfoBean.toString());
+                   Log.i(TAG, "onResponse: UserInfoBean: "+userInfoBean.toString());
 
                    Activity activity = (Activity)view.getContext();
                    activity.runOnUiThread(new Runnable() {
                        @Override
                        public void run() {
-                           userName.setText(userInfoBean.getResultBean().getNickname());  //设置用户昵称
+                           textUserName.setText(userInfoBean.getResultBean().getNickname());  //设置用户昵称
                            Glide.with(UserInfoFragment.this)
                                    .load(userInfoBean.getResultBean().getUserImagePath())
                                    .error(R.drawable.error)
@@ -104,7 +109,7 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
        });
     }
 
-    public void queryCarbonCreditsInfo(final View view){
+    public void queryCarbonCreditsInfo(){
         HttpUtils.getInfo(HttpUtils.carbonCreditsInfoUrl, 1, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -118,15 +123,19 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
 
                 if(!TextUtils.isEmpty(responseContent)){
                     carbonCreditsInfoBean = new Gson().fromJson(responseContent, CarbonCreditsInfoBean.class);
-                    Log.d(TAG, "onResponse: CarbonCreditsInfoBean: "+userInfoBean.toString());
+                    Log.d(TAG, "onResponse: CarbonCreditsInfoBean: "+carbonCreditsInfoBean.toString());
+
+                    availableCarbonCredits = carbonCreditsInfoBean.getResultBean().getCarbonCreditsAvailable();
+                    totalCarbonCredits = carbonCreditsInfoBean.getResultBean().getCarbonCreditsTotal();
+                    readyToGetCarbonCredits = carbonCreditsInfoBean.getResultBean().getCarbonCreditsToday();
 
                     Activity activity = (Activity)view.getContext();
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            userTotalCarbonCredits.setText(String.valueOf(carbonCreditsInfoBean.getResultBean().getCarbonCreditsTotal()));  //设置用户总碳积分
-                            userReadyToGetCredits.setText(String.valueOf(carbonCreditsInfoBean.getResultBean().getCarbonCreditsToday()));  //设置用户待领取的碳积分
-                            userAvailableCredits.setText(String.valueOf(carbonCreditsInfoBean.getResultBean().getCarbonCreditsAvailable()));  //设置用户可用碳积分
+                            textUserTotalCarbonCredits.setText(String.valueOf(carbonCreditsInfoBean.getResultBean().getCarbonCreditsTotal()));  //设置用户总碳积分
+                            textUserReadyToGetCredits.setText(String.valueOf(carbonCreditsInfoBean.getResultBean().getCarbonCreditsToday()));  //设置用户待领取的碳积分
+                            textUserAvailableCredits.setText(String.valueOf(carbonCreditsInfoBean.getResultBean().getCarbonCreditsAvailable()));  //设置用户可用碳积分
                         }
                     });
 
@@ -137,13 +146,13 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
         });
     }
 
-    public void init(View view){
+    public void initView(){
         //各控件获取实例
         headPortrait = view.findViewById(R.id.head_portrait);
-        userName = view.findViewById(R.id.text_user_name);
-        userTotalCarbonCredits = view.findViewById(R.id.text_total_credit);
-        userAvailableCredits = view.findViewById(R.id.text_available_credit);
-        userReadyToGetCredits = view.findViewById(R.id.text_readyToGet_credit);
+        textUserName = view.findViewById(R.id.text_user_name);
+        textUserTotalCarbonCredits = view.findViewById(R.id.text_total_credit);
+        textUserAvailableCredits = view.findViewById(R.id.text_available_credit);
+        textUserReadyToGetCredits = view.findViewById(R.id.text_readyToGet_credit);
         buttonGetCredits = view.findViewById(R.id.buttonGetCredits);
         imageJumpToCallUs = view.findViewById(R.id.imageJumpToCallUs);
         imageJumpToCardPackage = view.findViewById(R.id.imageJumpToCardPackage);
@@ -159,18 +168,27 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
         imageJumpToCallUs.setOnClickListener(this);
         imageJumpToTeam.setOnClickListener(this);
 
-        userInfoBean = new UserInfoBean();
-        carbonCreditsInfoBean = new CarbonCreditsInfoBean();
+        //userInfoBean = new UserInfoBean();
+        //carbonCreditsInfoBean = new CarbonCreditsInfoBean();
     }
 
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.buttonGetCredits:{
-                queryCarbonCreditsInfo(view);
-                queryUserInfo(view);
+            case R.id.buttonGetCredits:{  //一键领取
                 Toast.makeText(view.getContext(),"Get Credits !", Toast.LENGTH_SHORT).show();
+                availableCarbonCredits += readyToGetCarbonCredits;
+                totalCarbonCredits += readyToGetCarbonCredits;
+                readyToGetCarbonCredits = 0;
+                //更新UI
+                textUserAvailableCredits.setText(availableCarbonCredits);
+                textUserReadyToGetCredits.setText(readyToGetCarbonCredits);
+                textUserTotalCarbonCredits.setText(totalCarbonCredits);
+                //更新bean
+                carbonCreditsInfoBean.getResultBean().setCarbonCreditsAvailable(availableCarbonCredits);
+                carbonCreditsInfoBean.getResultBean().setCarbonCreditsToday(0);
+                carbonCreditsInfoBean.getResultBean().setCarbonCreditsTotal(totalCarbonCredits);
                 break;
             }
             case R.id.imageJumpToCardPackage:{

@@ -4,10 +4,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.beans.CommodityBean;
+import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,7 @@ import java.util.List;
  */
 
 public class Store2Activity extends AppCompatActivity {
-
+    private static final String TAG = "Store2Activity";
     private RecyclerView commodityRecyclerView;
     private List<CommodityBean> commodityBeanList = new ArrayList<>();
 
@@ -33,6 +35,11 @@ public class Store2Activity extends AppCompatActivity {
         init();
 
         commodityRecyclerView.setAdapter(new StoreRecyclerViewAdapter(this, commodityBeanList));
+
+
+        Log.i(TAG, "onCreate: testKey2="+ MySharedPreferencesUtils.getInt(Store2Activity.this, "testKey"));
+        MySharedPreferencesUtils.putInt(Store2Activity.this, "testKey", 2);
+        Log.i(TAG, "onCreate: testKey3="+MySharedPreferencesUtils.getInt(Store2Activity.this, "testKey"));
     }
 
     public void init(){

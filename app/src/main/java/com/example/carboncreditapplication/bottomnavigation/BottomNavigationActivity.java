@@ -25,6 +25,7 @@ import com.example.carboncreditapplication.bottomnavigation.userinfo.UserInfoFra
 import com.example.carboncreditapplication.bottomnavigation.home.rank.RankActivity;
 import com.example.carboncreditapplication.bottomnavigation.home.store.StoreActivity;
 import com.example.carboncreditapplication.utils.HttpUtils;
+import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
 
 import java.io.IOException;
 
@@ -61,6 +62,7 @@ public class BottomNavigationActivity extends AppCompatActivity {
         }
     };
 
+    @SuppressLint("LongLogTag")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +74,10 @@ public class BottomNavigationActivity extends AppCompatActivity {
         navView.getMenu().getItem(1).setChecked(true);
         navView.setItemIconTintList(null);
         setDefaultFragment();
+
+        Log.d(TAG, "onCreate: testKey="+MySharedPreferencesUtils.getInt(BottomNavigationActivity.this, "testKey"));
+        MySharedPreferencesUtils.putInt(BottomNavigationActivity.this, "testKey", 1);
+        Log.d(TAG, "onCreate: testKey1="+MySharedPreferencesUtils.getInt(BottomNavigationActivity.this, "testKey"));
     }
 
     public void setDefaultFragment(){
