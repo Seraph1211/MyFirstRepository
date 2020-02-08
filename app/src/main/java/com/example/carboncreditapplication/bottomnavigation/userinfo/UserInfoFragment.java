@@ -24,6 +24,7 @@ import com.example.carboncreditapplication.bottomnavigation.userinfo.cardpackage
 import com.example.carboncreditapplication.bottomnavigation.userinfo.merchant.MerchantActivity;
 import com.example.carboncreditapplication.bottomnavigation.userinfo.team.TeamActivity;
 import com.example.carboncreditapplication.utils.HttpUtils;
+import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -38,7 +39,7 @@ import static android.support.constraint.Constraints.TAG;
 public class UserInfoFragment extends Fragment implements View.OnClickListener{
 
     private TextView textUserName;  //用户昵称
-    private CircleImageView headPortrait;  //用户头像
+    private CircleImageView imageHeadPortrait;  //用户头像
     private TextView textUserTotalCarbonCredits;  //总碳积分
     private TextView textUserAvailableCredits;    //可用碳积分
     private TextView textUserReadyToGetCredits;   //待领取的碳积分
@@ -54,6 +55,8 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
     private int availableCarbonCredits;
     private int totalCarbonCredits;
     private int readyToGetCarbonCredits;
+    private String userNickname;
+    private String userHeadPortrait;
 
     private UserInfoBean userInfoBean;  //用户信息
     private CarbonCreditsInfoBean carbonCreditsInfoBean;  //用户碳积分信息
@@ -97,7 +100,7 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
                                    .load(userInfoBean.getResultBean().getUserImagePath())
                                    .error(R.drawable.error)
                                    .placeholder(R.drawable.girl)
-                                   .into(headPortrait);
+                                   .into(imageHeadPortrait);
                        }
                    });
 
@@ -146,9 +149,10 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
         });
     }
 
+    //初始化控件
     public void initView(){
         //各控件获取实例
-        headPortrait = view.findViewById(R.id.head_portrait);
+        imageHeadPortrait = view.findViewById(R.id.head_portrait);
         textUserName = view.findViewById(R.id.text_user_name);
         textUserTotalCarbonCredits = view.findViewById(R.id.text_total_credit);
         textUserAvailableCredits = view.findViewById(R.id.text_available_credit);
@@ -172,6 +176,32 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
         //carbonCreditsInfoBean = new CarbonCreditsInfoBean();
     }
 
+    //初始化用户数据
+    public void initData(){
+        //通过sp从本地获取用户信息以及碳积分信息
+        totalCarbonCredits = MySharedPreferencesUtils.getInt(getContext(), "carbon_credits_total");
+        availableCarbonCredits = MySharedPreferencesUtils.getInt(getContext(), "carbon_credits_available");
+        readyToGetCarbonCredits = MySharedPreferencesUtils.getInt(getContext(), "carbon_credits_today");
+        userNickname = MySharedPreferencesUtils.getString(getContext(), "nickname");
+        userHeadPortrait = MySharedPreferencesUtils.getString(getContext(), "user_image_path");
+
+        if(totalCarbonCredits==-2 || availableCarbonCredits==-2 || readyToGetCarbonCredits==-2
+                || userNickname.equals("empty") || userHeadPortrait.equals("empty")){ //以上任意一项没从本地拿到数据，则全部从网络访问数据
+            queryCarbonCreditsInfo();
+            queryUserInfo();
+        }else{
+            //更新UI
+            textUserTotalCarbonCredits.setText(String.valueOf(totalCarbonCredits));
+            textUserAvailableCredits.setText(String.valueOf(availableCarbonCredits));
+            textUserReadyToGetCredits.setText(String.valueOf(readyToGetCarbonCredits));
+            textUserName.setText(userNickname);
+            Glide.with(UserInfoFragment.this)
+                    .load(userHeadPortrait)
+                    .error(R.drawable.error)
+                    .placeholder(R.drawable.girl)
+                    .into(imageHeadPortrait);
+        }
+    }
 
     @Override
     public void onClick(View v) {

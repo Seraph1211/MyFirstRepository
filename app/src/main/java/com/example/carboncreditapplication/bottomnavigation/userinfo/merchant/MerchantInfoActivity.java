@@ -1,18 +1,19 @@
 package com.example.carboncreditapplication.bottomnavigation.userinfo.merchant;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
-
 import com.example.carboncreditapplication.R;
+
+/**
+ * 此活动创建时会从后台获取MerchantInfoBean(存储商家的相关信息),
+ * 修改任意一项信息时会将该Bean传给SetMerchantInfoActivity,然后在SetMerchantInfoActivity中向后台提交修改后的bean
+ */
 
 public class MerchantInfoActivity extends AppCompatActivity implements View.OnClickListener{
     ConstraintLayout name;
@@ -29,7 +30,6 @@ public class MerchantInfoActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_merchant_info);
 
         initView();
-
     }
 
 
@@ -75,7 +75,6 @@ public class MerchantInfoActivity extends AppCompatActivity implements View.OnCl
             }
         }
     }
-
 
     //半透明状态栏
     protected void setHalfTransparent() {

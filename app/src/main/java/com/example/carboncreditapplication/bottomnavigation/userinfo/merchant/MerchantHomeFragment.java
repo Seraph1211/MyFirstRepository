@@ -22,6 +22,7 @@ import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.beans.CouponResultBean;
 import com.example.carboncreditapplication.beans.MerchantBean;
 import com.example.carboncreditapplication.utils.Base64Utils;
+import com.uuzuche.lib_zxing.activity.CaptureActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +88,8 @@ public class MerchantHomeFragment extends Fragment implements View.OnClickListen
         switch (v.getId()){
             case R.id.imageMerchantScan:{
                 Toast.makeText(getContext(), "扫一扫！", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), CaptureActivity.class);
+                startActivityForResult(intent, 2);
                 break;
             }
             case R.id.imageMerchantAddCard:{

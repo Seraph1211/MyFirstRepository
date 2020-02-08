@@ -1,6 +1,7 @@
 package com.example.carboncreditapplication.bottomnavigation.userinfo.cardpackage;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -56,7 +57,7 @@ public class CardPackageRecyclerViewAdapter extends RecyclerView.Adapter<CardPac
 
     //多个属性未设置
     @Override
-    public void onBindViewHolder(@NonNull CardViewHolder cardViewHolder, int i) {
+    public void onBindViewHolder(@NonNull CardViewHolder cardViewHolder, final int i) {
         final CardPackageBean.ResultBean.CouponBagBean couponBagBean= cardInfoBeanList.get(i);
         cardViewHolder.textCardName.setText(couponBagBean.getCoupon_name());
 
@@ -67,11 +68,18 @@ public class CardPackageRecyclerViewAdapter extends RecyclerView.Adapter<CardPac
         cardViewHolder.textCardSill.setText(cardInfoBean.getCardInfoResultBean().getCardList().getSill());
         */
 
-        //为button注册点击事件
+        /**
+         * 为button注册点击事件
+         * 将coupon_id传给QRCodeActivity
+         */
         cardViewHolder.buttonUseCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, "Use Card !", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(context, QRCodeActivity.class);
+                intent.putExtra("coupon_id", couponBagBean.getCoupon_id());
+                context.startActivity(intent);
             }
         });
     }

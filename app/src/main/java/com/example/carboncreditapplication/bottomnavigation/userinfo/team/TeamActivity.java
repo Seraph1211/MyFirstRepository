@@ -1,5 +1,7 @@
 package com.example.carboncreditapplication.bottomnavigation.userinfo.team;
 
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -7,10 +9,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.carboncreditapplication.R;
+import com.example.carboncreditapplication.beans.TeamBean;
 import com.example.carboncreditapplication.beans.UserInfoBean;
+import com.example.carboncreditapplication.bottomnavigation.userinfo.merchant.MerchantActivity;
 import com.example.carboncreditapplication.utils.HttpUtils;
+import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
+import com.example.carboncreditapplication.utils.UserInfo;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,29 +30,49 @@ import okhttp3.Response;
 
 public class TeamActivity extends AppCompatActivity {
     private static final String TAG = "TeamActivity";
+    private static final int TEAM_ID_READY = 111;
     private String teamName;
-    private List<UserInfoBean> memberList = new ArrayList<>();
+    private List<TeamBean.ResultBean.UserListBean> memberList = new ArrayList<>();
     private ImageButton buttonBackTeam;  //返回
     private ImageButton buttonExitTeam;  //退出队伍
+    private int teamId;
+
+    Handler mHandler = new Handler(){
+        public void handleMessage(Message msg){
+            switch (msg.what){
+                case TEAM_ID_READY:{  //此举是为了保证从服务器拿到team_id之后再执行其他行为(当本地没有存储team_id时，team_id须从服务器获取)
+                    if(teamId == -1){
+                        setFragment(new NoTeamFragment());
+                    }else {
+                        queryTeamInfo();
+                    }
+                    break;
+                }
+            }
+            super.handleMessage(msg);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team);
 
-        queryTeamInfo();
-
-        setFragment(new NoTeamFragment());
+        //initData();
 
     }
 
-    public void init(){
-        //若队伍的成员列表长度为0,则加载NoTeamFragment
-        if(memberList.size()==0){
+    public void initData(){
+        teamId = MySharedPreferencesUtils.getInt(TeamActivity.this, "team_id");
+        if(teamId==-2){  //本地没有存储team_id, 则从服务器获取
+            setTeamIdFromServer();
+        }else if(teamId == -1){  //没有加入任何队伍
             setFragment(new NoTeamFragment());
-        }else {
-            setFragment(new TeamListFragment());
+        }else{  //有队伍
+            queryTeamInfo();
         }
+
+
     }
 
     public void setFragment(Fragment fragment){
@@ -54,24 +82,9 @@ public class TeamActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    public String getTeamName() {
-        return teamName;
-    }
+    public void setTeamIdFromServer(){
 
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
-    }
-
-    public List<UserInfoBean> getMemberList() {
-        return memberList;
-    }
-
-    public void setMemberList(List<UserInfoBean> memberList) {
-        this.memberList = memberList;
-    }
-
-    public void queryTeamInfo(){
-        HttpUtils.getInfo(HttpUtils.teamInfoUrl, new Callback() {
+        HttpUtils.getInfo(HttpUtils.userInfoUrl, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.d(TAG, "onFailure: ");
@@ -81,6 +94,54 @@ public class TeamActivity extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 String responseContent = response.body().string();
                 Log.d(TAG, "onResponse: responseContent="+responseContent);
+
+                UserInfoBean userInfoBean = new Gson().fromJson(responseContent, UserInfoBean.class);
+                if(userInfoBean!=null){
+                    teamId = userInfoBean.getResultBean().getTeamId();
+                    mHandler.sendEmptyMessage(TEAM_ID_READY);
+                }
+            }
+        });
+
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public List<TeamBean.ResultBean.UserListBean> getMemberList() {
+        return memberList;
+    }
+
+    /**
+     * 当用户有队伍时，执行此方法加载队伍的相关数据
+     * 网络数据请求成功时，在此方法内加载TeamList碎片
+     */
+    public void queryTeamInfo(){
+        HttpUtils.getInfo(HttpUtils.teamInfoUrl+"&team_id="+1, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d(TAG, "onFailure: ");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseContent = response.body().string();
+                Log.d(TAG, "onResponse: responseContent="+responseContent);
+
+                TeamBean teamBean = new Gson().fromJson(responseContent, TeamBean.class);
+                if(teamBean!=null){
+                    memberList = teamBean.getResult().getUserList();
+                    teamName = teamBean.getResult().getTeamName();
+                    setFragment(new TeamListFragment());  //加载TeamList碎片
+                }else {
+                    TeamActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(TeamActivity.this, "网络数据请求失败", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
     }

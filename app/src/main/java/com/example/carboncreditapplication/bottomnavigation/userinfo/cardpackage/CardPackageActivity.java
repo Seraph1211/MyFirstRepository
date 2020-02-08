@@ -43,6 +43,7 @@ public class CardPackageActivity extends AppCompatActivity {
         for(int i=0; i<20; i++){
             CardPackageBean.ResultBean.CouponBagBean couponBagBean = new CardPackageBean.ResultBean.CouponBagBean();
             couponBagBean.setCoupon_name("吕小布的蛋糕店"+(i+1)+"号");
+            couponBagBean.setCoupon_id(i);
             couponBagBeans.add(couponBagBean);
         }
 

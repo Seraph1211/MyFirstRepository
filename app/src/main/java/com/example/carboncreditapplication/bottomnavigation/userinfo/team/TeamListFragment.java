@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.carboncreditapplication.R;
+import com.example.carboncreditapplication.beans.TeamBean;
 import com.example.carboncreditapplication.beans.UserInfoBean;
 
 import java.util.ArrayList;
@@ -20,18 +21,19 @@ import java.util.List;
 public class TeamListFragment extends Fragment {
     View view;
     RecyclerView recyclerViewMemberList;
-    List<UserInfoBean> memberList = new ArrayList<>();
+    List<TeamBean.ResultBean.UserListBean> memberList = new ArrayList<>();
+    TeamActivity activity = (TeamActivity)getActivity();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_team_list, container, false);
 
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerViewMemberList = view.findViewById(R.id.recyclerViewTeamList);
         recyclerViewMemberList.setLayoutManager(layoutManager);
 
-        //此时memberList为空
+        memberList = activity.getMemberList();
+
         recyclerViewMemberList.setAdapter(new TeamMemberAdapter(getContext(), memberList));
 
         return view;

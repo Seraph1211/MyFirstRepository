@@ -2,6 +2,7 @@ package com.example.carboncreditapplication.bottomnavigation.userinfo.merchant;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
@@ -19,6 +20,7 @@ import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
 import com.example.carboncreditapplication.utils.UserInfo;
+import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,9 +55,9 @@ public class MerchantActivity extends AppCompatActivity {
 
         initView();
 
-        queryMerchantInfo();
+        //queryMerchantInfo();
 
-
+        setFragment(new MerchantHomeFragment());
     }
 
     public void initView(){
@@ -152,6 +154,34 @@ public class MerchantActivity extends AppCompatActivity {
     public TextView getTextMerchant() {
         return textMerchant;
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        switch (requestCode){
+            case 2:{
+                Log.d(TAG, "onActivityResult: 2");
+                if (data != null){
+                    Log.d(TAG, "onActivityResult: data!=null");
+                    Bundle bundle =data.getExtras();
+                    if(bundle == null){
+                        Log.d(TAG, "onActivityResult: bundle==null");
+                        return;
+                    }
+                    if(bundle.getInt(CodeUtils.RESULT_TYPE)==CodeUtils.RESULT_SUCCESS) {
+                        String result = bundle.getString(CodeUtils.RESULT_STRING);
+                        Toast.makeText(MerchantActivity.this, "解析结果："+result, Toast.LENGTH_SHORT).show();
+                    }else if(bundle.getInt(CodeUtils.RESULT_TYPE)==CodeUtils.RESULT_FAILED){
+                        Toast.makeText(MerchantActivity.this, "解析二维码失败！", Toast.LENGTH_SHORT).show();
+                    }
+                }else {
+                    Log.d(TAG, "onActivityResult: data==null");
+                }
+
+                break;
+            }
+        }
+    }
+
     public String getBase64Code(){
         return base64Code;
     }

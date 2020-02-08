@@ -10,8 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.carboncreditapplication.R;
+import com.example.carboncreditapplication.beans.TeamBean;
 import com.example.carboncreditapplication.beans.UserInfoBean;
 
 import java.util.List;
@@ -20,7 +23,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class TeamMemberAdapter extends RecyclerView.Adapter<TeamMemberAdapter.TeamMemberViewHolder> {
     private Context context;
-    private List<UserInfoBean> memberList;
+    private List<TeamBean.ResultBean.UserListBean> memberList;
 
     static class TeamMemberViewHolder extends RecyclerView.ViewHolder{
 
@@ -37,7 +40,7 @@ public class TeamMemberAdapter extends RecyclerView.Adapter<TeamMemberAdapter.Te
         }
     }
 
-    public TeamMemberAdapter(Context context, List<UserInfoBean> memberList){
+    public TeamMemberAdapter(Context context, List<TeamBean.ResultBean.UserListBean> memberList){
         this.context = context;
         this.memberList = memberList;
     }
@@ -53,7 +56,14 @@ public class TeamMemberAdapter extends RecyclerView.Adapter<TeamMemberAdapter.Te
 
     @Override
     public void onBindViewHolder(@NonNull TeamMemberViewHolder teamMemberViewHolder, int i) {
-
+        final TeamBean.ResultBean.UserListBean bean = memberList.get(i);
+        teamMemberViewHolder.textMemberName.setText(bean.getNickname());
+        teamMemberViewHolder.buttonSendCredits.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "赠送碳积分给："+bean.getNickname(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

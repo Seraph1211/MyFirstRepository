@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,15 +16,22 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.carboncreditapplication.R;
+import com.example.carboncreditapplication.beans.CardPackageBean;
+import com.example.carboncreditapplication.beans.CouponResultBean;
+import com.example.carboncreditapplication.utils.HttpUtils;
 
 import org.joda.time.DateTime;
 import org.w3c.dom.Text;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * AddGoodsActivity中添加coupon(优惠券)的Fragment
@@ -47,6 +57,31 @@ public class AddCouponFragment extends Fragment {
     private View view;
     private AddGoodsActivity activity;
     private Date date = new Date();
+    private CouponResultBean.ResultBean.CouponBean bean;
+
+    //textWatcher的作用是保证应该输入数字的部分不会输入文本
+    private TextWatcher textWatcher= new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        //一般我们都是在这个里面进行我们文本框的输入的判断，上面两个方法用到的很少
+        @Override
+        public void afterTextChanged(Editable s) {
+            String num = s.toString();
+            Pattern p = Pattern.compile("[0-9]*");
+            Matcher m = p.matcher(num);
+            if (!m.matches()) {
+                Toast.makeText(getContext(), "请输入数字！", Toast.LENGTH_SHORT).show();
+                s.clear();
+
+            }
+        }
+    };
 
 
     @Override
@@ -60,12 +95,17 @@ public class AddCouponFragment extends Fragment {
 
     public void initView(){
         activity = (AddGoodsActivity)getActivity();
+        couponType = activity.getGoodType();
 
         editCouponName = view.findViewById(R.id.editSetCouponName);
         editCouponCost = view.findViewById(R.id.editSetCouponCreditsNeed);
         textCouponExpirationTime = view.findViewById(R.id.textSetCouponExpirationTime);
         editCouponSill = view.findViewById(R.id.editSetCouponSill);
         editCouponValue = view.findViewById(R.id.editSetCouponValue);
+
+        editCouponCost.addTextChangedListener(textWatcher);
+        editCouponSill.addTextChangedListener(textWatcher);
+        editCouponValue.addTextChangedListener(textWatcher);
 
         textCouponExpirationTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +118,62 @@ public class AddCouponFragment extends Fragment {
 
             }
         });
+
+        //在fragment中设置Activity中button的点击事件
+        activity.getButtonAddGoods().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!getTextData()){
+                    return;
+                }
+                Log.d(TAG, "onClick: 546465456");
+
+
+            }
+        });
+    }
+
+    /**
+     * 获取优惠券的信息
+     * @return 信息不完全返回false
+     */
+    public boolean getTextData(){
+
+        if(TextUtils.isEmpty(editCouponCost.getText().toString()) || TextUtils.isEmpty(editCouponName.getText().toString())
+        || TextUtils.isEmpty(editCouponSill.getText().toString()) || TextUtils.isEmpty(editCouponValue.getText().toString())){
+            Toast.makeText(getContext(), "请填写全部的优惠券信息！", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        couponName = editCouponName.getText().toString();
+        couponCost = Integer.parseInt(editCouponCost.getText().toString());
+        couponSill = Integer.parseInt(editCouponSill.getText().toString());
+        couponValue = Integer.parseInt(editCouponValue.getText().toString());
+
+        return true;
+    }
+
+    /**
+     * 用HashMap来封装Coupon信息
+     * @return
+     */
+    public HashMap getCouponInfoMap(){
+        HashMap<String, Object> map = new HashMap<>();
+
+        map.put("coupon_name", couponName);
+        map.put("coupon_type", couponType);
+        map.put("coupon_cost", couponCost);
+        map.put("coupon_sill", couponSill);
+        map.put("coupon_value", couponValue);
+        map.put("expiration_time", new DateTime(date.getTime()));
+
+        return map;
+    }
+
+    /**
+     * 向后台提交要添加的优惠券的相关数据
+     */
+    public void postCouponInfo(){
     }
 
     /**

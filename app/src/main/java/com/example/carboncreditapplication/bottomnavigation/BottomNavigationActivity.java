@@ -1,20 +1,29 @@
 package com.example.carboncreditapplication.bottomnavigation;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.carboncreditapplication.R;
+import com.example.carboncreditapplication.beans.CarbonCreditsInfoBean;
+import com.example.carboncreditapplication.beans.UserInfoBean;
 import com.example.carboncreditapplication.bottomnavigation.game.GameFragment;
 import com.example.carboncreditapplication.bottomnavigation.home.HomeFragment;
 import com.example.carboncreditapplication.bottomnavigation.home.rank.MonthRankFragment;
@@ -26,6 +35,8 @@ import com.example.carboncreditapplication.bottomnavigation.home.rank.RankActivi
 import com.example.carboncreditapplication.bottomnavigation.home.store.StoreActivity;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
+import com.google.gson.Gson;
+import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
 import java.io.IOException;
 
@@ -33,9 +44,15 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+import static android.support.constraint.Constraints.TAG;
+
 public class BottomNavigationActivity extends AppCompatActivity {
 
     private static final String TAG = "BottomNavigationActivity";
+    private UserInfoBean userInfoBean = null;
+    private CarbonCreditsInfoBean carbonCreditsInfoBean = null;
+    BottomNavigationActivity activity =  BottomNavigationActivity.this;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -68,24 +85,24 @@ public class BottomNavigationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom_navigation);
 
+        ZXingLibrary.initDisplayOpinion(this);  //二维码相关
+        //获取相机拍摄读写权限
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            //版本判断
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA}, 1);
+            }
+        }
+
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        //设置默认界面、按钮
+        //设置默认界面（HomeFragment)、按钮
         navView.getMenu().getItem(1).setChecked(true);
         navView.setItemIconTintList(null);
-        setDefaultFragment();
-
-        Log.d(TAG, "onCreate: testKey="+MySharedPreferencesUtils.getInt(BottomNavigationActivity.this, "testKey"));
-        MySharedPreferencesUtils.putInt(BottomNavigationActivity.this, "testKey", 1);
-        Log.d(TAG, "onCreate: testKey1="+MySharedPreferencesUtils.getInt(BottomNavigationActivity.this, "testKey"));
+        setFragment(new HomeFragment());
     }
 
-    public void setDefaultFragment(){
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.frameLayout, new HomeFragment());
-        transaction.commit();
-    }
 
     public void setFragment(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -120,32 +137,105 @@ public class BottomNavigationActivity extends AppCompatActivity {
         }
     }
 
-
-    public void queryCommodityInfoTestDrive(){
-
-        HttpUtils.getInfo("http://121.36.4.52:8090/good/getgoods?page_no=1&page_size=10&good_type=1", new Callback() {
+    /**
+     * 从服务器获取用户信息并保存在本地
+     */
+    public void queryUserInfo(){
+        HttpUtils.getInfo(HttpUtils.userInfoUrl, 1, new Callback() {
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d(TAG, "onFailure: 请求失败！");
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(BottomNavigationActivity.this, "获取网络数据失败，请重试！", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                Log.d(TAG, "onFailure: 从服务器读取用户信息失败！");
             }
 
             @SuppressLint("LongLogTag")
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.d(TAG, "onResponse: 请求成功！");
-                Log.d(TAG, "onResponse: "+response.body().string());
+                String responseContent = response.body().string();
+                Log.i(TAG, "onResponse: userInfo's responseContent: "+responseContent);
 
+                if(!TextUtils.isEmpty(responseContent)){
+                    userInfoBean = new Gson().fromJson(responseContent, UserInfoBean.class);
+                    Log.i(TAG, "onResponse: UserInfoBean: "+userInfoBean.toString());
+
+                    if(userInfoBean!=null){
+                        UserInfoBean.UserInfoResultBean bean = userInfoBean.getResultBean();
+                        MySharedPreferencesUtils.saveUserInfo(BottomNavigationActivity.this, bean);
+                    }else {
+                        Log.d(TAG, "onResponse: userInfoBean解析失败，sp未存储用户信息");
+                    }
+
+                    //切换到主线程，设置home里要显示的内容
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                        }
+                    });
+                }else{
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(BottomNavigationActivity.this, "获取网络数据失败，请重试！", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    Log.d(TAG, "onResponse: 读取到的用户信息为空！");
+                }
             }
         });
+    }
 
+    /**
+     * 从服务器获取碳积分信息并保存在本地
+     */
+    public void queryCarbonCreditsInfo(){
+        HttpUtils.getInfo(HttpUtils.carbonCreditsInfoUrl, 1, new Callback() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onFailure(Call call, IOException e) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(BottomNavigationActivity.this, "获取网络数据失败，请重试！", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                Log.d(TAG, "onFailure: 从服务器读取碳积分信息失败！");
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseContent = response.body().string();
+                Log.d(TAG, "onResponse: carbonCreditsInfo's responseContent: "+responseContent);
+
+                if(!TextUtils.isEmpty(responseContent)){
+                    carbonCreditsInfoBean = new Gson().fromJson(responseContent, CarbonCreditsInfoBean.class);
+                    Log.d(TAG, "onResponse: CarbonCreditsInfoBean: "+carbonCreditsInfoBean.toString());
+
+                    if(carbonCreditsInfoBean!=null){
+                        CarbonCreditsInfoBean.CarbonCreditsInfoResultBean bean = carbonCreditsInfoBean.getResultBean();
+                        MySharedPreferencesUtils.saveUserInfo(BottomNavigationActivity.this, bean);
+                    }else {
+                        Log.d(TAG, "onResponse: carbonCreditsInfoBean解析失败，sp未存储碳积分信息");
+                    }
+
+                }else{
+                    Log.d(TAG, "onResponse: 读取到的碳积分信息为空！");
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(BottomNavigationActivity.this, "获取网络数据失败，请重试！", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
     }
 
 }
-
-/*
- *
- *  排行榜：{"result":[{"carbonCredits":1,"nickname":"小明","userImagePath":"https://i.loli.net/2020/01/16/q9HUiEuzDrCJLOZ.jpgs","userRank":1}],"status_code":"0000","status_msg":"处理成功"}
- *  碳积分抵押型商品：{"result":{"commodity":[{"carbon_credits_need":12,"commodity_id":1,"commodity_introduce":"test2","commodity_name":"test2","commodity_picture":"122315","commodity_price":2,"commodity_price_original":1,"commodity_type":1,"remaining":20},{"carbon_credits_need":1,"commodity_id":2,"commodity_introduce":"test","commodity_name":"test","commodity_picture":"...","commodity_price":1,"commodity_price_original":1,"commodity_type":1,"remaining":1},{"carbon_credits_need":12,"commodity_id":3,"commodity_introduce":"test2","commodity_name":"test2","commodity_picture":"122315","commodity_price":2,"commodity_price_original":1,"commodity_type":0,"remaining":20}]},"msg_code":"0000","page_total":1,"msg_message":"处理成功"}
- *
- */

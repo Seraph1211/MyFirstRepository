@@ -203,7 +203,6 @@ public class MerchantRegisterFragment extends Fragment {
         emailCode = editEmailSecurityCode.getText().toString();
     }
 
-
     public HashMap getRegisterInfoMap(){
         HashMap<String, Object> map = new HashMap<>();
 

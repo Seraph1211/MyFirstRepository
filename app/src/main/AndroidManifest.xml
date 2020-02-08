@@ -4,6 +4,19 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!--拍照-->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!--写入SD卡的权限：如果你希望保存相机拍照后的照片-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--读取SD卡的权限:打开相册选取图片所必须的权限-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,7 +25,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".bottomnavigation.userinfo.merchant.AddGoodsActivity"></activity>
+        <activity android:name=".bottomnavigation.userinfo.cardpackage.QRCodeActivity"></activity>
+        <activity android:name=".bottomnavigation.userinfo.merchant.AddGoodsActivity" />
         <activity android:name=".bottomnavigation.userinfo.merchant.MerchantActivity" />
         <activity android:name=".bottomnavigation.userinfo.merchant.MerchantInfoActivity" />
         <activity android:name=".bottomnavigation.userinfo.merchant.SetMerchantInfoActivity" />

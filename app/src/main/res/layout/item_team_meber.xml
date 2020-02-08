@@ -27,6 +27,8 @@
         android:layout_height="match_parent"
         />
 
+
+
     <Button
         android:id="@+id/buttonSendCredits"
         android:layout_width="80dp"

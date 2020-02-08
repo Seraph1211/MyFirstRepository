@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +12,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.utils.Base64Utils;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.UserInfo;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -99,6 +105,29 @@ public class MerchantLoginFragment extends Fragment {
                 String responseContent = response.body().string();
                 Log.d(TAG, "onResponse: responseContent="+responseContent);
 
+                String merchantResult = "";
+                String imageResult = "";
+                String token = "";
+
+                try {
+                    JSONObject jsonObject = new JSONObject(responseContent);
+                    merchantResult = jsonObject.getString("merchantResult");
+                    imageResult = jsonObject.getString("imageResult");
+                    token = jsonObject.getString("token");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if(!TextUtils.isEmpty(merchantResult)){  //merchantResult不为空
+                    if(merchantResult.equals("登陆失败")){
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getContext(), "密码错误", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
 
             }
         });

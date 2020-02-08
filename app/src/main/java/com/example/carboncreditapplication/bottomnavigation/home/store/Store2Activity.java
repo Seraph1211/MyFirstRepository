@@ -45,7 +45,7 @@ public class Store2Activity extends AppCompatActivity {
     public void init(){
         for(int i=0; i<10; i++){
             CommodityBean commodityBean = new CommodityBean();
-            commodityBean.getCommodityResultBean().setCommodityName("大力丸");
+            commodityBean.getCommodityResultBean().setCommodityName("长生不老药");
             commodityBean.getCommodityResultBean().setCommodityPrice(200);
             commodityBeanList.add(commodityBean);
         }

@@ -23,7 +23,7 @@ public class AddGoodsActivity extends AppCompatActivity {
     private Spinner mSpinner;
     private Button buttonAddGoods;
 
-    private int goodType;
+    private int goodType = -1;
 
     private AddCommodityFragment addCommodityFragment;
     private AddCouponFragment addCouponFragment;
@@ -108,5 +108,13 @@ public class AddGoodsActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameMerchantAddGoods, fragment);
         fragmentTransaction.commit();
+    }
+
+    public Button getButtonAddGoods(){
+        return buttonAddGoods;
+    }
+
+    public int getGoodType(){
+        return goodType;
     }
 }
