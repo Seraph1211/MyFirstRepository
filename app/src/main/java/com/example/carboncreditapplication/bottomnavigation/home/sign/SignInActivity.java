@@ -1,5 +1,6 @@
 package com.example.carboncreditapplication.bottomnavigation.home.sign;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import com.example.carboncreditapplication.beans.CarbonCreditsInfoBean;
 import com.example.carboncreditapplication.beans.UserInfoBean;
 import com.example.carboncreditapplication.bottomnavigation.home.store.Store2Activity;
 import com.example.carboncreditapplication.utils.HttpUtils;
+import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -30,6 +32,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private Button buttonSignIn;  //签到按钮
     private Button buttonToStore;  //跳转至积分商城的按钮
     private TextView textAvailableCredits;  //可用碳积分
+    private TextView textSignInNum;  //连续签到天数
 
     private int signInNumber = 0;  //累计签到天数
     private int signInToday = 0; //今日是否签到
@@ -53,6 +56,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         buttonSignIn = findViewById(R.id.buttonSignIn);
         buttonToStore = findViewById(R.id.buttonToStore);
         textAvailableCredits = findViewById(R.id.textAvailableCreditsSignIn);
+        textSignInNum = findViewById(R.id.textSignInNumber);
 
         checkImageList[0] = findViewById(R.id.imageCheck1);
         checkImageList[1] = findViewById(R.id.imageCheck2);
@@ -65,11 +69,29 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         buttonSignIn.setOnClickListener(this);
         buttonToStore.setOnClickListener(this);
 
-        queryCarbonCreditsInfo();
-        queryUserInfo();
+       initData();
 
-        if(carbonCreditsAvailable!=-1){
-            textAvailableCredits.setText(carbonCreditsAvailable);
+
+
+
+    }
+
+    public void initData(){
+        carbonCreditsAvailable = MySharedPreferencesUtils.getInt(SignInActivity.this, "carbon_credits_available");
+        signInNumber = MySharedPreferencesUtils.getInt(SignInActivity.this, "sign_in_num");
+        signInToday = MySharedPreferencesUtils.getInt(SignInActivity.this, "sign_in_today");
+
+
+        if(carbonCreditsAvailable != -2){
+            textAvailableCredits.setText(String.valueOf(carbonCreditsAvailable));
+        }else {
+            queryCarbonCreditsInfo();
+        }
+
+        if(signInNumber==-2 || signInToday==-2){
+            queryUserInfo();
+        }else {
+            textSignInNum.setText(String.valueOf(signInNumber));
         }
     }
 
@@ -92,7 +114,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 Toast.makeText(SignInActivity.this, "you clicked buttonSignIn", Toast.LENGTH_SHORT).show();
 
                 //签到满7天后重置签到天数的问题未考虑,未告知服务器今日已签到
-                if(signInNumber<7 && signInToday!=1){  //如果
+                if(signInNumber>-1 && signInNumber<7 && signInToday!=1){  //如果
                     signInNumber++;
                     signInToday = 1;
                     reloadCheckImages();
@@ -130,10 +152,19 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 String responseContent = response.body().string();
                 Log.d(TAG, "onResponse: responseContent="+responseContent);
                 UserInfoBean userInfoBean = new Gson().fromJson(responseContent, UserInfoBean.class);
-
-                //获取已连续签到天数、今日是否已签到
-                signInNumber =  userInfoBean.getResultBean().getSignInNumber();
-                signInToday = userInfoBean.getResultBean().getSignInToday();
+                if(userInfoBean!=null){
+                    //获取已连续签到天数、今日是否已签到
+                    signInNumber =  userInfoBean.getResultBean().getSignInNumber();
+                    signInToday = userInfoBean.getResultBean().getSignInToday();
+                    textSignInNum.setText(String.valueOf(signInNumber));
+                }else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(SignInActivity.this, "获取签到信息失败", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
     }
@@ -152,7 +183,28 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 Log.d(TAG, "onResponse: responseContent="+responseContent);
 
                 CarbonCreditsInfoBean carbonCreditsInfoBean = new Gson().fromJson(responseContent, CarbonCreditsInfoBean.class);
-                carbonCreditsAvailable = carbonCreditsInfoBean.getResultBean().getCarbonCreditsAvailable();
+
+                if(carbonCreditsInfoBean!=null){
+                    carbonCreditsAvailable = carbonCreditsInfoBean.getResultBean().getCarbonCreditsAvailable();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(carbonCreditsAvailable!=-2){
+                                textAvailableCredits.setText(String.valueOf(carbonCreditsAvailable));
+                            }
+
+                        }
+                    });
+                }else {
+                    Log.d(TAG, "onResponse: 碳积分信息获取失败");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(SignInActivity.this, "碳积分信息获取失败！", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
             }
         });
     }

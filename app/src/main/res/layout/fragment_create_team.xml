@@ -15,7 +15,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/shape_gray_stroke"
-        android:hint="请输入队伍名称"
+        android:hint="请输入队伍名"
         android:paddingLeft="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

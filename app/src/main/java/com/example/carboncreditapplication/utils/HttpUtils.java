@@ -21,15 +21,22 @@ public class HttpUtils {
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static final String TAG = "HttpUtils";
     public static String basicUrl = "http：//121.36.4.52:8090/carbon_credits_system";
-    public static final String carbonCreditsInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/carbonCredits/getCreditsInfo?user_id=";
-    public static final String userInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getUserInfo?user_id=";
+    public static final String carbonCreditsInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/carbonCredits/getCreditsInfo?user_id=1";
+    public static final String userInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getUserInfo?user_id=1";
     public static final String monthlyReportInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getMonthlyReport?user_id=1&city_id=3202";
     public static final String userRankingInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getUserRankingList?user_id=1&city_id=3202";
     public static final String cardPackageUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getUserCoupon?user_id=1&page_no=1&page_size=50";
     public static final String friendsInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/carbon_credits_system/user/getFriendInfo?user_id=1";
     public static final String teamInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getTeamInfo?user_id=1";
+    public static final String deleteTeamMemberUrl = "http://121.36.4.52:8090/carbon_credits_system/user/deleteUserFromTeam?user_id=1";
+    public static final String createTeamUrl = "http://121.36.4.52:8090/carbon_credits_system/user/createTeam";
+    public static final String addUserToTeamUrl = "http://121.36.4.52:8090/carbon_credits_system/user/addUserToTeam";
+    public static final String giveAwayCreditsUrl = "http://121.36.4.52:8090/carbon_credits_system/user/giveAway";
     public static final String commodityInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/good/getGoods?page_no=1&page_size=10&good_type=1";
     public static final String merchantHomeUrl = "http://121.36.4.52:8090/carbon_credits_system/Merchant/home?userId=1";
+    public static final String merchantModifyUrl = "http://121.36.4.52:8090/carbon_credits_system/Merchant/modify";
+    public static final String merchantInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/Merchant/getInfo";
+    public static final String merchantModifyPasswordUrl = "http://121.36.4.52:8090/carbon_credits_system/Merchant/modifyPassword?userId=1";
     public static final String emailSecurityCodeUrl = "http://121.36.4.52:8090/carbon_credits_system/Merchant/emailCode";
     public static final String merchantSignUpUrl = "http://121.36.4.52:8090/carbon_credits_system/Merchant/signUp";
     public static final String merchantLoginUrl = "http://121.36.4.52:8090/carbon_credits_system/Merchant/login";
@@ -78,6 +85,20 @@ public class HttpUtils {
                 Log.d("http", "onResponse: responseContent:"+responseContent);
             }
         });
+    }
+
+    //post Bean
+    public static <T> void postBean(String address, T bean, okhttp3.Callback callback){
+        OkHttpClient client = new OkHttpClient();
+        String JSONString = new Gson().toJson(bean);
+        RequestBody formBody = RequestBody.create(JSON, JSONString);
+        Log.d(TAG, "postBean: "+JSONString);
+        Request request = new Request.Builder()
+                .url(address)
+                .post(formBody)
+                .build();
+
+        client.newCall(request).enqueue(callback);
     }
 
     //将数据封装成HashMap发送给服务器

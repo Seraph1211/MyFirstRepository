@@ -1,6 +1,8 @@
 package com.example.carboncreditapplication.beans;
 
-public class MerchantBean {
+import java.io.Serializable;
+
+public class MerchantBean implements Serializable {
 
     /**
      * merchantId : 0
@@ -13,9 +15,8 @@ public class MerchantBean {
      * merchantIntroduce : 贩卖啥啥啥
      * merchantImage : asdfgasfds.jpg
      */
-
-    private String merchantId;
-    private String userId;
+    private int merchantId;
+    private int userId;
     private String merchantPassword;
     private String merchantPhoneNumber;
     private String merchantEmail;
@@ -24,19 +25,31 @@ public class MerchantBean {
     private String merchantIntroduce;
     private String merchantImage;
 
-    public String getMerchantId() {
+    public MerchantBean(){
+        merchantId = -1;
+        userId = -1;
+        merchantPassword = "";
+        merchantPhoneNumber = "";
+        merchantEmail = "";
+        merchantName = "";
+        merchantAddress = "";
+        merchantIntroduce = "";
+        merchantImage = "";
+    }
+
+    public int getMerchantId() {
         return merchantId;
     }
 
-    public void setMerchantId(String merchantId) {
+    public void setMerchantId(int merchantId) {
         this.merchantId = merchantId;
     }
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 

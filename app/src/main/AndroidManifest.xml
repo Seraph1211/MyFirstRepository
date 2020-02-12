@@ -29,7 +29,7 @@
         <activity android:name=".bottomnavigation.userinfo.merchant.AddGoodsActivity" />
         <activity android:name=".bottomnavigation.userinfo.merchant.MerchantActivity" />
         <activity android:name=".bottomnavigation.userinfo.merchant.MerchantInfoActivity" />
-        <activity android:name=".bottomnavigation.userinfo.merchant.SetMerchantInfoActivity" />
+        <activity android:name=".bottomnavigation.userinfo.merchant.ModifyMerchantInfoActivity" />
         <activity android:name=".bottomnavigation.userinfo.team.TeamActivity" />
         <activity
             android:name=".bottomnavigation.userinfo.cardpackage.CardPackageActivity"

@@ -3,9 +3,11 @@ package com.example.carboncreditapplication.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.telephony.mbms.MbmsErrors;
 import android.util.Log;
 
 import com.example.carboncreditapplication.beans.CarbonCreditsInfoBean;
+import com.example.carboncreditapplication.beans.MerchantBean;
 import com.example.carboncreditapplication.beans.UserInfoBean;
 
 import static android.support.constraint.Constraints.TAG;
@@ -118,6 +120,25 @@ public class MySharedPreferencesUtils {
             editor.putInt("mileage_bus_total", creditsInfoBean.getMileageBusTotal());  //总公交里程
             editor.putInt("mileage_bike_total", creditsInfoBean.getMileageBikeTotal());  //总骑行里程
             editor.putInt("mileage_walk_total", creditsInfoBean.getMileageWalkTotal());  //总步行里程
+
+            editor.apply();
+        }
+    }
+
+    public static void saveMerchantInfo(Context context, MerchantBean bean){
+        if(bean==null){
+            Log.d(TAG, "saveMerchantInfo: bean="+bean.toString());
+        }else {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            editor.putInt("merchant_id", bean.getMerchantId());  //商家id
+            editor.putString("merchant_name", bean.getMerchantName());  //商家名称
+            editor.putString("merchant_password", bean.getMerchantPassword());  //商家密码
+            editor.putString("merchant_phone", bean.getMerchantPhoneNumber());  //商家电话
+            editor.putString("merchant_email", bean.getMerchantEmail());  //商家电子邮箱
+            editor.putString("merchant_address", bean.getMerchantAddress());  //商家地址
+            editor.putString("merchant_introduction", bean.getMerchantIntroduce());  //商家介绍
 
             editor.apply();
         }

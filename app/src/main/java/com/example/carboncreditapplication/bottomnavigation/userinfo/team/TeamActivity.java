@@ -1,13 +1,16 @@
 package com.example.carboncreditapplication.bottomnavigation.userinfo.team;
 
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -36,6 +39,7 @@ public class TeamActivity extends AppCompatActivity {
     private ImageButton buttonBackTeam;  //返回
     private ImageButton buttonExitTeam;  //退出队伍
     private int teamId;
+    private TeamBean teamBean;
 
     Handler mHandler = new Handler(){
         public void handleMessage(Message msg){
@@ -58,8 +62,49 @@ public class TeamActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team);
 
-        //initData();
+        initView();
+        initData();
+    }
 
+    public void initView(){
+        buttonBackTeam = findViewById(R.id.buttonTeamBack);
+        buttonExitTeam = findViewById(R.id.buttonExitTeam);
+
+        buttonExitTeam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: ExitTeam");
+                if(teamId!=-2 && teamId!=-1){  //-2为sp存储int型数据时的默认值，-1表示没有队伍
+                    AlertDialog dialog = new AlertDialog.Builder(TeamActivity.this)
+                            .setMessage("确定要退出此队伍吗？")
+                            .setCancelable(false)
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    exitTeam();
+                                }
+                            })
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .create();
+
+                    dialog.show();
+                }else if(teamId == -1){
+                    Toast.makeText(TeamActivity.this, "你还没有加入任何队伍！", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        buttonBackTeam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     public void initData(){
@@ -105,6 +150,33 @@ public class TeamActivity extends AppCompatActivity {
 
     }
 
+    public void exitTeam(){
+        HttpUtils.getInfo(HttpUtils.deleteTeamMemberUrl, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d(TAG, "onFailure: ");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(TeamActivity.this, "退出队伍失败，请重试！", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.d(TAG, "onResponse: ");
+                Toast.makeText(TeamActivity.this, "成功退出队伍！", Toast.LENGTH_SHORT).show();
+                MySharedPreferencesUtils.putInt(TeamActivity.this, "team_id", -1);  //将本地存储的队伍id设为-1，表示没有加入队伍
+                setFragment(new NoTeamFragment());  //重新加载碎片
+            }
+        });
+    }
+
+    public TeamBean getTeamBean(){
+        return teamBean;
+    }
+
     public String getTeamName() {
         return teamName;
     }
@@ -129,7 +201,7 @@ public class TeamActivity extends AppCompatActivity {
                 String responseContent = response.body().string();
                 Log.d(TAG, "onResponse: responseContent="+responseContent);
 
-                TeamBean teamBean = new Gson().fromJson(responseContent, TeamBean.class);
+                teamBean = new Gson().fromJson(responseContent, TeamBean.class);
                 if(teamBean!=null){
                     memberList = teamBean.getResult().getUserList();
                     teamName = teamBean.getResult().getTeamName();
