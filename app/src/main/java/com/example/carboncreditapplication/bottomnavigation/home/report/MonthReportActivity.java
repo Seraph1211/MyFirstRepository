@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.carboncreditapplication.R;
@@ -84,6 +85,7 @@ public class MonthReportActivity extends AppCompatActivity {
     private TextView textCarbonDioxideReductionThisMonth;  //本月二氧化碳减排量
     private TextView textUserRankLastMonth;  //上月排名
     private TextView textUserRankThisMonth;  //本月排名
+    private ImageButton buttonBack;
 
     MonthReportBean monthReportBean = null;  //bean
 
@@ -116,6 +118,14 @@ public class MonthReportActivity extends AppCompatActivity {
         textCarbonDioxideReductionThisMonth = findViewById(R.id.textCarbonDioxideReductionThisMonth);
         textUserRankLastMonth = findViewById(R.id.textUserRankLastMonth);
         textUserRankThisMonth = findViewById(R.id.textUserRankThisMonth);
+        buttonBack = findViewById(R.id.buttonChartsBack);
+
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     /**

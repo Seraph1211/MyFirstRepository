@@ -42,6 +42,8 @@ public class ImageViewPager {
     // 在values文件假下创建了pager_image_ids.xml文件，并定义了4张轮播图对应的id，用于点击事件
     private int[] image_ids = new int[]{R.id.pager_image1, R.id.pager_image2, R.id.pager_image3, R.id.pager_image4};
 
+    Thread thread;
+
     public ImageViewPager(Context context, View mView){
         this.context = context;
         this.mView = mView;
@@ -179,7 +181,7 @@ public class ImageViewPager {
      */
     private void autoPlayView() {
         //自动播放图片
-        new Thread(new Runnable() {
+        thread =  new Thread(new Runnable() {
             @Override
             public void run() {
                 while (!isStop) {
@@ -192,7 +194,8 @@ public class ImageViewPager {
                     SystemClock.sleep(PAGER_TIME);
                 }
             }
-        }).start();
+        });
+        thread.start();
     }
 
 

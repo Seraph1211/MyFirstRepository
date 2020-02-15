@@ -1,11 +1,7 @@
 package com.example.carboncreditapplication.bottomnavigation.userinfo.merchant;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.Preference;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -13,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +24,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 
 import okhttp3.Call;
@@ -39,12 +36,12 @@ import okhttp3.Response;
  * 返回上一个Fragment: activity.setFragment(LastFragment);
  * 从服务端拿到数据后再setFragment
  */
-
 public class MerchantActivity extends AppCompatActivity {
 
     private Context context = MerchantActivity.this;
     private static final String TAG = "MerchantActivity";
     private TextView textMerchant;
+    private ImageButton buttonBack;
 
     private String base64Code = null;  //从服务端获取的base64格式的图片信息
 
@@ -62,6 +59,14 @@ public class MerchantActivity extends AppCompatActivity {
 
     public void initView(){
         textMerchant = findViewById(R.id.textMerchant);
+        buttonBack = findViewById(R.id.buttonMerchantBack);
+
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     /**

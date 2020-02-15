@@ -20,9 +20,11 @@ import com.bumptech.glide.Glide;
 import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.beans.CarbonCreditsInfoBean;
 import com.example.carboncreditapplication.beans.UserInfoBean;
+import com.example.carboncreditapplication.bottomnavigation.BottomNavigationActivity;
 import com.example.carboncreditapplication.bottomnavigation.userinfo.cardpackage.CardPackageActivity;
 import com.example.carboncreditapplication.bottomnavigation.userinfo.merchant.MerchantActivity;
 import com.example.carboncreditapplication.bottomnavigation.userinfo.team.TeamActivity;
+import com.example.carboncreditapplication.utils.CustomProgressDialogUtils;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
 import com.google.gson.Gson;
@@ -75,6 +77,8 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
     }
 
     public void queryUserInfo(){
+        CustomProgressDialogUtils.showLoading(getContext());
+
       HttpUtils.getInfo(HttpUtils.userInfoUrl, 1, new Callback() {
            @Override
            public void onFailure(Call call, IOException e) {

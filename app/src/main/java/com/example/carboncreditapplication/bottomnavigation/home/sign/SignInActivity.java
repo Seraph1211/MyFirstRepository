@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +32,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private ImageView[] checkImageList = new ImageView[7]; //存放7张check图片的数组，累计签到n次，点亮n张图片
     private Button buttonSignIn;  //签到按钮
     private Button buttonToStore;  //跳转至积分商城的按钮
+    private ImageButton buttonBack; //返回
     private TextView textAvailableCredits;  //可用碳积分
     private TextView textSignInNum;  //连续签到天数
 
@@ -55,6 +57,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     public void init(){
         buttonSignIn = findViewById(R.id.buttonSignIn);
         buttonToStore = findViewById(R.id.buttonToStore);
+        buttonBack = findViewById(R.id.buttonSignInBack);
         textAvailableCredits = findViewById(R.id.textAvailableCreditsSignIn);
         textSignInNum = findViewById(R.id.textSignInNumber);
 
@@ -68,11 +71,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         buttonSignIn.setOnClickListener(this);
         buttonToStore.setOnClickListener(this);
+        buttonBack.setOnClickListener(this);
 
        initData();
-
-
-
 
     }
 
@@ -118,6 +119,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                     signInNumber++;
                     signInToday = 1;
                     reloadCheckImages();
+                    textSignInNum.setText(String.valueOf(signInNumber));
                     Toast.makeText(SignInActivity.this, "签到成功！", Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(SignInActivity.this, "今日已签到！", Toast.LENGTH_SHORT).show();
@@ -153,6 +155,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 Log.d(TAG, "onResponse: responseContent="+responseContent);
                 UserInfoBean userInfoBean = new Gson().fromJson(responseContent, UserInfoBean.class);
                 if(userInfoBean!=null){
+                    MySharedPreferencesUtils.saveUserInfo(SignInActivity.this, userInfoBean.getResultBean());
                     //获取已连续签到天数、今日是否已签到
                     signInNumber =  userInfoBean.getResultBean().getSignInNumber();
                     signInToday = userInfoBean.getResultBean().getSignInToday();
@@ -185,6 +188,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 CarbonCreditsInfoBean carbonCreditsInfoBean = new Gson().fromJson(responseContent, CarbonCreditsInfoBean.class);
 
                 if(carbonCreditsInfoBean!=null){
+                    MySharedPreferencesUtils.saveUserInfo(SignInActivity.this, carbonCreditsInfoBean.getResultBean());  //本地存储4
                     carbonCreditsAvailable = carbonCreditsInfoBean.getResultBean().getCarbonCreditsAvailable();
                     runOnUiThread(new Runnable() {
                         @Override

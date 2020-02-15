@@ -33,6 +33,8 @@ import com.example.carboncreditapplication.bottomnavigation.home.store.Store2Act
 import com.example.carboncreditapplication.bottomnavigation.userinfo.UserInfoFragment;
 import com.example.carboncreditapplication.bottomnavigation.home.rank.RankActivity;
 import com.example.carboncreditapplication.bottomnavigation.home.store.StoreActivity;
+import com.example.carboncreditapplication.pedometer.PedometerService;
+import com.example.carboncreditapplication.utils.CustomProgressDialogUtils;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
 import com.google.gson.Gson;
@@ -95,8 +97,19 @@ public class BottomNavigationActivity extends AppCompatActivity {
             }
         }
 
+        int versionCodes = Build.VERSION.SDK_INT;//取得SDK版本
+        Log.d(TAG, "onCreate: sdk版本="+versionCodes);
+
+        //启动服务
+        Intent intent = new Intent(BottomNavigationActivity.this, PedometerService.class);
+        startService(intent);
+
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        queryCarbonCreditsInfo();
+        queryUserInfo();
+
         //设置默认界面（HomeFragment)、按钮
         navView.getMenu().getItem(1).setChecked(true);
         navView.setItemIconTintList(null);
@@ -141,6 +154,8 @@ public class BottomNavigationActivity extends AppCompatActivity {
      * 从服务器获取用户信息并保存在本地
      */
     public void queryUserInfo(){
+        //CustomProgressDialogUtils.showLoading(BottomNavigationActivity.this);
+
         HttpUtils.getInfo(HttpUtils.userInfoUrl, 1, new Callback() {
             @SuppressLint("LongLogTag")
             @Override
@@ -148,6 +163,7 @@ public class BottomNavigationActivity extends AppCompatActivity {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        //CustomProgressDialogUtils.stopLoading();
                         Toast.makeText(BottomNavigationActivity.this, "获取网络数据失败，请重试！", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -164,20 +180,9 @@ public class BottomNavigationActivity extends AppCompatActivity {
                     userInfoBean = new Gson().fromJson(responseContent, UserInfoBean.class);
                     Log.i(TAG, "onResponse: UserInfoBean: "+userInfoBean.toString());
 
-                    if(userInfoBean!=null){
-                        UserInfoBean.UserInfoResultBean bean = userInfoBean.getResultBean();
-                        MySharedPreferencesUtils.saveUserInfo(BottomNavigationActivity.this, bean);
-                    }else {
-                        Log.d(TAG, "onResponse: userInfoBean解析失败，sp未存储用户信息");
-                    }
+                    UserInfoBean.UserInfoResultBean bean = userInfoBean.getResultBean();
+                    MySharedPreferencesUtils.saveUserInfo(BottomNavigationActivity.this, bean);
 
-                    //切换到主线程，设置home里要显示的内容
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                        }
-                    });
                 }else{
                     activity.runOnUiThread(new Runnable() {
                         @Override
@@ -195,6 +200,8 @@ public class BottomNavigationActivity extends AppCompatActivity {
      * 从服务器获取碳积分信息并保存在本地
      */
     public void queryCarbonCreditsInfo(){
+       // CustomProgressDialogUtils.showLoading(BottomNavigationActivity.this);
+
         HttpUtils.getInfo(HttpUtils.carbonCreditsInfoUrl, 1, new Callback() {
             @SuppressLint("LongLogTag")
             @Override
@@ -202,6 +209,7 @@ public class BottomNavigationActivity extends AppCompatActivity {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        //CustomProgressDialogUtils.stopLoading();
                         Toast.makeText(BottomNavigationActivity.this, "获取网络数据失败，请重试！", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -214,16 +222,15 @@ public class BottomNavigationActivity extends AppCompatActivity {
                 String responseContent = response.body().string();
                 Log.d(TAG, "onResponse: carbonCreditsInfo's responseContent: "+responseContent);
 
+
                 if(!TextUtils.isEmpty(responseContent)){
                     carbonCreditsInfoBean = new Gson().fromJson(responseContent, CarbonCreditsInfoBean.class);
                     Log.d(TAG, "onResponse: CarbonCreditsInfoBean: "+carbonCreditsInfoBean.toString());
 
-                    if(carbonCreditsInfoBean!=null){
-                        CarbonCreditsInfoBean.CarbonCreditsInfoResultBean bean = carbonCreditsInfoBean.getResultBean();
-                        MySharedPreferencesUtils.saveUserInfo(BottomNavigationActivity.this, bean);
-                    }else {
-                        Log.d(TAG, "onResponse: carbonCreditsInfoBean解析失败，sp未存储碳积分信息");
-                    }
+                    //即使没拿到数据bean也不会为Null，所以不必判空，但是当没拿到东西或者拿到一些奇怪的东西时的处理还没写好
+                    CarbonCreditsInfoBean.CarbonCreditsInfoResultBean bean = carbonCreditsInfoBean.getResultBean();
+                    MySharedPreferencesUtils.saveUserInfo(BottomNavigationActivity.this, bean);
+                    Log.d(TAG, "onResponse: MyPreferences,user_nickname="+MySharedPreferencesUtils.getString(BottomNavigationActivity.this, "nickname"));
 
                 }else{
                     Log.d(TAG, "onResponse: 读取到的碳积分信息为空！");

@@ -2,6 +2,7 @@ package com.example.carboncreditapplication.bottomnavigation.game;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -40,6 +41,8 @@ public class GameFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_game, container, false);
         imageView = view.findViewById(R.id.imageView2);
         queryCommodityInfoTestDrive(view);
+
+
 
         return view;
     }
@@ -81,6 +84,32 @@ public class GameFragment extends Fragment {
             }
         });
 
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.d(TAG, "onAttach: GameFragment");
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.d(TAG, "onActivityCreated: GameFragment");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        //imageViewPager.thread.stop();  //停止自动播放的线程
+        Log.d(TAG, "onDetach: GameFragment");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d(TAG, "onDestroyView: GameFragment");
     }
 }
 

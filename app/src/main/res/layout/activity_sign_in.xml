@@ -17,8 +17,8 @@
 
         <ImageButton
             android:id="@+id/buttonSignInBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:background="@drawable/back_white" />
 
         <TextView
@@ -27,7 +27,7 @@
             android:layout_gravity="center"
             android:text="每日签到"
             android:textColor="#FFFFFF"
-            android:textSize="25sp" />
+            android:textSize="22sp" />
 
     </android.support.v7.widget.Toolbar>
 
