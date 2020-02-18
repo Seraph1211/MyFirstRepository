@@ -56,9 +56,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     public void init(){
         buttonSignIn = findViewById(R.id.buttonSignIn);
-        buttonToStore = findViewById(R.id.buttonToStore);
+        //buttonToStore = findViewById(R.id.buttonToStore);
         buttonBack = findViewById(R.id.buttonSignInBack);
-        textAvailableCredits = findViewById(R.id.textAvailableCreditsSignIn);
+        //textAvailableCredits = findViewById(R.id.textAvailableCreditsSignIn);
         textSignInNum = findViewById(R.id.textSignInNumber);
 
         checkImageList[0] = findViewById(R.id.imageCheck1);
@@ -70,7 +70,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         checkImageList[6] = findViewById(R.id.imageCheck7);
 
         buttonSignIn.setOnClickListener(this);
-        buttonToStore.setOnClickListener(this);
         buttonBack.setOnClickListener(this);
 
        initData();
@@ -83,17 +82,20 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         signInToday = MySharedPreferencesUtils.getInt(SignInActivity.this, "sign_in_today");
 
 
+        /* 获取可用碳积分
         if(carbonCreditsAvailable != -2){
             textAvailableCredits.setText(String.valueOf(carbonCreditsAvailable));
         }else {
             queryCarbonCreditsInfo();
         }
+         */
 
         if(signInNumber==-2 || signInToday==-2){
             queryUserInfo();
         }else {
             textSignInNum.setText(String.valueOf(signInNumber));
         }
+        reloadCheckImages();
     }
 
     public void reloadCheckImages(){
@@ -119,17 +121,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                     signInNumber++;
                     signInToday = 1;
                     reloadCheckImages();
-                    textSignInNum.setText(String.valueOf(signInNumber));
+                    textSignInNum.setText(signInNumber+"天");
+                    MySharedPreferencesUtils.putInt(SignInActivity.this,"sign_in_num", signInNumber);
+                    MySharedPreferencesUtils.putInt(SignInActivity.this, "sign_in_today", signInToday);
                     Toast.makeText(SignInActivity.this, "签到成功！", Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(SignInActivity.this, "今日已签到！", Toast.LENGTH_SHORT).show();
                 }
 
-                break;
-            }
-            case R.id.buttonToStore:{
-                Toast.makeText(SignInActivity.this, "you clicked buttonToStore", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(SignInActivity.this, Store2Activity.class));
                 break;
             }
             case R.id.buttonSignInBack:{

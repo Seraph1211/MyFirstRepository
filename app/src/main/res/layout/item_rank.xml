@@ -1,25 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="50dp">
+    android:layout_height="60dp">
 
     <TextView
         android:id="@+id/text_ranking"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:gravity="center"
         android:text="1"
-        android:textSize="20sp"
+        android:textSize="22sp"
+        android:layout_weight="0.8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/image_ranking"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="3dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
         android:src="@drawable/girl"
         app:layout_constraintStart_toEndOf="@id/text_ranking"
         app:layout_constraintTop_toTopOf="parent"
@@ -28,10 +34,12 @@
 
     <TextView
         android:id="@+id/text_ranking_name"
-        android:layout_width="120dp"
+        android:layout_width="0dp"
         android:layout_height="50dp"
         android:gravity="center"
+        android:layout_weight="2"
         android:text="烽火戏诸侯"
+        android:layout_gravity="center_vertical"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@id/image_ranking"
         app:layout_constraintTop_toTopOf="parent"
@@ -40,8 +48,10 @@
 
     <TextView
         android:id="@+id/text_ranking_credits"
-        android:layout_width="121dp"
+        android:layout_width="0dp"
         android:layout_height="52dp"
+        android:layout_weight="2"
+        android:layout_gravity="center_vertical"
         android:gravity="center|end"
         android:text="154651611"
         android:textSize="18sp"
@@ -50,11 +60,13 @@
 
     <ImageView
         android:id="@+id/imageView5"
-        android:layout_width="40dp"
+        android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginTop="5dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
         android:src="@drawable/rank_credit"
         app:layout_constraintStart_toEndOf="@id/text_ranking_credits"
         app:layout_constraintTop_toTopOf="parent" />
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

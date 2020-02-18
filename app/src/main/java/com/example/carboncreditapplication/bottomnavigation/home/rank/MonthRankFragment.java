@@ -24,7 +24,7 @@ public class MonthRankFragment extends Fragment {
 
         initList();
 
-        RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.recycler_view_month);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view_month);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));

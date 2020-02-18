@@ -138,7 +138,7 @@ public class Store2Activity extends AppCompatActivity implements View.OnClickLis
                 break;
             }
             case R.id.buttonToCardPackage:{
-                startActivity(new Intent(Store2Activity.this, SignInActivity.class));
+                startActivity(new Intent(Store2Activity.this, CardPackageActivity.class));
                 break;
             }
             case R.id.buttonStore2Back:{
