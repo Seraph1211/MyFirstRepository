@@ -54,6 +54,8 @@ public class BottomNavigationActivity extends AppCompatActivity {
     private UserInfoBean userInfoBean = null;
     private CarbonCreditsInfoBean carbonCreditsInfoBean = null;
     BottomNavigationActivity activity =  BottomNavigationActivity.this;
+    private boolean hasUserInfo;
+    private boolean hasCreditsInfo;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -87,6 +89,8 @@ public class BottomNavigationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom_navigation);
 
+
+
         ZXingLibrary.initDisplayOpinion(this);  //二维码相关
         //获取相机拍摄读写权限
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -107,15 +111,13 @@ public class BottomNavigationActivity extends AppCompatActivity {
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        queryCarbonCreditsInfo();
-        queryUserInfo();
+        //initData();
 
         //设置默认界面（HomeFragment)、按钮
         navView.getMenu().getItem(1).setChecked(true);
         navView.setItemIconTintList(null);
         setFragment(new HomeFragment());
     }
-
 
     public void setFragment(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -150,6 +152,17 @@ public class BottomNavigationActivity extends AppCompatActivity {
         }
     }
 
+    public void initData(){
+        hasUserInfo = MySharedPreferencesUtils.getBoolean(BottomNavigationActivity.this, "has_user_info");
+        hasCreditsInfo = MySharedPreferencesUtils.getBoolean(BottomNavigationActivity.this, "has_credits_info");
+        if(!hasUserInfo){  //本地没有保存User模块的信息
+            queryUserInfo();
+        }
+        if (!hasCreditsInfo){ //本地没有保存Credits模块的信息（碳积分、里程）
+            queryCarbonCreditsInfo();
+        }
+    }
+
     /**
      * 从服务器获取用户信息并保存在本地
      */
@@ -163,7 +176,6 @@ public class BottomNavigationActivity extends AppCompatActivity {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        //CustomProgressDialogUtils.stopLoading();
                         Toast.makeText(BottomNavigationActivity.this, "获取网络数据失败，请重试！", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -178,11 +190,8 @@ public class BottomNavigationActivity extends AppCompatActivity {
 
                 if(!TextUtils.isEmpty(responseContent)){
                     userInfoBean = new Gson().fromJson(responseContent, UserInfoBean.class);
-                    Log.i(TAG, "onResponse: UserInfoBean: "+userInfoBean.toString());
-
-                    UserInfoBean.UserInfoResultBean bean = userInfoBean.getResultBean();
-                    MySharedPreferencesUtils.saveUserInfo(BottomNavigationActivity.this, bean);
-
+                    MySharedPreferencesUtils.saveUserInfo(BottomNavigationActivity.this, userInfoBean.getResultBean());
+                    MySharedPreferencesUtils.putBoolean(BottomNavigationActivity.this, "has_user_info", true);
                 }else{
                     activity.runOnUiThread(new Runnable() {
                         @Override
@@ -190,8 +199,8 @@ public class BottomNavigationActivity extends AppCompatActivity {
                             Toast.makeText(BottomNavigationActivity.this, "获取网络数据失败，请重试！", Toast.LENGTH_SHORT).show();
                         }
                     });
-                    Log.d(TAG, "onResponse: 读取到的用户信息为空！");
                 }
+
             }
         });
     }
@@ -222,14 +231,12 @@ public class BottomNavigationActivity extends AppCompatActivity {
                 String responseContent = response.body().string();
                 Log.d(TAG, "onResponse: carbonCreditsInfo's responseContent: "+responseContent);
 
-
                 if(!TextUtils.isEmpty(responseContent)){
                     carbonCreditsInfoBean = new Gson().fromJson(responseContent, CarbonCreditsInfoBean.class);
-                    Log.d(TAG, "onResponse: CarbonCreditsInfoBean: "+carbonCreditsInfoBean.toString());
-
                     //即使没拿到数据bean也不会为Null，所以不必判空，但是当没拿到东西或者拿到一些奇怪的东西时的处理还没写好
-                    CarbonCreditsInfoBean.CarbonCreditsInfoResultBean bean = carbonCreditsInfoBean.getResultBean();
-                    MySharedPreferencesUtils.saveUserInfo(BottomNavigationActivity.this, bean);
+
+                    MySharedPreferencesUtils.saveUserInfo(BottomNavigationActivity.this, carbonCreditsInfoBean.getResultBean());
+                    MySharedPreferencesUtils.putBoolean(BottomNavigationActivity.this, "has_credits_info", true);
                     Log.d(TAG, "onResponse: MyPreferences,user_nickname="+MySharedPreferencesUtils.getString(BottomNavigationActivity.this, "nickname"));
 
                 }else{

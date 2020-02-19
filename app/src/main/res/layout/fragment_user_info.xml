@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -21,7 +21,7 @@
 
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/linearLayout"
-                android:layout_width="412dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -110,8 +110,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
+                android:layout_marginLeft="14dp"
+                android:layout_marginRight="14dp"
                 android:background="@drawable/shape_corner_shadow">
 
                 <TextView
@@ -387,10 +387,6 @@
 
         </LinearLayout>
 
-
-
     </ScrollView>
 
-
-
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

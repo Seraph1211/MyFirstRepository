@@ -97,7 +97,7 @@ public class MonthReportActivity extends AppCompatActivity {
 
         init();
 
-        queryReportInfo();
+        //queryReportInfo();
 
     }
 

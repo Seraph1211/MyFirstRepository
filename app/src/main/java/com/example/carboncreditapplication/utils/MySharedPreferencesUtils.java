@@ -88,6 +88,10 @@ public class MySharedPreferencesUtils {
             editor.putInt("mileage_bus_total", creditsInfoBean.getMileageBusTotal());  //总公交里程
             editor.putInt("mileage_bike_total", creditsInfoBean.getMileageBikeTotal());  //总骑行里程
             editor.putInt("mileage_walk_total", creditsInfoBean.getMileageWalkTotal());  //总步行里程
+            editor.putInt("mileage_subway_yesterday", creditsInfoBean.getMileageSubwayToday());  //昨日地铁里程
+            editor.putInt("mileage_bus_yesterday", creditsInfoBean.getMileageBusToday());  //昨日公交里程
+            editor.putInt("mileage_bike_yesterday", creditsInfoBean.getMileageBikeToday());  //昨日骑行里程
+            editor.putInt("mileage_walk_yesterday", creditsInfoBean.getMileageWalkToday());  //昨日步数
 
             editor.apply();
         }
@@ -120,6 +124,10 @@ public class MySharedPreferencesUtils {
             editor.putInt("mileage_bus_total", creditsInfoBean.getMileageBusTotal());  //总公交里程
             editor.putInt("mileage_bike_total", creditsInfoBean.getMileageBikeTotal());  //总骑行里程
             editor.putInt("mileage_walk_total", creditsInfoBean.getMileageWalkTotal());  //总步行里程
+            editor.putInt("mileage_subway_yesterday", creditsInfoBean.getMileageSubwayToday());  //昨日地铁里程
+            editor.putInt("mileage_bus_yesterday", creditsInfoBean.getMileageBusToday());  //昨日公交里程
+            editor.putInt("mileage_bike_yesterday", creditsInfoBean.getMileageBikeToday());  //昨日骑行里程
+            editor.putInt("mileage_walk_yesterday", creditsInfoBean.getMileageWalkToday());  //昨日步数
 
             editor.apply();
         }

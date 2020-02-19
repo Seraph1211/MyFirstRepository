@@ -93,7 +93,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         if(signInNumber==-2 || signInToday==-2){
             queryUserInfo();
         }else {
-            textSignInNum.setText(String.valueOf(signInNumber));
+            textSignInNum.setText(signInNumber+"天");
         }
         reloadCheckImages();
     }

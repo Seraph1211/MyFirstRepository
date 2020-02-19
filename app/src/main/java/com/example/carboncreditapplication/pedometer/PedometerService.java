@@ -15,9 +15,9 @@ import android.util.Log;
 
 import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
 
-import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
 public class PedometerService extends Service implements SensorEventListener {
+    private static final String TAG = "PedometerService";
     private SensorManager sensorManager;  //传感器管理者
     private int stepCountToday = 0;  //今日步数
     private int previousStepCount = 0; //上一次获取的“从系统重启到现在的总步数”

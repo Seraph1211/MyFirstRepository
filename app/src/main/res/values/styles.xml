@@ -28,5 +28,9 @@
 
     </style>
 
+    <style name="LauncherTheme" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/report_bg</item>
+    </style>
+
 
 </resources>

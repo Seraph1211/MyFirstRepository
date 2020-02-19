@@ -8,182 +8,9 @@
     android:background="#ffffff"
     android:orientation="vertical">
 
-    <!--
-    碳积分的展示区域
-    -->
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="200dp"
-        android:layout_marginBottom="15dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout_editor_absoluteY="0dp"
-            tools:layout_editor_absoluteX="8dp"/>
-
-        <LinearLayout
-            android:weightSum="10"
-            android:background="#33000000"
-            android:orientation="horizontal"
-            android:layout_gravity="bottom"
-            android:gravity="center_vertical"
-            android:layout_width="match_parent"
-            android:layout_height="35dip">
-            <TextView
-                android:layout_weight="8"
-                android:id="@+id/tv_pager_title"
-                android:text="很长的标题。。。。。你懂我意思吧"
-                android:paddingLeft="8dip"
-                android:gravity="center_vertical"
-                android:textColor="@android:color/white"
-                android:layout_width="0dp"
-                android:layout_height="35dip"/>
-            <!--用来动态添加轮播小点-->
-            <LinearLayout
-                android:id="@+id/lineLayout_dot"
-                android:layout_weight="2"
-                android:gravity="center|right"
-                android:layout_marginRight="5dp"
-                android:paddingLeft="3dp"
-                android:paddingRight="3dp"
-                android:orientation="horizontal"
-                android:layout_width="0dp"
-                android:layout_height="match_parent">
-
-            </LinearLayout>
-
-        </LinearLayout>
-    </FrameLayout>
-
-
-    <!--
-    导航按钮区域，含排行榜、商城、签到等？先设三个
-    -->
-    <LinearLayout
-        android:id="@+id/nav_bar"
-        android:layout_width="400dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="5dp"
-        android:orientation="horizontal">
-
-        <!--三个可点击的LinearLayout-->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/store"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:background="@drawable/store_009900"
-                android:onClick="onClick" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="积分商城" />
-
-        </LinearLayout>
-
-        <LinearLayout
-
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/rank"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:background="@drawable/rank_009900"
-                android:onClick="onClick" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="排行榜" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/sign_in"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:background="@drawable/sign_009900"
-                android:onClick="onClick" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="每日签到" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:padding="5dp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <ImageButton
-                android:id="@+id/report"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:background="@drawable/report_009900"
-                android:onClick="onClick" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="出行月报" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <!--
-    用滚动框来显示绿色出行的里程数
-    前期设置好图片、背景后，后期只需更改里程数即可
-    里程数的textView id有：text_on_foot_mileage, text_subway_mileage, text_bus_mileage, text_bike_mileage
-    -->
     <ScrollView
-        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        android:padding="10dp"
         android:scrollbars="none">
 
         <LinearLayout
@@ -191,263 +18,625 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/subway_mileage"
+            <com.youth.banner.Banner
+                android:id="@+id/banner"
                 android:layout_width="match_parent"
-                android:layout_height="110dp"
-                android:layout_marginBottom="25dp"
-                android:background="@drawable/shape_corner"
-                android:orientation="horizontal">
+                android:layout_height="200dp"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <android.support.constraint.ConstraintLayout
+        <!--
+            导航按钮区域，含排行榜、商城、签到等？先设三个
+            -->
+        <LinearLayout
+            android:id="@+id/nav_bar"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal">
+
+            <!--三个可点击的LinearLayout-->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/store"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/store_009900"
+                    android:onClick="onClick" />
+
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView"
-                    app:layout_constraintEnd_toEndOf="@+id/text_subway_mileage"
-                    app:layout_constraintStart_toEndOf="@+id/text_subway_mileage"
-                    app:layout_constraintTop_toBottomOf="@+id/textView">
-
-                    <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="160dp"
-                        android:layout_height="42dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginTop="4dp"
-                        android:text="地铁总里程"
-                        android:gravity="center"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="25sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/text_subway_mileage"
-                        android:layout_width="222dp"
-                        android:layout_height="42dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginBottom="24dp"
-                        android:textColor="#009900"
-                        android:gravity="left"
-                        android:paddingLeft="20dp"
-                        android:text="12"
-                        android:textSize="35sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-
-
-                    <ImageView
-                        android:id="@+id/imageView"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginEnd="24dp"
-                        android:layout_marginRight="36dp"
-                        android:background="@drawable/ic_subway_24dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-
-                </android.support.constraint.ConstraintLayout>
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="积分商城" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/on_foot_mileage"
-                android:layout_width="match_parent"
-                android:layout_height="110dp"
-                android:layout_marginBottom="25dp"
-                android:background="@drawable/shape_corner"
-                android:orientation="horizontal">
 
-                <android.support.constraint.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/rank"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/rank_009900"
+                    android:onClick="onClick" />
+
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView"
-                    app:layout_constraintEnd_toEndOf="@+id/textView3"
-                    app:layout_constraintStart_toEndOf="@+id/textView3"
-                    app:layout_constraintTop_toBottomOf="@+id/textView">
-
-                    <TextView
-                        android:id="@+id/textView8"
-                        android:gravity="center"
-                        android:layout_width="160dp"
-                        android:layout_height="42dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginTop="4dp"
-                        android:text="步行总里程"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="25sp"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/text_on_foot_mileage"
-                        android:layout_width="222dp"
-                        android:layout_height="42dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginBottom="24dp"
-                        android:gravity="left"
-                        android:paddingLeft="20dp"
-                        android:text="12"
-                        android:textSize="35sp"
-                        android:textColor="#009900"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-
-
-                    <ImageView
-                        android:id="@+id/imageView4"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginEnd="24dp"
-                        android:layout_marginRight="36dp"
-                        android:background="@drawable/ic_walk_24dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-
-                </android.support.constraint.ConstraintLayout>
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/bus_mileage"
-                android:layout_width="match_parent"
-                android:layout_height="121dp"
-                android:layout_marginBottom="25dp"
-                android:background="@drawable/shape_corner"
-                android:orientation="horizontal">
-
-                <android.support.constraint.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView"
-                    app:layout_constraintEnd_toEndOf="@+id/text_bus_mileage"
-                    app:layout_constraintStart_toEndOf="@+id/text_bus_mileage"
-                    app:layout_constraintTop_toBottomOf="@+id/textView">
-
-                    <TextView
-                        android:id="@+id/textView4"
-                        android:layout_width="160dp"
-                        android:layout_height="36dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginTop="4dp"
-                        android:gravity="center"
-                        android:text="公交总里程"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="25sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/text_bus_mileage"
-                        android:layout_width="222dp"
-                        android:layout_height="42dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginBottom="24dp"
-                        android:gravity="left"
-                        android:paddingLeft="20dp"
-                        android:text="12"
-                        android:textSize="35sp"
-                        android:textColor="#009900"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-
-
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginEnd="24dp"
-                        android:layout_marginRight="36dp"
-                        android:background="@drawable/ic_bus_24dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-
-                </android.support.constraint.ConstraintLayout>
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="排行榜" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/bike_mileage"
-                android:layout_width="match_parent"
-                android:layout_height="110dp"
-                android:layout_marginBottom="25dp"
-                android:background="@drawable/shape_corner"
-                android:orientation="horizontal">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-                <android.support.constraint.ConstraintLayout
+                <ImageButton
+                    android:id="@+id/sign_in"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/sign_009900"
+                    android:onClick="onClick" />
+
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView"
-                    app:layout_constraintEnd_toEndOf="@+id/text_bike_mileage"
-                    app:layout_constraintStart_toEndOf="@+id/text_bike_mileage"
-                    app:layout_constraintTop_toBottomOf="@+id/textView">
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="每日签到" />
 
-                    <TextView
-                        android:id="@+id/textView6"
-                        android:layout_width="160dp"
-                        android:layout_height="42dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginTop="4dp"
-                        android:gravity="center"
-                        android:text="骑行总里程"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="25sp"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+            </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/text_bike_mileage"
-                        android:layout_width="222dp"
-                        android:layout_height="42dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginBottom="24dp"
-                        android:gravity="left"
-                        android:paddingLeft="20dp"
-                        android:text="12"
-                        android:textSize="35sp"
-                        android:textColor="#009900"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="5dp">
 
+                <ImageButton
+                    android:id="@+id/report"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/report_009900"
+                    android:onClick="onClick" />
 
-                    <ImageView
-                        android:id="@+id/imageView3"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginEnd="24dp"
-                        android:layout_marginRight="36dp"
-                        android:background="@drawable/ic_bike_24dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-
-                </android.support.constraint.ConstraintLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="出行月报" />
 
             </LinearLayout>
 
         </LinearLayout>
 
+        <!--
+            里程数
+            前期设置好图片、背景后，后期只需更改里程数即可
+            里程数的textView id有：text_on_foot_mileage, text_subway_mileage, text_bus_mileage, text_bike_mileage
+            -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginBottom="25dp"
+                android:background="@drawable/shape_corner"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="地铁里程"
+                            android:textAppearance="@android:style/TextAppearance.Large"
+                            android:gravity="left"
+                            android:layout_marginTop="5dp"
+                            android:paddingLeft="20dp"
+                            android:textSize="24sp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="left|bottom"
+                            android:textSize="20sp"
+                            android:paddingBottom="2dp"
+                            android:text="(km)"
+                            />
+
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_marginBottom="12dp"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignRight="@+id/viewLine3"
+                            android:orientation="vertical">
+
+
+                            <TextView
+                                android:id="@+id/textSubwayMileagesTotal"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:textColor="#009900"
+                                android:layout_weight="3"
+                                android:gravity="center"
+                                android:textSize="36sp"
+                                android:text="0"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:text="总里程"
+                                android:gravity="center"/>
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignLeft="@+id/viewLine3"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textSubwayMileagesYesterday"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:textColor="#009900"
+                                android:layout_weight="3"
+                                android:gravity="center"
+                                android:textSize="36sp"
+                                android:text="0"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:text="昨日里程"
+                                android:gravity="center"/>
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/viewLine3"
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/darker_gray"
+                            android:layout_centerInParent="true"
+                            android:layout_marginBottom="40dp"
+                            />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_subway_24dp"
+                    />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginBottom="25dp"
+            android:background="@drawable/shape_corner"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="步行里程"
+                        android:textAppearance="@android:style/TextAppearance.Large"
+                        android:gravity="left"
+                        android:layout_marginTop="5dp"
+                        android:paddingLeft="20dp"
+                        android:textSize="24sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="left|bottom"
+                        android:textSize="20sp"
+                        android:paddingBottom="2dp"
+                        android:text="(km)"
+                        />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginBottom="12dp"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignRight="@+id/viewLine4"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/textWalkMileagesTotal"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:textColor="#009900"
+                            android:layout_weight="3"
+                            android:gravity="center"
+                            android:textSize="36sp"
+                            android:text="0"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:text="总里程"
+                            android:gravity="center"/>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignLeft="@+id/viewLine4"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textWalkMileagesYesterday"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:textColor="#009900"
+                            android:layout_weight="3"
+                            android:gravity="center"
+                            android:textSize="36sp"
+                            android:text="0"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:text="昨日步数"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/viewLine4"
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/darker_gray"
+                        android:layout_centerInParent="true"
+                        android:layout_marginBottom="40dp"
+                        />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/ic_walk_24dp"
+                />
+
+
+        </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginBottom="25dp"
+                android:background="@drawable/shape_corner"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="骑行里程"
+                            android:textAppearance="@android:style/TextAppearance.Large"
+                            android:gravity="left"
+                            android:layout_marginTop="5dp"
+                            android:paddingLeft="20dp"
+                            android:textSize="24sp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="left|bottom"
+                            android:textSize="20sp"
+                            android:paddingBottom="2dp"
+                            android:text="(km)"
+                            />
+
+                    </LinearLayout>
+
+                    <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_marginBottom="12dp"
+                            android:layout_height="match_parent">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_alignRight="@+id/viewLine"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/textBikeMileagesTotal"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="0dp"
+                                        android:textColor="#009900"
+                                        android:layout_weight="3"
+                                        android:gravity="center"
+                                        android:textSize="36sp"
+                                        android:text="0"/>
+
+                                <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="0dp"
+                                        android:layout_weight="1"
+                                        android:text="总里程"
+                                        android:gravity="center"/>
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_alignLeft="@+id/viewLine"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/textBikeMileagesYesterday"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:textColor="#009900"
+                                    android:layout_weight="3"
+                                    android:gravity="center"
+                                    android:textSize="36sp"
+                                    android:text="0"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:text="昨日里程"
+                                    android:gravity="center"/>
+
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/viewLine"
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:background="@android:color/darker_gray"
+                                android:layout_centerInParent="true"
+                                android:layout_marginBottom="40dp"
+                                />
+
+                        </RelativeLayout>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_bike_24dp"
+                    />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginBottom="25dp"
+                android:background="@drawable/shape_corner"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="公交里程"
+                            android:textAppearance="@android:style/TextAppearance.Large"
+                            android:gravity="left"
+                            android:layout_marginTop="5dp"
+                            android:paddingLeft="20dp"
+                            android:textSize="24sp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="left|bottom"
+                            android:textSize="20sp"
+                            android:paddingBottom="2dp"
+                            android:text="(km)"
+                            />
+
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_marginBottom="12dp"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignRight="@+id/viewLine2"
+                            android:orientation="vertical">
+
+
+                                <TextView
+                                    android:id="@+id/textBusMileagesTotal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:textColor="#009900"
+                                    android:layout_weight="3"
+                                    android:gravity="center"
+                                    android:textSize="36sp"
+                                    android:text="0"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:text="总里程"
+                                    android:gravity="center"/>
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignLeft="@+id/viewLine2"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textBusMileagesYesterday"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:textColor="#009900"
+                                android:layout_weight="3"
+                                android:gravity="center"
+                                android:textSize="36sp"
+                                android:text="0"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:text="昨日里程"
+                                android:gravity="center"/>
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/viewLine2"
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/darker_gray"
+                            android:layout_centerInParent="true"
+                            android:layout_marginBottom="40dp"
+                            />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_bus_24dp"
+                    />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        </LinearLayout>
+
     </ScrollView>
+
 
 </LinearLayout>

@@ -34,7 +34,7 @@
         <activity android:name=".bottomnavigation.userinfo.team.TeamActivity" />
         <activity
             android:name=".bottomnavigation.userinfo.cardpackage.CardPackageActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".bottomnavigation.home.store.CommodityInfoActivity" />
         <activity android:name=".bottomnavigation.home.sign.SignInActivity" />
         <activity
