@@ -26,7 +26,7 @@
         android:id="@+id/buttonCreateTeam2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_button_orange"
+        android:background="@drawable/shape_btn_4caf50"
         android:text="创 建 队 伍"
         android:textColor="#ffffff"
         android:textSize="20dp"

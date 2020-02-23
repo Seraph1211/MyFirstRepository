@@ -1,7 +1,5 @@
 package com.example.carboncreditapplication.bottomnavigation.home.sign;
 
-import android.annotation.TargetApi;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,9 +13,10 @@ import android.widget.Toast;
 import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.beans.CarbonCreditsInfoBean;
 import com.example.carboncreditapplication.beans.UserInfoBean;
-import com.example.carboncreditapplication.bottomnavigation.home.store.Store2Activity;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
+import com.example.carboncreditapplication.utils.ToastUtils;
+import com.example.carboncreditapplication.utils.UserInfo;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -118,13 +117,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
                 //签到满7天后重置签到天数的问题未考虑,未告知服务器今日已签到
                 if(signInNumber>-1 && signInNumber<7 && signInToday!=1){  //如果
-                    signInNumber++;
-                    signInToday = 1;
-                    reloadCheckImages();
-                    textSignInNum.setText(signInNumber+"天");
-                    MySharedPreferencesUtils.putInt(SignInActivity.this,"sign_in_num", signInNumber);
-                    MySharedPreferencesUtils.putInt(SignInActivity.this, "sign_in_today", signInToday);
-                    Toast.makeText(SignInActivity.this, "签到成功！", Toast.LENGTH_SHORT).show();
+                    signInToServer();
                 }else{
                     Toast.makeText(SignInActivity.this, "今日已签到！", Toast.LENGTH_SHORT).show();
                 }
@@ -158,14 +151,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                     //获取已连续签到天数、今日是否已签到
                     signInNumber =  userInfoBean.getResultBean().getSignInNumber();
                     signInToday = userInfoBean.getResultBean().getSignInToday();
-                    textSignInNum.setText(String.valueOf(signInNumber));
+                    textSignInNum.setText(signInNumber+"天");
                 }else {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(SignInActivity.this, "获取签到信息失败", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    ToastUtils.showToast(SignInActivity.this, "获取签到信息失败");
                 }
             }
         });
@@ -208,6 +196,31 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                     });
                 }
 
+            }
+        });
+    }
+
+
+    public void signInToServer(){
+        HttpUtils.getInfo(HttpUtils.userSignInUrl + "?user_id=" + UserInfo.userId, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtils.showToast(SignInActivity.this, "网络错误，请重试");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseContent = response.body().string();
+                Log.d(TAG, "onResponse: "+responseContent);
+
+                signInNumber++;
+                signInToday = 1;
+                reloadCheckImages();
+                textSignInNum.setText(signInNumber+"天");
+                MySharedPreferencesUtils.putInt(SignInActivity.this,"sign_in_num", signInNumber);
+                MySharedPreferencesUtils.putInt(SignInActivity.this, "sign_in_today", signInToday);
+
+                ToastUtils.showToast(SignInActivity.this, "签到成功");
             }
         });
     }

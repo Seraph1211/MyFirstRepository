@@ -10,8 +10,8 @@
 
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/holo_orange_light"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#4CAF50"
         app:layout_constraintTop_toTopOf="parent"
         >
 
@@ -22,6 +22,7 @@
             android:background="@drawable/back_white" />
 
         <TextView
+            android:id="@+id/textTeamName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -32,8 +33,8 @@
         <ImageButton
             android:id="@+id/buttonExitTeam"
             android:layout_gravity="end"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginRight="15dp"
             android:background="@drawable/exit_white"/>
 

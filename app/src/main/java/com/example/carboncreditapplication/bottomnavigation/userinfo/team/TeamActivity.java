@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.carboncreditapplication.R;
@@ -20,6 +21,7 @@ import com.example.carboncreditapplication.beans.UserInfoBean;
 import com.example.carboncreditapplication.bottomnavigation.userinfo.merchant.MerchantActivity;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
+import com.example.carboncreditapplication.utils.ToastUtils;
 import com.example.carboncreditapplication.utils.UserInfo;
 import com.google.gson.Gson;
 
@@ -34,10 +36,10 @@ import okhttp3.Response;
 public class TeamActivity extends AppCompatActivity {
     private static final String TAG = "TeamActivity";
     private static final int TEAM_ID_READY = 111;
-    private String teamName;
     private List<TeamBean.ResultBean.UserListBean> memberList = new ArrayList<>();
     private ImageButton buttonBackTeam;  //返回
     private ImageButton buttonExitTeam;  //退出队伍
+    private TextView textTeamName;
     private int teamId;
     private TeamBean teamBean;
 
@@ -69,6 +71,7 @@ public class TeamActivity extends AppCompatActivity {
     public void initView(){
         buttonBackTeam = findViewById(R.id.buttonTeamBack);
         buttonExitTeam = findViewById(R.id.buttonExitTeam);
+        textTeamName = findViewById(R.id.textTeamName);
 
         buttonExitTeam.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,48 +144,12 @@ public class TeamActivity extends AppCompatActivity {
                 Log.d(TAG, "onResponse: responseContent="+responseContent);
 
                 UserInfoBean userInfoBean = new Gson().fromJson(responseContent, UserInfoBean.class);
-                if(userInfoBean!=null){
-                    teamId = userInfoBean.getResultBean().getTeamId();
-                    mHandler.sendEmptyMessage(TEAM_ID_READY);
-                }
+                teamId = userInfoBean.getResultBean().getTeamId();
+                mHandler.sendEmptyMessage(TEAM_ID_READY);
+
             }
         });
 
-    }
-
-    public void exitTeam(){
-        HttpUtils.getInfo(HttpUtils.deleteTeamMemberUrl, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.d(TAG, "onFailure: ");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(TeamActivity.this, "退出队伍失败，请重试！", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                Log.d(TAG, "onResponse: ");
-                Toast.makeText(TeamActivity.this, "成功退出队伍！", Toast.LENGTH_SHORT).show();
-                MySharedPreferencesUtils.putInt(TeamActivity.this, "team_id", -1);  //将本地存储的队伍id设为-1，表示没有加入队伍
-                setFragment(new NoTeamFragment());  //重新加载碎片
-            }
-        });
-    }
-
-    public TeamBean getTeamBean(){
-        return teamBean;
-    }
-
-    public String getTeamName() {
-        return teamName;
-    }
-
-    public List<TeamBean.ResultBean.UserListBean> getMemberList() {
-        return memberList;
     }
 
     /**
@@ -194,6 +161,7 @@ public class TeamActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.d(TAG, "onFailure: ");
+                ToastUtils.showToast(TeamActivity.this, "网络数据请求失败");
             }
 
             @Override
@@ -202,19 +170,39 @@ public class TeamActivity extends AppCompatActivity {
                 Log.d(TAG, "onResponse: responseContent="+responseContent);
 
                 teamBean = new Gson().fromJson(responseContent, TeamBean.class);
-                if(teamBean!=null){
-                    memberList = teamBean.getResult().getUserList();
-                    teamName = teamBean.getResult().getTeamName();
-                    setFragment(new TeamListFragment());  //加载TeamList碎片
-                }else {
-                    TeamActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(TeamActivity.this, "网络数据请求失败", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
+                memberList = teamBean.getResult().getUserList();
+                setFragment(new TeamListFragment());  //加载TeamList碎片
             }
         });
+    }
+
+    public void exitTeam(){
+        HttpUtils.getInfo(HttpUtils.deleteTeamMemberUrl+"?user_id="+UserInfo.userId, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d(TAG, "onFailure: ");
+                ToastUtils.showToast(TeamActivity.this, "退出队伍失败，请重试");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.d(TAG, "onResponse: "+response.body().string());
+                ToastUtils.showToast(TeamActivity.this, "成功退出队伍");
+                MySharedPreferencesUtils.putInt(TeamActivity.this, "team_id", -1);  //将本地存储的队伍id设为-1，表示没有加入队伍
+                setFragment(new NoTeamFragment());  //重新加载碎片
+            }
+        });
+    }
+
+    public TeamBean getTeamBean(){
+        return teamBean;
+    }
+
+    public List<TeamBean.ResultBean.UserListBean> getMemberList() {
+        return memberList;
+    }
+
+    public void setTeamName(String teamName){
+        textTeamName.setText(teamName);
     }
 }

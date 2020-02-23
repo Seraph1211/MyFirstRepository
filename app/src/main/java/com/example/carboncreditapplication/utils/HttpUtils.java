@@ -28,8 +28,9 @@ public class HttpUtils {
     public static final String cardPackageUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getUserCoupon?user_id=1&page_no=1&page_size=50";
     public static final String friendsInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/carbon_credits_system/user/getFriendInfo?user_id=1";
     public static final String teamInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getTeamInfo?user_id=1";
-    public static final String deleteTeamMemberUrl = "http://121.36.4.52:8090/carbon_credits_system/user/deleteUserFromTeam?user_id=1";
+    public static final String deleteTeamMemberUrl = "http://121.36.4.52:8090/carbon_credits_system/user/deleteUserFromTeam";
     public static final String createTeamUrl = "http://121.36.4.52:8090/carbon_credits_system/user/createTeam";
+    public static final String userSignInUrl = "http://121.36.4.52:8090/carbon_credits_system/user/signIn";
     public static final String addUserToTeamUrl = "http://121.36.4.52:8090/carbon_credits_system/user/addUserToTeam";
     public static final String giveAwayCreditsUrl = "http://121.36.4.52:8090/carbon_credits_system/user/giveAway";
     public static final String commodityInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/good/getGoods?page_no=1&page_size=10&good_type=1";
