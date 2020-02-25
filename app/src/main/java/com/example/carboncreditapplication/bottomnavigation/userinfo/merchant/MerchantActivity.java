@@ -15,8 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.carboncreditapplication.R;
+import com.example.carboncreditapplication.bottomnavigation.userinfo.cardpackage.CardPackageActivity;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
+import com.example.carboncreditapplication.utils.StatusBarUtils;
 import com.example.carboncreditapplication.utils.UserInfo;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
@@ -49,6 +51,9 @@ public class MerchantActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_merchant);
+
+        StatusBarUtils.setStatusBarColor(MerchantActivity.this, R.color.colorWhite);  //设置状态栏颜色
+        StatusBarUtils.setLightStatusBar(MerchantActivity.this, true, true);  //状态栏字体颜色-黑
 
         initView();
 

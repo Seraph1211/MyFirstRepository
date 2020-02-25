@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 
 import com.example.carboncreditapplication.R;
+import com.example.carboncreditapplication.utils.StatusBarUtils;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
@@ -19,6 +20,10 @@ public class QRCodeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrcode);
         ZXingLibrary.initDisplayOpinion(this);
+
+        StatusBarUtils.setStatusBarColor(QRCodeActivity.this, R.color.colorWhite);  //设置状态栏颜色
+        StatusBarUtils.setLightStatusBar(QRCodeActivity.this, true, true);  //状态栏字体颜色-黑
+
 
         imageQRCode = findViewById(R.id.imageQRCode);
 

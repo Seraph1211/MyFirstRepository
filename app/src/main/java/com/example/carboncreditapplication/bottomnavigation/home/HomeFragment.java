@@ -1,6 +1,5 @@
 package com.example.carboncreditapplication.bottomnavigation.home;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,14 +17,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.dyhdyh.widget.loadingbar2.LoadingBar;
 import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.beans.CarbonCreditsInfoBean;
 import com.example.carboncreditapplication.beans.UserInfoBean;
 import com.example.carboncreditapplication.bottomnavigation.BottomNavigationActivity;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
-import com.example.carboncreditapplication.utils.UserInfo;
 import com.google.gson.Gson;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -127,7 +124,7 @@ public class HomeFragment extends Fragment {
         titleList.add("标题3");
         titleList.add("标题4");
 
-        banner = view.findViewById(R.id.banner);
+        banner = view.findViewById(R.id.bannerHome);
         banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
         banner.setImageLoader(new MyLoader());
         banner.setImages(imageUrlList);

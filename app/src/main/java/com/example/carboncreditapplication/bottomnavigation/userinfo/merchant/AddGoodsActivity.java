@@ -12,16 +12,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.carboncreditapplication.R;
+import com.example.carboncreditapplication.bottomnavigation.userinfo.cardpackage.CardPackageActivity;
+import com.example.carboncreditapplication.utils.StatusBarUtils;
 
 public class AddGoodsActivity extends AppCompatActivity {
     private static final String TAG = "AddGoodsActivity";
     private Spinner mSpinner;
     private Button buttonAddGoods;
+    private ImageButton buttonBack;
 
     private int goodType = -1;
 
@@ -32,6 +36,10 @@ public class AddGoodsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_goods);
+
+        StatusBarUtils.setStatusBarColor(AddGoodsActivity.this, R.color.colorWhite);  //设置状态栏颜色
+        StatusBarUtils.setLightStatusBar(AddGoodsActivity.this, true, true);  //状态栏字体颜色-黑
+
         initView();
     }
 
@@ -42,6 +50,7 @@ public class AddGoodsActivity extends AppCompatActivity {
         addCouponFragment = new AddCouponFragment();
 
         buttonAddGoods = findViewById(R.id.buttonMerchantAddGoods);
+        buttonBack = findViewById(R.id.buttonMerchantAddGoodsBack);
 
         //若是Coupon，提交前要判断过期日期是否合理，不合理则Toast提醒修正
         buttonAddGoods.setOnClickListener(new View.OnClickListener() {
@@ -51,18 +60,18 @@ public class AddGoodsActivity extends AppCompatActivity {
             }
         });
 
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
     }
 
 
     public void initSpinner(){
         mSpinner = findViewById(R.id.spinnerGoodsType);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            mSpinner.setDropDownWidth(280); //下拉宽度
-            mSpinner.setDropDownHorizontalOffset(100); //下拉的横向偏移
-            mSpinner.setDropDownVerticalOffset(100); //下拉的纵向偏移
-        }
-
 
         //原始string数组
         final String[] spinnerItems = {"会员卡","折扣券","满减券","无门槛红包","碳积分抵押（实体商品）"};

@@ -15,6 +15,7 @@ import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.beans.MerchantBean;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
+import com.example.carboncreditapplication.utils.StatusBarUtils;
 import com.example.carboncreditapplication.utils.UserInfo;
 
 import org.json.JSONException;
@@ -64,6 +65,9 @@ public class MerchantInfoActivity extends AppCompatActivity implements View.OnCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_merchant_info);
+
+        StatusBarUtils.setStatusBarColor(MerchantInfoActivity.this, R.color.colorWhite);  //设置状态栏颜色
+        StatusBarUtils.setLightStatusBar(MerchantInfoActivity.this, true, true);  //状态栏字体颜色-黑
 
         initView();
         initData();

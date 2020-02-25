@@ -21,6 +21,7 @@ import com.example.carboncreditapplication.beans.UserInfoBean;
 import com.example.carboncreditapplication.bottomnavigation.userinfo.merchant.MerchantActivity;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
+import com.example.carboncreditapplication.utils.StatusBarUtils;
 import com.example.carboncreditapplication.utils.ToastUtils;
 import com.example.carboncreditapplication.utils.UserInfo;
 import com.google.gson.Gson;
@@ -63,6 +64,8 @@ public class TeamActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team);
+
+        StatusBarUtils.setStatusBarColor(TeamActivity.this, R.color.colorGreen);  //设置状态栏颜色
 
         initView();
         initData();

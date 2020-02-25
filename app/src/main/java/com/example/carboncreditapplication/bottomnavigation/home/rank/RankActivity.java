@@ -17,6 +17,7 @@ import com.example.carboncreditapplication.bottomnavigation.BottomNavigationActi
 import com.example.carboncreditapplication.bottomnavigation.home.store.Store2Activity;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
+import com.example.carboncreditapplication.utils.StatusBarUtils;
 
 import java.io.IOException;
 
@@ -33,6 +34,8 @@ public class RankActivity extends AppCompatActivity implements TabLayout.OnTabSe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rank);
+
+        StatusBarUtils.setStatusBarColor(RankActivity.this, R.color.colorOrange);  //设置状态栏颜色
 
         initView();
         initTab();

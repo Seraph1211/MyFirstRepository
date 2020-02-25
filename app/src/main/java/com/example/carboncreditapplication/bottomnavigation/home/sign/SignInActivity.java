@@ -15,6 +15,7 @@ import com.example.carboncreditapplication.beans.CarbonCreditsInfoBean;
 import com.example.carboncreditapplication.beans.UserInfoBean;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
+import com.example.carboncreditapplication.utils.StatusBarUtils;
 import com.example.carboncreditapplication.utils.ToastUtils;
 import com.example.carboncreditapplication.utils.UserInfo;
 import com.google.gson.Gson;
@@ -48,6 +49,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        StatusBarUtils.setStatusBarColor(SignInActivity.this, R.color.colorAqua);  //设置状态栏颜色
 
         init();
 

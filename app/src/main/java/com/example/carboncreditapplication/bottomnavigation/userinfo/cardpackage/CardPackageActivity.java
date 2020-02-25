@@ -1,14 +1,19 @@
 package com.example.carboncreditapplication.bottomnavigation.userinfo.cardpackage;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 
 import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.beans.CardPackageBean;
 import com.example.carboncreditapplication.utils.HttpUtils;
+import com.example.carboncreditapplication.utils.StatusBarUtils;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -27,11 +32,16 @@ public class CardPackageActivity extends AppCompatActivity {
     private static final String TAG = "CardPackageActivity";
     private RecyclerView cardPackageRecyclerView;
     private List<CardPackageBean.ResultBean.CouponBagBean> couponBagBeans = new ArrayList<>();
+    private ImageButton buttonBack;
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card_package);
+
+        StatusBarUtils.setStatusBarColor(CardPackageActivity.this, R.color.colorWhite);  //设置状态栏颜色
+        StatusBarUtils.setLightStatusBar(CardPackageActivity.this, true, true);  //状态栏字体颜色-黑
 
         init();
 
@@ -52,6 +62,14 @@ public class CardPackageActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         cardPackageRecyclerView.setLayoutManager(layoutManager);
         cardPackageRecyclerView.setAdapter(new CardPackageRecyclerViewAdapter(this, couponBagBeans));
+
+        buttonBack = findViewById(R.id.buttonCardPackageBack);
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     public void queryCouponInfo(){

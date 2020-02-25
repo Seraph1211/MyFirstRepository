@@ -18,11 +18,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.bumptech.glide.Glide;
 import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.beans.CouponResultBean;
 import com.example.carboncreditapplication.beans.MerchantBean;
+import com.example.carboncreditapplication.bottomnavigation.home.HomeFragment;
 import com.example.carboncreditapplication.utils.Base64Utils;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.Transformer;
+import com.youth.banner.loader.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +40,7 @@ import static android.support.constraint.Constraints.TAG;
 public class MerchantHomeFragment extends Fragment implements View.OnClickListener{
     View view;
     private MerchantActivity activity;
-    private ImageView imageMerchantHome;
+
     private ImageView imageMerchantScan;  //扫一扫
     private ImageView imageMerchantAddTicket;  //添加券
     private ImageView imageMerchantInfo;  //商家个人信息中心
@@ -43,11 +49,16 @@ public class MerchantHomeFragment extends Fragment implements View.OnClickListen
     private List<CouponResultBean.ResultBean.CouponBean> addedCouponList = new ArrayList<>();
     private MerchantBean bean = null;
 
+    private List<Integer> imageUrlList;
+    private List<String> titleList;
+    private Banner banner;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_merchant_home, container, false);
 
         initView();
+        initBanner();
         initRecyclerView();
 
         //Base64Utils.loadBase64Image("data:image/jpg;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAAAjCAIAAACmdes6AAABRUlEQVR42u3Yyw3CMAwGYEsMwBbswSAwBafeOHNg5FKEQFacOL8TN01RqhyqKJX8KQ+7obnXhyjf4h/uiIR+OP/dM0iDNEiDNEj9JqsWpMt0S7Xo+PvzkW3WisGNpGAUGBi6tWhoSkLiJupjLxWQ+CxZN0k7EqiVC09WqL2feDiJwxxIp+nMmxyRHeBF8lJRELROWnWWlEV4OF6XFoz8dMr+tUjIXsompXKSEnfZqtNTE5Jqg0UoQ/95qkg1J3uUhP+rp0hSu7yTMhsFU2SqHkw3EEHceVJ0QkwevMwzkaInIWfId1K2DU4qK1tx0jvQryrYQhpJqkCSyVNG4qroIuQvEMnRU0PiKpSUUlWWraZUq5M4TPajpPpK3J0kz3e+o7YkZbOtXiugJFM62paUpDrWqZ3eEBX/SnRHsp7dg9QBade3rS+1zQqnEpXIrwAAAABJRU5ErkJggg==", imageMerchantHome);
@@ -58,7 +69,6 @@ public class MerchantHomeFragment extends Fragment implements View.OnClickListen
     public void initView(){
         activity = (MerchantActivity) getActivity();
 
-        imageMerchantHome = view.findViewById(R.id.imageMerchantHome);
         imageMerchantAddTicket = view.findViewById(R.id.imageMerchantAddCard);
         imageMerchantScan = view.findViewById(R.id.imageMerchantScan);
         imageMerchantInfo = view.findViewById(R.id.imageMerchantInfo);
@@ -66,6 +76,33 @@ public class MerchantHomeFragment extends Fragment implements View.OnClickListen
         imageMerchantScan.setOnClickListener(this);
         imageMerchantAddTicket.setOnClickListener(this);
         imageMerchantInfo.setOnClickListener(this);
+    }
+
+    public void initBanner(){
+        imageUrlList = new ArrayList<>();
+        titleList = new ArrayList<>();
+
+        imageUrlList.add(R.drawable.banner_1);
+        imageUrlList.add(R.drawable.banner_2);
+        imageUrlList.add(R.drawable.banner_3);
+        imageUrlList.add(R.drawable.banner_4);
+
+        titleList.add("标题1");
+        titleList.add("标题2");
+        titleList.add("标题3");
+        titleList.add("标题4");
+
+        banner = view.findViewById(R.id.bannerMerchantHome);
+        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
+        banner.setImageLoader(new MyLoader());
+        banner.setImages(imageUrlList);
+        banner.setBannerTitles(titleList);
+        banner.setBannerAnimation(Transformer.Default);
+        banner.setDelayTime(2000);  //切换频率
+        banner.isAutoPlay(true);  //自动启动
+        banner.setIndicatorGravity(BannerConfig.CENTER);  //位置设置
+        banner.start();
+
     }
 
     public void initRecyclerView(){
@@ -170,5 +207,14 @@ public class MerchantHomeFragment extends Fragment implements View.OnClickListen
         }
     }
 
+
+    private class MyLoader extends ImageLoader {
+        @Override
+        public void displayImage(Context context, Object path, ImageView imageView) {
+            Glide.with(getActivity())
+                    .load(path).
+                    into(imageView);
+        }
+    }
 
 }

@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context=".bottomnavigation.userinfo.merchant.MerchantActivity">
 
@@ -12,7 +13,6 @@
         android:id="@+id/toolbar2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_orange_light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,7 +21,7 @@
             android:id="@+id/buttonMerchantBack"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:background="@drawable/back_white" />
+            android:background="@drawable/back32" />
 
         <TextView
             android:id="@+id/textMerchant"
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="商 家"
-            android:textColor="#FFFFFF"
+            android:textColor="@android:color/black"
             android:textSize="22sp" />
 
     </android.support.v7.widget.Toolbar>

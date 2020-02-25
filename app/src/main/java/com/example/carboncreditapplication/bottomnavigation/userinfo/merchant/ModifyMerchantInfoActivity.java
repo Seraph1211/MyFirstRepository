@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.beans.MerchantBean;
+import com.example.carboncreditapplication.utils.StatusBarUtils;
 
 public class ModifyMerchantInfoActivity extends AppCompatActivity {
 
@@ -33,6 +34,9 @@ public class ModifyMerchantInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_merchant_info);
+
+        StatusBarUtils.setStatusBarColor(ModifyMerchantInfoActivity.this, R.color.colorWhite);  //设置状态栏颜色
+        StatusBarUtils.setLightStatusBar(ModifyMerchantInfoActivity.this, true, true);  //状态栏字体颜色-黑
 
         initData();
         initView();

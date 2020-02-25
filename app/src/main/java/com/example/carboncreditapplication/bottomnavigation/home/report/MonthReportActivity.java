@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.beans.MonthReportBean;
 import com.example.carboncreditapplication.utils.HttpUtils;
+import com.example.carboncreditapplication.utils.StatusBarUtils;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -94,6 +95,8 @@ public class MonthReportActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_month_report);
+
+        StatusBarUtils.setStatusBarColor(MonthReportActivity.this, R.color.colorWathet);  //设置状态栏颜色
 
         init();
 
