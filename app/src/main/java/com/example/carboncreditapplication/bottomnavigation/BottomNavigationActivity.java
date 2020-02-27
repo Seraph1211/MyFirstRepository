@@ -2,7 +2,6 @@ package com.example.carboncreditapplication.bottomnavigation;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -20,21 +19,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.beans.CarbonCreditsInfoBean;
 import com.example.carboncreditapplication.beans.UserInfoBean;
 import com.example.carboncreditapplication.bottomnavigation.game.GameFragment;
 import com.example.carboncreditapplication.bottomnavigation.home.HomeFragment;
-import com.example.carboncreditapplication.bottomnavigation.home.rank.MonthRankFragment;
 import com.example.carboncreditapplication.bottomnavigation.home.report.MonthReportActivity;
 import com.example.carboncreditapplication.bottomnavigation.home.sign.SignInActivity;
-import com.example.carboncreditapplication.bottomnavigation.home.store.Store2Activity;
+import com.example.carboncreditapplication.bottomnavigation.home.store.store3.Store3Activity;
 import com.example.carboncreditapplication.bottomnavigation.userinfo.UserInfoFragment;
 import com.example.carboncreditapplication.bottomnavigation.home.rank.RankActivity;
-import com.example.carboncreditapplication.bottomnavigation.home.store.StoreActivity;
+import com.example.carboncreditapplication.bottomnavigation.home.store.store1.StoreActivity;
 import com.example.carboncreditapplication.pedometer.PedometerService;
-import com.example.carboncreditapplication.utils.CustomProgressDialogUtils;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
 import com.google.gson.Gson;
@@ -45,8 +41,6 @@ import java.io.IOException;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-
-import static android.support.constraint.Constraints.TAG;
 
 public class BottomNavigationActivity extends AppCompatActivity {
 
@@ -130,7 +124,7 @@ public class BottomNavigationActivity extends AppCompatActivity {
         switch (view.getId()){
             case R.id.store:{
                 Toast.makeText(BottomNavigationActivity.this, "Store!!!", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(BottomNavigationActivity.this, Store2Activity.class));
+                startActivity(new Intent(BottomNavigationActivity.this, Store3Activity.class));
                 break;
             }
             case R.id.rank:{

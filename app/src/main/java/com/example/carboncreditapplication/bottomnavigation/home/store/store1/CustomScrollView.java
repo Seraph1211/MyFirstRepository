@@ -1,4 +1,4 @@
-package com.example.carboncreditapplication.bottomnavigation.home.store;
+package com.example.carboncreditapplication.bottomnavigation.home.store.store1;
 
 import android.content.Context;
 import android.util.AttributeSet;

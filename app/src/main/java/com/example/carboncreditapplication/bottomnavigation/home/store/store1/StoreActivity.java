@@ -1,4 +1,4 @@
-package com.example.carboncreditapplication.bottomnavigation.home.store;
+package com.example.carboncreditapplication.bottomnavigation.home.store.store1;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +14,7 @@ import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 
 import com.example.carboncreditapplication.R;
+import com.example.carboncreditapplication.beans.CommodityBean;
 import com.example.carboncreditapplication.bottomnavigation.BottomNavigationActivity;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class StoreActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private CustomScrollView customScrollView;
     private LinearLayout linearContainer;
-    private String[] tabTxt = {"全部","人气专区", "商品折扣券", "乘车券", "折扣专区"};
+    private String[] tabTxt = {"全部","优惠券", "商品", "二手交易"};
     //内容块view的集合
     private List<LinearLayout> linearLayoutList = new ArrayList<>();
     //判读是否是scrollview主动引起的滑动，true-是，false-否，由tablayout引起的
@@ -38,6 +39,7 @@ public class StoreActivity extends AppCompatActivity {
     //监听判断最后一个模块的高度，不满一屏时让最后一个模块撑满屏幕
     private ViewTreeObserver.OnGlobalLayoutListener listener;
 
+    private List<CommodityBean> commodityBeans;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,7 @@ public class StoreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store);
 
-        tabLayout = findViewById(R.id.tablayout);
+        tabLayout = findViewById(R.id.tabLayout);
         customScrollView = findViewById(R.id.scrollView);
         linearContainer = findViewById(R.id.container);
 
@@ -53,10 +55,10 @@ public class StoreActivity extends AppCompatActivity {
         StoreNavigationView storeNavigationView = new StoreNavigationView(this);
         linearLayoutList.add(storeNavigationView);
         linearContainer.addView(storeNavigationView);
+        initData();
         for (int i = 1; i < tabTxt.length; i++) {
-            AnchorView anchorView = new AnchorView(this);
+            AnchorView anchorView = new AnchorView(this, commodityBeans);
             anchorView.setAnchorTxt(tabTxt[i]);
-            anchorView.setContentTxt(tabTxt[i]);
             linearLayoutList.add(anchorView);
             linearContainer.addView(anchorView);
         }
@@ -144,6 +146,17 @@ public class StoreActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void initData(){
+        commodityBeans = new ArrayList<>();
+        for(int i=0; i<5; i++){
+            CommodityBean commodityBean = new CommodityBean();
+            commodityBean.getCommodityResultBean().setCommodityName("长生不老药");
+            commodityBean.getCommodityResultBean().setCommodityPrice(200);
+            commodityBeans.add(commodityBean);
+        }
+
     }
 
     //tablayout对应标签的切换

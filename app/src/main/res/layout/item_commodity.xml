@@ -10,7 +10,7 @@
         android:id="@+id/imageCommodity"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:src="@drawable/img7"
+        android:src="@drawable/commodity"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:text="Commodity Name"
-        android:textSize="25sp"
+        android:textSize="22sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toRightOf="@id/imageCommodity"/>
 
@@ -31,7 +31,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginBottom="5dp"
         android:text="500"
-        android:textSize="30sp"
+        android:textSize="24sp"
         android:textColor="@android:color/holo_orange_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/imageCommodity"/>
@@ -43,7 +43,7 @@
         android:text="积分"
         android:layout_marginBottom="9dp"
         android:textColor="@android:color/darker_gray"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/textCommodityPrice"/>
 

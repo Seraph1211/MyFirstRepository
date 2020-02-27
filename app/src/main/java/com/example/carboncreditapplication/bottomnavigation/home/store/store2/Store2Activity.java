@@ -1,4 +1,4 @@
-package com.example.carboncreditapplication.bottomnavigation.home.store;
+package com.example.carboncreditapplication.bottomnavigation.home.store.store2;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -15,12 +15,11 @@ import android.widget.Toast;
 import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.beans.CarbonCreditsInfoBean;
 import com.example.carboncreditapplication.beans.CommodityBean;
-import com.example.carboncreditapplication.beans.UserInfoBean;
 import com.example.carboncreditapplication.bottomnavigation.home.sign.SignInActivity;
+import com.example.carboncreditapplication.bottomnavigation.home.store.StoreRecyclerViewAdapter;
 import com.example.carboncreditapplication.bottomnavigation.userinfo.cardpackage.CardPackageActivity;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
-import com.example.carboncreditapplication.utils.UserInfo;
 import com.google.gson.Gson;
 
 import java.io.IOException;

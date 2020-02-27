@@ -21,10 +21,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".bottomnavigation.home.store.store3.Store3Activity"></activity>
+
         <service
             android:name=".pedometer.PedometerService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
         <activity android:name=".bottomnavigation.userinfo.cardpackage.QRCodeActivity" />
         <activity android:name=".bottomnavigation.userinfo.merchant.AddGoodsActivity" />
@@ -34,11 +36,11 @@
         <activity android:name=".bottomnavigation.userinfo.team.TeamActivity" />
         <activity
             android:name=".bottomnavigation.userinfo.cardpackage.CardPackageActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".bottomnavigation.home.store.CommodityInfoActivity" />
         <activity android:name=".bottomnavigation.home.sign.SignInActivity" />
         <activity
-            android:name=".bottomnavigation.home.store.Store2Activity"
+            android:name=".bottomnavigation.home.store.store2.Store2Activity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".bottomnavigation.home.report.MonthReportActivity" />
         <activity android:name=".bottomnavigation.home.rank.RankActivity" />
@@ -52,7 +54,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".bottomnavigation.home.store.StoreActivity" />
+        <activity android:name=".bottomnavigation.home.store.store1.StoreActivity" />
     </application>
 
 </manifest>

@@ -97,6 +97,7 @@ public class MonthReportActivity extends AppCompatActivity {
         setContentView(R.layout.activity_month_report);
 
         StatusBarUtils.setStatusBarColor(MonthReportActivity.this, R.color.colorWathet);  //设置状态栏颜色
+        StatusBarUtils.setLightStatusBar(MonthReportActivity.this, true, true);  //设置状态栏字体颜色
 
         init();
 

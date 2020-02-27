@@ -14,9 +14,7 @@ import android.widget.FrameLayout;
 
 import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.bottomnavigation.BottomNavigationActivity;
-import com.example.carboncreditapplication.bottomnavigation.home.store.Store2Activity;
 import com.example.carboncreditapplication.utils.HttpUtils;
-import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
 import com.example.carboncreditapplication.utils.StatusBarUtils;
 
 import java.io.IOException;
@@ -45,9 +43,6 @@ public class RankActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
         setFragment(new TotalRankFragment());
 
-        Log.d(TAG, "onCreate: testKey4="+ MySharedPreferencesUtils.getInt(RankActivity.this, "testKey"));
-        MySharedPreferencesUtils.putInt(RankActivity.this, "testKey", 3);
-        Log.d(TAG, "onCreate: testKey5="+MySharedPreferencesUtils.getInt(RankActivity.this, "testKey"));
     }
 
     private void initView() {
