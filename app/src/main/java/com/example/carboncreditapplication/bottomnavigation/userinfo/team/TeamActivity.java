@@ -138,17 +138,33 @@ public class TeamActivity extends AppCompatActivity {
         HttpUtils.getInfo(HttpUtils.userInfoUrl, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                ToastUtils.showToast(TeamActivity.this, "服务器错误");
                 Log.d(TAG, "onFailure: ");
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String responseContent = response.body().string();
-                Log.d(TAG, "onResponse: responseContent="+responseContent);
+                int code = response.code();
+                Log.d(TAG, "TeamId code="+code);
 
-                UserInfoBean userInfoBean = new Gson().fromJson(responseContent, UserInfoBean.class);
-                teamId = userInfoBean.getResultBean().getTeamId();
-                mHandler.sendEmptyMessage(TEAM_ID_READY);
+                if(code==200){
+                    String responseContent = response.body().string();
+                    Log.d(TAG, "onResponse: responseContent="+responseContent);
+
+                    UserInfoBean userInfoBean = new Gson().fromJson(responseContent, UserInfoBean.class);
+                    String msgCode = userInfoBean.getMsg_code();
+
+                    if(msgCode.equals("0000")){
+                        teamId = userInfoBean.getResultBean().getTeamId();
+                        mHandler.sendEmptyMessage(TEAM_ID_READY);
+                    }else {
+                        ToastUtils.showToast(TeamActivity.this, userInfoBean.getMsg_message());
+                    }
+
+                }else {
+                    ToastUtils.showToast(TeamActivity.this, "服务器错误");
+                }
+
 
             }
         });
@@ -164,17 +180,29 @@ public class TeamActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.d(TAG, "onFailure: ");
-                ToastUtils.showToast(TeamActivity.this, "网络数据请求失败");
+                ToastUtils.showToast(TeamActivity.this, "服务器错误");
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String responseContent = response.body().string();
-                Log.d(TAG, "onResponse: responseContent="+responseContent);
+                int code = response.code();
+                Log.d(TAG, "Team code="+code);
 
-                teamBean = new Gson().fromJson(responseContent, TeamBean.class);
-                memberList = teamBean.getResult().getUserList();
-                setFragment(new TeamListFragment());  //加载TeamList碎片
+                if(code==200){
+                    String responseContent = response.body().string();
+                    Log.d(TAG, "onResponse: responseContent="+responseContent);
+
+                    teamBean = new Gson().fromJson(responseContent, TeamBean.class);
+                    String msgCode = teamBean.getMsg_code();
+                    if(msgCode.equals("0000")){
+                        memberList = teamBean.getResult().getUserList();
+                        setFragment(new TeamListFragment());  //加载TeamList碎片
+                    }else {
+                        ToastUtils.showToast(TeamActivity.this, teamBean.getMsg_message());
+                    }
+                }else{
+                    ToastUtils.showToast(TeamActivity.this, "服务器错误");
+                }
             }
         });
     }

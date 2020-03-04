@@ -146,18 +146,29 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String responseContent = response.body().string();
-                Log.d(TAG, "onResponse: responseContent="+responseContent);
-                UserInfoBean userInfoBean = new Gson().fromJson(responseContent, UserInfoBean.class);
-                if(userInfoBean!=null){
-                    MySharedPreferencesUtils.saveUserInfo(SignInActivity.this, userInfoBean.getResultBean());
-                    //获取已连续签到天数、今日是否已签到
-                    signInNumber =  userInfoBean.getResultBean().getSignInNumber();
-                    signInToday = userInfoBean.getResultBean().getSignInToday();
-                    textSignInNum.setText(signInNumber+"天");
-                }else {
-                    ToastUtils.showToast(SignInActivity.this, "获取签到信息失败");
+                int code = response.code();
+                Log.d(TAG, "onResponse: code="+code);
+
+                if(code==200){  //服务器成功处理请求
+                    String responseContent = response.body().string();
+                    Log.d(TAG, "onResponse: responseContent="+responseContent);
+                    UserInfoBean userInfoBean = new Gson().fromJson(responseContent, UserInfoBean.class);
+
+                    String msgCode = userInfoBean.getMsg_code();
+                    if(msgCode.equals("0000")){
+                        MySharedPreferencesUtils.saveUserInfo(SignInActivity.this, userInfoBean.getResultBean());
+                        //获取已连续签到天数、今日是否已签到
+                        signInNumber =  userInfoBean.getResultBean().getSignInNumber();
+                        signInToday = userInfoBean.getResultBean().getSignInToday();
+                        textSignInNum.setText(signInNumber+"天");
+                    }else {
+                        ToastUtils.showToast(SignInActivity.this, userInfoBean.getMsg_message());
+                    }
+
+                }else{
+                    ToastUtils.showToast(SignInActivity.this, "服务器错误");
                 }
+
             }
         });
     }
@@ -208,22 +219,31 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         HttpUtils.getInfo(HttpUtils.userSignInUrl + "?user_id=" + UserInfo.userId, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                ToastUtils.showToast(SignInActivity.this, "网络错误，请重试");
+                ToastUtils.showToast(SignInActivity.this, "服务器错误");
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String responseContent = response.body().string();
-                Log.d(TAG, "onResponse: "+responseContent);
+                int code = response.code();
+                Log.d(TAG, "signIn code="+code);
 
-                signInNumber++;
-                signInToday = 1;
-                reloadCheckImages();
-                textSignInNum.setText(signInNumber+"天");
-                MySharedPreferencesUtils.putInt(SignInActivity.this,"sign_in_num", signInNumber);
-                MySharedPreferencesUtils.putInt(SignInActivity.this, "sign_in_today", signInToday);
+                if(code==200){
+                    String responseContent = response.body().string();
+                    Log.d(TAG, "SignIn responseContent="+responseContent);
 
-                ToastUtils.showToast(SignInActivity.this, "签到成功");
+                    signInNumber++;
+                    signInToday = 1;
+                    reloadCheckImages();
+                    textSignInNum.setText(signInNumber+"天");
+                    MySharedPreferencesUtils.putInt(SignInActivity.this,"sign_in_num", signInNumber);
+                    MySharedPreferencesUtils.putInt(SignInActivity.this, "sign_in_today", signInToday);
+
+                    ToastUtils.showToast(SignInActivity.this, "签到成功");
+                }else {
+                    ToastUtils.showToast(SignInActivity.this, "服务器错误，签到失败");
+                }
+
+
             }
         });
     }

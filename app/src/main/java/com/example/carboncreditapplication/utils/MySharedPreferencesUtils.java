@@ -140,9 +140,9 @@ public class MySharedPreferencesUtils {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor editor = sharedPreferences.edit();
 
-            editor.putInt("merchant_id", bean.getMerchantId());  //商家id
+            //editor.putInt("merchant_id", bean.getMerchantId());  //商家id
             editor.putString("merchant_name", bean.getMerchantName());  //商家名称
-            editor.putString("merchant_password", bean.getMerchantPassword());  //商家密码
+            //editor.putString("merchant_password", bean.getMerchantPassword());  //商家密码
             editor.putString("merchant_phone", bean.getMerchantPhoneNumber());  //商家电话
             editor.putString("merchant_email", bean.getMerchantEmail());  //商家电子邮箱
             editor.putString("merchant_address", bean.getMerchantAddress());  //商家地址

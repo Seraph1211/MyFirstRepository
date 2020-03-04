@@ -159,15 +159,14 @@
             </android.support.constraint.ConstraintLayout>
 
             <android.support.constraint.ConstraintLayout
-                android:id="@+id/constraintLayout"
+                android:id="@+id/clCardPackage"
                 android:layout_marginTop="40dp"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:background="#FFFFFF"
                 android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@id/linearLayout2"
-                tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="402dp">
+                >
 
                 <ImageView
                     android:id="@+id/image_bag"
@@ -205,12 +204,100 @@
             </android.support.constraint.ConstraintLayout>
 
             <android.support.constraint.ConstraintLayout
-                android:id="@+id/constraintLayout2"
+            android:id="@+id/clTeam"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="#FFFFFF"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/clCardPackage"
+            >
+
+            <ImageView
+                android:id="@+id/imageTeam"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:src="@drawable/team2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:gravity="center"
+                android:text="我的小队"
+                android:textSize="21sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imageTeam"
+                tools:layout_editor_absoluteX="67dp"
+                tools:layout_editor_absoluteY="5dp" />
+
+            <ImageView
+                android:id="@+id/imageJumpToTeam"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:padding="10dp"
+                android:layout_marginRight="7dp"
+                android:src="@drawable/jump_to"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:layout_editor_absoluteY="7dp" />
+
+        </android.support.constraint.ConstraintLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/clMerchant"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:background="#FFFFFF"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/constraintLayout5"
+                app:layout_constraintTop_toBottomOf="@id/clTeam"
+                >
+
+                <ImageView
+                    android:id="@+id/imageMerchantIn"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:padding="5dp"
+                    android:src="@drawable/merchant_in"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="8dp"
+                    android:gravity="center"
+                    android:text="商家入驻"
+                    android:textSize="21sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/imageMerchantIn"
+                    tools:layout_editor_absoluteX="67dp"
+                    tools:layout_editor_absoluteY="5dp" />
+
+                <ImageView
+                    android:id="@+id/imageJumpToMerchant"
+                    android:layout_width="45dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="7dp"
+                    android:padding="10dp"
+                    android:src="@drawable/jump_to"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:layout_editor_absoluteY="7dp" />
+
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/clExplain"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/clMerchant"
                 >
 
                 <ImageView
@@ -249,14 +336,13 @@
             </android.support.constraint.ConstraintLayout>
 
             <android.support.constraint.ConstraintLayout
-                android:id="@+id/constraintLayout3"
+                android:id="@+id/clCallUs"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:background="#FFFFFF"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/constraintLayout2"
-                tools:layout_editor_absoluteX="2dp"
-                tools:layout_editor_absoluteY="531dp">
+                app:layout_constraintTop_toBottomOf="@id/clExplain"
+                >
 
                 <ImageView
                     android:id="@+id/imageCallUs"
@@ -295,95 +381,9 @@
 
             </android.support.constraint.ConstraintLayout>
 
-            <android.support.constraint.ConstraintLayout
-                android:id="@+id/constraintLayout4"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="#FFFFFF"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/constraintLayout3"
-                tools:layout_editor_absoluteX="2dp"
-                tools:layout_editor_absoluteY="531dp">
 
-                <ImageView
-                    android:id="@+id/imageMerchantIn"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:padding="5dp"
-                    android:src="@drawable/merchant_in"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_margin="8dp"
-                    android:gravity="center"
-                    android:text="商家入驻"
-                    android:textSize="21sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/imageMerchantIn"
-                    tools:layout_editor_absoluteX="67dp"
-                    tools:layout_editor_absoluteY="5dp" />
 
-                <ImageView
-                    android:id="@+id/imageJumpToMerchant"
-                    android:layout_width="45dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:padding="10dp"
-                    android:layout_marginRight="7dp"
-                    android:src="@drawable/jump_to"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    tools:layout_editor_absoluteY="7dp" />
-
-            </android.support.constraint.ConstraintLayout>
-
-            <android.support.constraint.ConstraintLayout
-                android:id="@+id/constraintLayout5"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="#FFFFFF"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/constraintLayout"
-                tools:layout_editor_absoluteX="2dp"
-                tools:layout_editor_absoluteY="531dp">
-
-                <ImageView
-                    android:id="@+id/imageTeam"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:padding="5dp"
-                    android:src="@drawable/team2"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_margin="8dp"
-                    android:gravity="center"
-                    android:text="我的队伍"
-                    android:textSize="21sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/imageTeam"
-                    tools:layout_editor_absoluteX="67dp"
-                    tools:layout_editor_absoluteY="5dp" />
-
-                <ImageView
-                    android:id="@+id/imageJumpToTeam"
-                    android:layout_width="45dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:padding="10dp"
-                    android:layout_marginRight="7dp"
-                    android:src="@drawable/jump_to"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    tools:layout_editor_absoluteY="7dp" />
-
-            </android.support.constraint.ConstraintLayout>
 
         </LinearLayout>
 

@@ -10,13 +10,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.carboncreditapplication.R;
+import com.example.carboncreditapplication.beans.RankBean;
 
 import java.util.List;
 
 public class RankRecyclerViewAdapter extends RecyclerView.Adapter<RankRecyclerViewAdapter.RankViewHolder> {
 
     private Context context;
-    private List<RankItem> rankItemList;
+    private List<RankBean.ResultBean.UserListBean> rankItemList;
 
     static class RankViewHolder extends RecyclerView.ViewHolder{
          TextView textRanking;  //排名
@@ -27,13 +28,13 @@ public class RankRecyclerViewAdapter extends RecyclerView.Adapter<RankRecyclerVi
         public RankViewHolder(View view, Context context){
             super(view);
             textRanking = view.findViewById(R.id.text_ranking);
-            imageHeadPortrait = view.findViewById(R.id.image_ranking);
+            //imageHeadPortrait = view.findViewById(R.id.image_ranking);
             textUserName = view.findViewById(R.id.text_ranking_name);
             textCredits = view.findViewById(R.id.text_ranking_credits);
         }
     }
 
-    public RankRecyclerViewAdapter(Context context, List<RankItem> rankItemList){
+    public RankRecyclerViewAdapter(Context context, List<RankBean.ResultBean.UserListBean> rankItemList){
         this.context = context;
         this.rankItemList = rankItemList;
     }
@@ -50,11 +51,11 @@ public class RankRecyclerViewAdapter extends RecyclerView.Adapter<RankRecyclerVi
 
     @Override
     public void onBindViewHolder(@NonNull RankViewHolder viewHolder, int i) {
-        RankItem rankItem = rankItemList.get(i);
-        viewHolder.textRanking.setText(String.valueOf(rankItem.getRanking()));
-        viewHolder.imageHeadPortrait.setImageResource(rankItem.getImageId());
-        viewHolder.textUserName.setText(rankItem.getUserName());
-        viewHolder.textCredits.setText(String.valueOf(rankItem.getCredits()));
+        RankBean.ResultBean.UserListBean rankItem = rankItemList.get(i);
+        viewHolder.textRanking.setText(String.valueOf(rankItem.getUserRank()));
+        //viewHolder.imageHeadPortrait.setImageResource(rankItem.getUserImagePath());
+        viewHolder.textUserName.setText(rankItem.getNickname());
+        viewHolder.textCredits.setText(String.valueOf(rankItem.getCarbonCredits()));
     }
 
     @Override

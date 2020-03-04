@@ -9,14 +9,14 @@ public class CouponResultBean {
 
     /**
      * result : {"coupon":[{"coupon__type":1,"coupon_cost":32,"coupon_id":3,"coupon_name":"test3","expiration_time":1580801535000,"sill":20,"user_store_id":0,"user_type":1,"value":10}]}
-     * msg_code : 0000
      * page_total : 1
+     * * msg_code : 0000
      * msg_message : 处理成功
      */
 
     private ResultBean result;
-    private String msg_code;
     private int page_total;
+    private String msg_code;
     private String msg_message;
 
     public ResultBean getResult() {

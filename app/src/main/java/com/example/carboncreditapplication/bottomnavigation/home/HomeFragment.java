@@ -23,6 +23,8 @@ import com.example.carboncreditapplication.beans.UserInfoBean;
 import com.example.carboncreditapplication.bottomnavigation.BottomNavigationActivity;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
+import com.example.carboncreditapplication.utils.NetworkUtil;
+import com.example.carboncreditapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -66,8 +68,8 @@ public class HomeFragment extends Fragment {
     private int walkMileagesTotal = 0;  //总步行里程
     private int walkMileagesYesterday = 0;  //昨日步数
 
-    private boolean hasUserInfo;
-    private boolean hasCreditsInfo;
+    private boolean hasUserInfo = false;
+    private boolean hasCreditsInfo = false;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Nullable
@@ -77,12 +79,16 @@ public class HomeFragment extends Fragment {
 
         initBanner();
         initView();
-        initData();
+        //initData();
 
         return view;
     }
 
-
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initData();
+    }
 
     public void initView(){
         activity = (BottomNavigationActivity)getActivity();
@@ -99,6 +105,7 @@ public class HomeFragment extends Fragment {
     public void initData(){
         hasUserInfo = MySharedPreferencesUtils.getBoolean(getContext(), "has_user_info");
         hasCreditsInfo = MySharedPreferencesUtils.getBoolean(getContext(), "has_credits_info");
+        Log.d(TAG, "initData: hasUserInfo="+hasUserInfo+" hasCreditsInfo="+hasCreditsInfo);
         if(!hasUserInfo){  //本地没有保存User模块的信息
             queryUserInfo();
         }
@@ -142,35 +149,38 @@ public class HomeFragment extends Fragment {
      */
     public void queryUserInfo(){
         //CustomProgressDialogUtils.showLoading(BottomNavigationActivity.this);
+        if(!NetworkUtil.isNetworkAvailable(getContext())){
+            ToastUtils.showToast(getContext(), "未连接网络");
+            return;
+        }
 
-        HttpUtils.getInfo(HttpUtils.userInfoUrl, 1, new Callback() {
+        HttpUtils.getInfo(HttpUtils.userInfoUrl, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(activity, "获取网络数据失败，请重试！", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                ToastUtils.showToast(getContext(), "服务器错误");
                 Log.d(TAG, "onFailure: 从服务器读取用户信息失败！");
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String responseContent = response.body().string();
-                Log.i(TAG, "onResponse: userInfo's responseContent: "+responseContent);
+                int code = response.code();
+                Log.d(TAG, "UserInfo: code="+code);
 
-                if(!TextUtils.isEmpty(responseContent)){
+                if(code==200){  //服务器成功处理请求
+                    String responseContent = response.body().string();
+                    Log.d(TAG, "UserInfo responseContent="+responseContent);
+
                     UserInfoBean userInfoBean = new Gson().fromJson(responseContent, UserInfoBean.class);
-                    MySharedPreferencesUtils.saveUserInfo(getContext(), userInfoBean.getResultBean());
-                    MySharedPreferencesUtils.putBoolean(getContext(), "has_user_info", true);
+                    String msgCode = userInfoBean.getMsg_code();
+
+                    if(msgCode.equals("0000")){
+                        MySharedPreferencesUtils.saveUserInfo(getContext(), userInfoBean.getResultBean());
+                        MySharedPreferencesUtils.putBoolean(getContext(), "has_user_info", true);
+                    }else{
+                        ToastUtils.showToast(getContext(), "获取数据失败");
+                    }
                 }else{
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getContext(), "获取网络数据失败，请重试！", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    ToastUtils.showToast(getContext(), "服务器故障");
                 }
 
             }
@@ -182,15 +192,19 @@ public class HomeFragment extends Fragment {
      */
     public void queryCarbonCreditsInfo(){
         // CustomProgressDialogUtils.showLoading(BottomNavigationActivity.this);
+        if(!NetworkUtil.isNetworkAvailable(getContext())){
+            ToastUtils.showToast(getContext(), "未连接网络");
+            return;
+        }
 
-        HttpUtils.getInfo(HttpUtils.carbonCreditsInfoUrl, 1, new Callback() {
+        HttpUtils.getInfo(HttpUtils.carbonCreditsInfoUrl, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         //CustomProgressDialogUtils.stopLoading();
-                        Toast.makeText(activity, "获取网络数据失败，请重试！", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, "服务器故障", Toast.LENGTH_SHORT).show();
                     }
                 });
                 Log.d(TAG, "onFailure: 从服务器读取碳积分信息失败！");
@@ -198,24 +212,26 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String responseContent = response.body().string();
-                Log.d(TAG, "onResponse: carbonCreditsInfo's responseContent: "+responseContent);
+                int code = response.code();
+                Log.d(TAG, "CarbonCredits code="+code);
 
-                if(!TextUtils.isEmpty(responseContent)){
-                    CarbonCreditsInfoBean carbonCreditsInfoBean = new Gson().fromJson(responseContent, CarbonCreditsInfoBean.class);
-                    //即使没拿到数据bean也不会为Null，所以不必判空，但是当没拿到东西或者拿到一些奇怪的东西时的处理还没写好
-                    MySharedPreferencesUtils.saveUserInfo(getContext(), carbonCreditsInfoBean.getResultBean());
-                    MySharedPreferencesUtils.putBoolean(getContext(), "has_credits_info", true);
+                if(code==200){  //服务器成功处理请求
+                    String responseContent = response.body().string();
+                    Log.d(TAG, "CarbonCreditsInfoBean:"+responseContent);
 
-                    reloadMileageInfo();
+                    CarbonCreditsInfoBean carbonCreditsInfoBean = new Gson().fromJson(responseContent, CarbonCreditsInfoBean.class); //即使没拿到数据bean也不会为Null，所以不必判空，但是当没拿到东西或者拿到一些奇怪的东西时的处理还没写好
+
+                    String msgCode = carbonCreditsInfoBean.getMsg_code();
+                    if(msgCode.equals("0000")){  //获取数据成功
+                        MySharedPreferencesUtils.saveUserInfo(getContext(), carbonCreditsInfoBean.getResultBean());
+                        MySharedPreferencesUtils.putBoolean(getContext(), "has_credits_info", true);
+
+                        reloadMileageInfo();
+                    }else {  //失败，则提示用户错误信息
+                        ToastUtils.showToast(getContext(), carbonCreditsInfoBean.getMsg_message());
+                    }
                 }else{
-                    Log.d(TAG, "onResponse: 读取到的碳积分信息为空！");
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getContext(), "获取网络数据失败，请重试！", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    ToastUtils.showToast(getContext(), "服务器错误");
                 }
             }
         });

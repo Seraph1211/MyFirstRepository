@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -27,7 +28,12 @@ import com.example.carboncreditapplication.bottomnavigation.userinfo.team.TeamAc
 import com.example.carboncreditapplication.utils.CustomProgressDialogUtils;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
+import com.example.carboncreditapplication.utils.NetworkUtil;
+import com.example.carboncreditapplication.utils.ToastUtils;
 import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -53,6 +59,11 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
     private ImageView imageJumpToCallUs;  //联系方式入口
     private ImageView imageJumpToTeam;  //队伍入口
 
+    private ConstraintLayout clCardPackage;
+    private ConstraintLayout clMerchant;
+    private ConstraintLayout clTeam;
+    private ConstraintLayout clCallUs;
+    private ConstraintLayout clExplain;
 
     private int availableCarbonCredits=0;
     private int totalCarbonCredits=0;
@@ -71,7 +82,7 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
 
         initView();
 
-        //initData();
+        initData();
 
         return view;
     }
@@ -79,44 +90,52 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
     public void queryUserInfo(){
         CustomProgressDialogUtils.showLoading(getContext());
 
-      HttpUtils.getInfo(HttpUtils.userInfoUrl, 1, new Callback() {
+      HttpUtils.getInfo(HttpUtils.userInfoUrl, new Callback() {
            @Override
            public void onFailure(Call call, IOException e) {
+               ToastUtils.showToast(getContext(), "服务器错误");
                Log.d(TAG, "onFailure: 从服务器读取用户信息失败！");
            }
 
            @Override
            public void onResponse(Call call, Response response) throws IOException {
-               String responseContent = response.body().string();
-               Log.i(TAG, "onResponse: userInfo's responseContent: "+responseContent);
+               CustomProgressDialogUtils.stopLoading();
 
-               if(!TextUtils.isEmpty(responseContent)){
+               int code = response.code();
+               Log.d(TAG, "onResponse: code="+code);
+
+               if(code==200){  //code==200表示服务器成功处理了请求
+                   String responseContent = response.body().string();
+                   Log.i(TAG, "onResponse: userInfo's responseContent: "+responseContent);
+
                    userInfoBean = new Gson().fromJson(responseContent, UserInfoBean.class);
-                   Log.i(TAG, "onResponse: UserInfoBean: "+userInfoBean.toString());
+                   String msgCode = userInfoBean.getMsg_code();
+                   Log.d(TAG, "onResponse: msgCode="+msgCode);
 
-                   Activity activity = (Activity)view.getContext();
-                   activity.runOnUiThread(new Runnable() {
-                       @Override
-                       public void run() {
-                           textUserName.setText(userInfoBean.getResultBean().getNickname());  //设置用户昵称
-                           Glide.with(UserInfoFragment.this)
-                                   .load(userInfoBean.getResultBean().getUserImagePath())
-                                   .error(R.drawable.error)
-                                   .placeholder(R.drawable.girl)
-                                   .into(imageHeadPortrait);
-                       }
-                   });
+                   if(msgCode.equals("0000")){ //信息获取成功
+                       getActivity().runOnUiThread(new Runnable() {
+                           @Override
+                           public void run() {
+                               textUserName.setText(userInfoBean.getResultBean().getNickname());  //设置用户昵称
+                               Glide.with(UserInfoFragment.this)
+                                       .load(userInfoBean.getResultBean().getUserImagePath())
+                                       .error(R.drawable.error)
+                                       .placeholder(R.drawable.girl)
+                                       .into(imageHeadPortrait);
+                           }
+                       });
+                   }
 
-
-               }else{
-                   Log.d(TAG, "onResponse: 读取到的用户信息为空！");
+               }else {
+                   ToastUtils.showToast(getContext(), "服务器故障");
                }
+
            }
        });
     }
 
     public void queryCarbonCreditsInfo(){
-        HttpUtils.getInfo(HttpUtils.carbonCreditsInfoUrl, 1, new Callback() {
+        HttpUtils.getInfo(HttpUtils.carbonCreditsInfoUrl, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.d(TAG, "onFailure: 从服务器读取碳积分信息失败！");
@@ -124,20 +143,25 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String responseContent = response.body().string();
-                Log.d(TAG, "onResponse: carbonCreditsInfo's responseContent: "+responseContent);
+                int code = response.code();
+                Log.d(TAG, "onResponse: code="+code);
 
-                if(!TextUtils.isEmpty(responseContent)){
+                if(code==200){  //服务器成功处理请求
+                    String responseContent = response.body().string();
+                    Log.d(TAG, "onResponse: CarbonCreditsInfo: "+responseContent);
+
                     carbonCreditsInfoBean = new Gson().fromJson(responseContent, CarbonCreditsInfoBean.class);
                     Log.d(TAG, "onResponse: CarbonCreditsInfoBean: "+carbonCreditsInfoBean.toString());
 
-                    if(carbonCreditsInfoBean != null){
+                    String msgCode = carbonCreditsInfoBean.getMsg_code();
+                    Log.d(TAG, "onResponse: CarbonCreditsBean's msgCode="+msgCode);
+
+                    if(msgCode.equals("0000")){  //成功获取信息
                         availableCarbonCredits = carbonCreditsInfoBean.getResultBean().getCarbonCreditsAvailable();
                         totalCarbonCredits = carbonCreditsInfoBean.getResultBean().getCarbonCreditsTotal();
                         readyToGetCarbonCredits = carbonCreditsInfoBean.getResultBean().getCarbonCreditsToday();
 
-                        Activity activity = (Activity)view.getContext();
-                        activity.runOnUiThread(new Runnable() {
+                        getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 textUserTotalCarbonCredits.setText(String.valueOf(carbonCreditsInfoBean.getResultBean().getCarbonCreditsTotal()));  //设置用户总碳积分
@@ -145,12 +169,10 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
                                 textUserAvailableCredits.setText(String.valueOf(carbonCreditsInfoBean.getResultBean().getCarbonCreditsAvailable()));  //设置用户可用碳积分
                             }
                         });
-                    }else {
-                        Log.d(TAG, "onResponse: carbonCreditsBean="+carbonCreditsInfoBean.toString());
                     }
 
-                }else{
-                    Log.d(TAG, "onResponse: 读取到的碳积分信息为空！");
+                }else {
+                    ToastUtils.showToast(getContext(), "服务器错误");
                 }
             }
         });
@@ -171,13 +193,20 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
         imageJumpToMerchantIn = view.findViewById(R.id.imageJumpToMerchant);
         imageJumpToTeam = view.findViewById(R.id.imageJumpToTeam);
 
+        clCallUs = view.findViewById(R.id.clCallUs);
+        clCardPackage = view.findViewById(R.id.clCardPackage);
+        clExplain = view.findViewById(R.id.clExplain);
+        clMerchant = view.findViewById(R.id.clMerchant);
+        clTeam = view.findViewById(R.id.clTeam);
+
         //注册监听器
         buttonGetCredits.setOnClickListener(this);
-        imageJumpToMerchantIn.setOnClickListener(this);
-        imageJumpToHelpInfo.setOnClickListener(this);
-        imageJumpToCardPackage.setOnClickListener(this);
-        imageJumpToCallUs.setOnClickListener(this);
-        imageJumpToTeam.setOnClickListener(this);
+        clTeam.setOnClickListener(this);
+        clMerchant.setOnClickListener(this);
+        clExplain.setOnClickListener(this);
+        clCardPackage.setOnClickListener(this);
+        clCallUs.setOnClickListener(this);
+
 
         //userInfoBean = new UserInfoBean();
         //carbonCreditsInfoBean = new CarbonCreditsInfoBean();
@@ -190,12 +219,17 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
         availableCarbonCredits = MySharedPreferencesUtils.getInt(getContext(), "carbon_credits_available");
         readyToGetCarbonCredits = MySharedPreferencesUtils.getInt(getContext(), "carbon_credits_today");
         userNickname = MySharedPreferencesUtils.getString(getContext(), "nickname");
-        userHeadPortrait = MySharedPreferencesUtils.getString(getContext(), "user_image_path");
+        //头像 userHeadPortrait = MySharedPreferencesUtils.getString(getContext(), "user_image_path");
 
         if(totalCarbonCredits==-2 || availableCarbonCredits==-2 || readyToGetCarbonCredits==-2
-                || userNickname.equals("empty") || userHeadPortrait.equals("empty")){ //以上任意一项没从本地拿到数据，则全部从网络访问数据
-            queryCarbonCreditsInfo();
+                || userNickname.equals("empty") /*|| userHeadPortrait.equals("empty")*/){ //以上任意一项没从本地拿到数据，则全部从网络访问数据
+
+            if(!NetworkUtil.isNetworkAvailable(getContext())){
+                ToastUtils.showToast(getContext(), "未连接网络");
+                return;
+            }
             queryUserInfo();
+            queryCarbonCreditsInfo();
         }else{
             //更新UI
             textUserTotalCarbonCredits.setText(String.valueOf(totalCarbonCredits));
@@ -210,49 +244,96 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.buttonGetCredits:{  //一键领取,接口尚未给出！！！
-                Toast.makeText(view.getContext(),"Get Credits !", Toast.LENGTH_SHORT).show();
-                availableCarbonCredits += readyToGetCarbonCredits;
-                totalCarbonCredits += readyToGetCarbonCredits;
-                readyToGetCarbonCredits = 0;
-                //更新UI
-                textUserAvailableCredits.setText(String.valueOf(availableCarbonCredits));
-                textUserReadyToGetCredits.setText(String.valueOf(readyToGetCarbonCredits));
-                textUserTotalCarbonCredits.setText(String.valueOf(totalCarbonCredits));
+    /**
+     * 一键领取待领取的碳积分
+     */
+    public void getCredits(){
+        HttpUtils.getInfo(HttpUtils.getCarbonCreditsUrl, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtils.showToast(getContext(), "服务器故障");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                int code = response.code();
+                Log.d(TAG, "getCredits: code="+code);
+
+                if(code==200){  //服务器成功处理请求
+                    String responseContent = response.body().string();
+                    Log.d(TAG, "getCredits responseContent="+responseContent);
+
+                    String msgCode = "";
+                    String msgMsg = "";
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseContent);
+                        msgCode = jsonObject.getString("msg_code");
+                        Log.d(TAG, "getCredits msgCode="+msgCode);
+                        msgMsg = jsonObject.getString("msg_msg");
+                        Log.d(TAG, "getCredits msgMsg="+msgMsg);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    if(msgCode.equals("0000")){
+                        availableCarbonCredits += readyToGetCarbonCredits;
+                        totalCarbonCredits += readyToGetCarbonCredits;
+                        readyToGetCarbonCredits = 0;
+                        //更新UI
+                        textUserAvailableCredits.setText(String.valueOf(availableCarbonCredits));
+                        textUserReadyToGetCredits.setText(String.valueOf(readyToGetCarbonCredits));
+                        textUserTotalCarbonCredits.setText(String.valueOf(totalCarbonCredits));
                 /*
                 //更新bean
                 carbonCreditsInfoBean.getResultBean().setCarbonCreditsAvailable(availableCarbonCredits);
                 carbonCreditsInfoBean.getResultBean().setCarbonCreditsToday(0);
                 carbonCreditsInfoBean.getResultBean().setCarbonCreditsTotal(totalCarbonCredits);
                 */
-                //更新sp中存储的数据
-                MySharedPreferencesUtils.putInt(getContext(), "carbon_credits_total", totalCarbonCredits);
-                MySharedPreferencesUtils.putInt(getContext(), "carbon_credits_available", availableCarbonCredits);
-                MySharedPreferencesUtils.putInt(getContext(), "carbon_credits_today", readyToGetCarbonCredits);
+                        //更新sp中存储的数据
+                        MySharedPreferencesUtils.putInt(getContext(), "carbon_credits_total", totalCarbonCredits);
+                        MySharedPreferencesUtils.putInt(getContext(), "carbon_credits_available", availableCarbonCredits);
+                        MySharedPreferencesUtils.putInt(getContext(), "carbon_credits_today", readyToGetCarbonCredits);
+
+                        ToastUtils.showToast(getContext(), "领取成功！");
+                    }else{
+                        ToastUtils.showToast(getContext(), msgMsg);
+                    }
+                }else {
+                    ToastUtils.showToast(getContext(), "服务器错误");
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.buttonGetCredits:{
+                if(readyToGetCarbonCredits!=0){
+                    getCredits();
+                }
+
                 break;
             }
-            case R.id.imageJumpToCardPackage:{
+            case R.id.clCardPackage:{
                 Toast.makeText(view.getContext(), "Card Package !", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(view.getContext(), CardPackageActivity.class));
                 break;
             }
-            case R.id.imageJumpToHelp:{
+            case R.id.clExplain:{
                 Toast.makeText(view.getContext(), "Help Info !", Toast.LENGTH_SHORT).show();
                 break;
             }
-            case R.id.imageJumpToCallUs:{
+            case R.id.clCallUs:{
                 Toast.makeText(view.getContext(), "Call Us !", Toast.LENGTH_SHORT).show();
                 break;
             }
-            case R.id.imageJumpToMerchant:{
+            case R.id.clMerchant:{
                 Toast.makeText(view.getContext(), "Merchant In !", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getContext(), MerchantActivity.class));
                 break;
             }
-            case R.id.imageJumpToTeam:{
+            case R.id.clTeam:{
                 Toast.makeText(view.getContext(), "Team !", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getContext(), TeamActivity.class));
             }

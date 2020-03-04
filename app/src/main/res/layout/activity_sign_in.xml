@@ -50,7 +50,7 @@
                 android:src="@drawable/sign_in_top_bg"/>
 
             <android.support.constraint.ConstraintLayout
-                android:id="@+id/constraintLayout2"
+                android:id="@+id/clExplain"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1.5"

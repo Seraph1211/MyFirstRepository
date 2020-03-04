@@ -3,6 +3,10 @@ package com.example.carboncreditapplication.utils;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -21,9 +25,10 @@ public class HttpUtils {
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static final String TAG = "HttpUtils";
     public static String basicUrl = "http：//121.36.4.52:8090/carbon_credits_system";
-    public static final String carbonCreditsInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/carbonCredits/getCreditsInfo?user_id=1";
+    public static final String carbonCreditsInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/carbonCredits/getCreditsInfo?user_id=1&mileage_walk_today=10";
     public static final String userInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getUserInfo?user_id=1";
-    public static final String monthlyReportInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getMonthlyReport?user_id=1&city_id=3202";
+    public static final String getCarbonCreditsUrl = "http://121.36.4.52:8090/carbon_credits_system/carbonCredits/receiveCarbonCredits?user_id=1";
+    public static final String monthlyReportInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getMonthlyReport?user_id=1&city_id=3202&start_month="+DateUtils.getLastMonth()+"&end_month="+DateUtils.getMonth();
     public static final String userRankingInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getUserRankingList?user_id=1&city_id=3202";
     public static final String cardPackageUrl = "http://121.36.4.52:8090/carbon_credits_system/user/getUserCoupon?user_id=1&page_no=1&page_size=50";
     public static final String friendsInfoUrl = "http://121.36.4.52:8090/carbon_credits_system/carbon_credits_system/user/getFriendInfo?user_id=1";
@@ -118,6 +123,36 @@ public class HttpUtils {
                 .build();
 
         client.newCall(request).enqueue(callback);
+    }
+
+    public static void post(String address, okhttp3.Callback callback){
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody formBody = RequestBody.create(null, "");
+
+        Request request = new Request.Builder()
+                .url(address)
+                .post(formBody)
+                .build();
+
+        client.newCall(request).enqueue(callback);
+
+    }
+
+    public static void post(String address, int userId, okhttp3.Callback callback){
+        OkHttpClient client = new OkHttpClient();
+
+       RequestBody formBody = new FormBody.Builder()
+               .add("userId", String.valueOf(userId))
+               .build();
+
+        Request request = new Request.Builder()
+                .url(address)
+                .post(formBody)
+                .build();
+
+        client.newCall(request).enqueue(callback);
+
     }
 
     //异步请求

@@ -1,7 +1,5 @@
 package com.example.carboncreditapplication.bottomnavigation.home.report;
 
-import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +12,7 @@ import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.beans.MonthReportBean;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.StatusBarUtils;
+import com.example.carboncreditapplication.utils.ToastUtils;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -350,52 +349,67 @@ public class MonthReportActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 从服务器获取数据
+     */
     public void queryReportInfo(){
+        Log.d(TAG, "queryReportInfo: url="+HttpUtils.monthlyReportInfoUrl);
         HttpUtils.getInfo(HttpUtils.monthlyReportInfoUrl, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                ToastUtils.showToast(MonthReportActivity.this, "服务器故障");
                 Log.d(TAG, "onFailure: ");
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String responseContent = response.body().string();
-                Log.d(TAG, "onResponse: responseContent="+responseContent);
+                int code = response.code();
+                Log.d(TAG, "MonthReport code="+code);
 
-                monthReportBean = new Gson().fromJson(responseContent, MonthReportBean.class);
+                if(code==200){
+                    String responseContent = response.body().string();
+                    Log.d(TAG, "MonthReport responseContent="+responseContent);
 
-                //更新TextView的数据
-                textCarbonDioxideReductionLastMonth.setText(String.valueOf(monthReportBean.getResult().getCO2_reduction_last_month()));
-                textCarbonDioxideReductionThisMonth.setText(String.valueOf(monthReportBean.getResult().getCO2_reduction_this_month()));
-                textUserRankLastMonth.setText(String.valueOf(monthReportBean.getResult().getUser_rank_last_month()));
-                textUserRankThisMonth.setText(String.valueOf(monthReportBean.getResult().getUser_rank_this_month()));
+                    monthReportBean = new Gson().fromJson(responseContent, MonthReportBean.class);
+                    String msgCode = monthReportBean.getMsg_code();
+                    if(msgCode.equals("0000")){
+                        //更新TextView的数据
+                        textCarbonDioxideReductionLastMonth.setText(String.valueOf(monthReportBean.getResult().getCO2_reduction_last_month()));
+                        textCarbonDioxideReductionThisMonth.setText(String.valueOf(monthReportBean.getResult().getCO2_reduction_this_month()));
+                        textUserRankLastMonth.setText(String.valueOf(monthReportBean.getResult().getUser_rank_last_month()));
+                        textUserRankThisMonth.setText(String.valueOf(monthReportBean.getResult().getUser_rank_this_month()));
 
-                //更新饼状图数据:地铁、公交、骑行、步行
-                pieValues[0] = monthReportBean.getResult().getMileage_subway();
-                pieValues[1] = monthReportBean.getResult().getMileage_bus();
-                pieValues[2] = monthReportBean.getResult().getMileage_bike();
-                pieValues[3] = monthReportBean.getResult().getMileage_walk();
-                //initPieChart();
+                        //更新饼状图数据:地铁、公交、骑行、步行
+                        pieValues[0] = monthReportBean.getResult().getMileage_subway();
+                        pieValues[1] = monthReportBean.getResult().getMileage_bus();
+                        pieValues[2] = monthReportBean.getResult().getMileage_bike();
+                        pieValues[3] = monthReportBean.getResult().getMileage_walk();
+                        //initPieChart();
 
-                //更新柱状图数据,顺序同上
-                columnValues[0] = monthReportBean.getResult().getMileage_subway();
-                columnValues[1] = monthReportBean.getResult().getMileage_bus();
-                columnValues[2] = monthReportBean.getResult().getMileage_bike();
-                columnValues[3] = monthReportBean.getResult().getMileage_walk();
-                //initColumnChart();
+                        //更新柱状图数据,顺序同上
+                        columnValues[0] = monthReportBean.getResult().getMileage_subway();
+                        columnValues[1] = monthReportBean.getResult().getMileage_bus();
+                        columnValues[2] = monthReportBean.getResult().getMileage_bike();
+                        columnValues[3] = monthReportBean.getResult().getMileage_walk();
+                        //initColumnChart();
 
-                MonthReportActivity activity = MonthReportActivity.this;
+                        MonthReportActivity activity = MonthReportActivity.this;
 
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        initColumnChart();
-                        initPieChart();
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                initColumnChart();
+                                initPieChart();
+                            }
+                        });
+
+                        //折线统计图数据服务端尚未给出！
+                    }else {
+                        ToastUtils.showToast(MonthReportActivity.this, monthReportBean.getMsg_message());
                     }
-                });
-
-                //折线统计图数据服务端尚未给出！
-
+                }else {
+                    ToastUtils.showToast(MonthReportActivity.this, "服务器错误");
+                }
 
             }
         });

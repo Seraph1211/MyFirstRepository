@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,6 +20,12 @@ import com.example.carboncreditapplication.bottomnavigation.userinfo.team.NoTeam
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.StatusBarUtils;
 import com.example.carboncreditapplication.utils.ToastUtils;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class Store3Activity extends AppCompatActivity implements TabLayout.OnTabSelectedListener{
     private static final int COUPON_INFO_READY = 231;
@@ -55,6 +62,8 @@ public class Store3Activity extends AppCompatActivity implements TabLayout.OnTab
 
         StatusBarUtils.setStatusBarColor(Store3Activity.this, R.color.colorWhite);  //设置状态栏颜色
         StatusBarUtils.setLightStatusBar(Store3Activity.this, true, true);  //状态栏字体颜色-黑
+
+        queryGoodsInfo();
 
         initView();
     }
@@ -132,5 +141,27 @@ public class Store3Activity extends AppCompatActivity implements TabLayout.OnTab
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameStore3, fragment);
         fragmentTransaction.commit();
+    }
+
+    public void queryGoodsInfo(){
+        HttpUtils.getInfo(HttpUtils.commodityInfoUrl, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d(TAG, "onFailure: ");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                int code = response.code();
+                Log.d(TAG, "Store code="+code);
+
+                if(code==200){
+                    String responseContent = response.body().string();
+                    Log.d(TAG, "Store responseContent="+responseContent);
+                }else {
+                    ToastUtils.showToast(Store3Activity.this, "服务器错误");
+                }
+            }
+        });
     }
 }

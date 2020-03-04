@@ -16,6 +16,7 @@ import com.example.carboncreditapplication.beans.MerchantBean;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
 import com.example.carboncreditapplication.utils.StatusBarUtils;
+import com.example.carboncreditapplication.utils.ToastUtils;
 import com.example.carboncreditapplication.utils.UserInfo;
 
 import org.json.JSONException;
@@ -49,7 +50,7 @@ public class MerchantInfoActivity extends AppCompatActivity implements View.OnCl
     private TextView textMerchantPhone;
     private TextView textMerchantAddress;
     private TextView textMerchantIntroduction;
-    private TextView textMerchantEamil;
+    private TextView textMerchantEmail;
 
     private int merchantId;
     private String merchantName;
@@ -84,7 +85,7 @@ public class MerchantInfoActivity extends AppCompatActivity implements View.OnCl
 
         textMerchantIntroduction = findViewById(R.id.textMerchantIntroduce);
         textMerchantPhone = findViewById(R.id.textMerchantPhoneNum);
-        textMerchantEamil = findViewById(R.id.textMerchantEmail);
+        textMerchantEmail = findViewById(R.id.textMerchantEmail);
         textMerchantAddress = findViewById(R.id.textMerchantAddress);
         textMerchantName = findViewById(R.id.textMerchantName);
 
@@ -110,12 +111,10 @@ public class MerchantInfoActivity extends AppCompatActivity implements View.OnCl
         }else {
             textMerchantName.setText(merchantName);
             textMerchantPhone.setText(merchantPhone);
-            textMerchantEamil.setText(merchantEmail);
+            textMerchantEmail.setText(merchantEmail);
             textMerchantAddress.setText(merchantAddress);
             textMerchantIntroduction.setText(merchantIntroduction);
 
-            bean.setMerchantId(merchantId);
-            bean.setUserId(UserInfo.userId);
             bean.setMerchantName(merchantName);
             bean.setMerchantPhoneNumber(merchantPhone);
             bean.setMerchantEmail(merchantEmail);
@@ -159,7 +158,7 @@ public class MerchantInfoActivity extends AppCompatActivity implements View.OnCl
     }
 
     public void queryMerchantInfo(){
-        HttpUtils.getInfo(HttpUtils.merchantInfoUrl + "?userId=" + UserInfo.userId, new Callback() {
+        HttpUtils.post(HttpUtils.merchantInfoUrl + "?userId=" + 2, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.d(TAG, "onFailure: ");
@@ -173,45 +172,52 @@ public class MerchantInfoActivity extends AppCompatActivity implements View.OnCl
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String responseContent = response.body().string();
-                Log.d(TAG, "onResponse: "+responseContent);
+                int code = response.code();
+                Log.d(TAG, "queryMerchantInfo code="+code);
 
-                try {
-                    JSONObject jsonObject = new JSONObject(responseContent);
+                if(code==200){
+                    String responseContent = response.body().string();
+                    Log.d(TAG, "onResponse: "+responseContent);
 
-                    bean.setUserId(jsonObject.getInt("userId"));
-                    bean.setMerchantPhoneNumber(jsonObject.getString("merchantPhoneNumber"));
-                    bean.setMerchantEmail(jsonObject.getString("merchantEmail"));
-                    bean.setMerchantName(jsonObject.getString("merchant_name"));
-                    bean.setMerchantAddress(jsonObject.getString("merchant_address"));
-                    bean.setMerchantIntroduce(jsonObject.getString("merchantIntroduce"));
-                    bean.setMerchantImage(jsonObject.getString("merchantImage"));
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseContent);
 
-                    MySharedPreferencesUtils.saveMerchantInfo(MerchantInfoActivity.this, bean);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                        bean.setMerchantPhoneNumber(jsonObject.getString("merchantPhoneNumber"));
+                        bean.setMerchantEmail(jsonObject.getString("merchantEmail"));
+                        bean.setMerchantName(jsonObject.getString("merchantName"));
+                        bean.setMerchantAddress(jsonObject.getString("merchantAddress"));
+                        bean.setMerchantIntroduce(jsonObject.getString("merchantIntroduce"));
+                        bean.setMerchantImage(jsonObject.getString("merchantImage"));
 
-                if(bean.getUserId()==-1 || TextUtils.isEmpty(bean.getMerchantName()) || TextUtils.isEmpty(bean.getMerchantPhoneNumber())
-                || TextUtils.isEmpty(bean.getMerchantEmail()) || TextUtils.isEmpty(bean.getMerchantAddress())
-                || TextUtils.isEmpty(bean.getMerchantIntroduce())){
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(MerchantInfoActivity.this, "访问网络数据失败", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    if(TextUtils.isEmpty(bean.getMerchantName()) || TextUtils.isEmpty(bean.getMerchantPhoneNumber())
+                            || TextUtils.isEmpty(bean.getMerchantEmail()) || TextUtils.isEmpty(bean.getMerchantAddress())
+                            || TextUtils.isEmpty(bean.getMerchantIntroduce())){
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(MerchantInfoActivity.this, "访问网络数据失败", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }else {
+                        MySharedPreferencesUtils.saveMerchantInfo(MerchantInfoActivity.this, bean);  //本地存储商家信息
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                textMerchantName.setText(bean.getMerchantName());
+                                textMerchantPhone.setText(bean.getMerchantPhoneNumber());
+                                textMerchantEmail.setText(bean.getMerchantEmail());
+                                textMerchantAddress.setText(bean.getMerchantAddress());
+                                textMerchantIntroduction.setText(bean.getMerchantIntroduce());
+                            }
+                        });
+                    }
                 }else {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            textMerchantName.setText(bean.getMerchantName());
-                            textMerchantPhone.setText(bean.getMerchantPhoneNumber());
-                            textMerchantEamil.setText(bean.getMerchantEmail());
-                            textMerchantAddress.setText(bean.getMerchantAddress());
-                            textMerchantIntroduction.setText(bean.getMerchantIntroduce());
-                        }
-                    });
+                    ToastUtils.showToast(MerchantInfoActivity.this, "服务器错误");
                 }
 
             }

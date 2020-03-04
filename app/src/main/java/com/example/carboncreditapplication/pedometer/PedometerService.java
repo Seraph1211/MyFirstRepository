@@ -92,6 +92,7 @@ public class PedometerService extends Service implements SensorEventListener {
                 //本地存储了 上一次获取的“从系统重启到现在的总步数”
                 stepCountToday = tempStep - previousStepCount;  //计算今日步数
                 postStepCount(stepCountToday);  //提交今日步数
+                MySharedPreferencesUtils.putInt(getBaseContext(), "sign_in_today", 0);
             }
 
             MySharedPreferencesUtils.putInt(PedometerService.this, "previous_step", tempStep);

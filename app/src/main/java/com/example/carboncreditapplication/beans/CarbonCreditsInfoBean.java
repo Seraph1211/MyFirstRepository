@@ -8,6 +8,25 @@ public class CarbonCreditsInfoBean {
     @SerializedName("result")
     private CarbonCreditsInfoResultBean resultBean;
 
+    private String msg_code;
+    private String msg_message;
+
+    public String getMsg_code() {
+        return msg_code;
+    }
+
+    public void setMsg_code(String msg_code) {
+        this.msg_code = msg_code;
+    }
+
+    public String getMsg_message() {
+        return msg_message;
+    }
+
+    public void setMsg_message(String msg_message) {
+        this.msg_message = msg_message;
+    }
+
     public int getUserId() {
         return userId;
     }

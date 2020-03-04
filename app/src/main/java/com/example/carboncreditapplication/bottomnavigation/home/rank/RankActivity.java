@@ -13,9 +13,12 @@ import android.widget.FrameLayout;
 
 
 import com.example.carboncreditapplication.R;
+import com.example.carboncreditapplication.beans.RankBean;
 import com.example.carboncreditapplication.bottomnavigation.BottomNavigationActivity;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.StatusBarUtils;
+import com.example.carboncreditapplication.utils.ToastUtils;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 
@@ -27,6 +30,7 @@ public class RankActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private static final String TAG = "RankActivity";
     private TabLayout mTab;
     private FrameLayout mFrame;
+    private RankBean rankBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +41,9 @@ public class RankActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
         initView();
         initTab();
-        mTab.setOnTabSelectedListener(this);
+        mTab.addOnTabSelectedListener(this);
 
-        queryRankInfo();
+        //queryRankInfo();
 
         setFragment(new TotalRankFragment());
 
@@ -99,20 +103,39 @@ public class RankActivity extends AppCompatActivity implements TabLayout.OnTabSe
     }
 
     public void queryRankInfo(){
+        Log.d(TAG, "queryRankInfo: ");
         HttpUtils.getInfo(HttpUtils.userRankingInfoUrl, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                ToastUtils.showToast(RankActivity.this, "服务器错误");
                 Log.d(TAG, "onFailure: ");
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.d(TAG, "onResponse: ");
-                String responseContent = response.body().string();
-                Log.d(TAG, "onResponse: responseContent="+responseContent);
+                int code = response.code();
+                Log.d(TAG, "Rank code="+code);
 
+                if(code==200){
+                    String responseContent = response.body().string();
+                        Log.d(TAG, "onResponse: responseContent="+responseContent);
+
+                        rankBean = new Gson().fromJson(responseContent, RankBean.class);
+                        String msgCode = rankBean.getMsg_code();
+                        if(msgCode.equals("0000")){  //处理成功
+                            setFragment(new TotalRankFragment());
+                    }else {
+                        ToastUtils.showToast(RankActivity.this, rankBean.getMsg_message());
+                    }
+                }else {
+                    ToastUtils.showToast(RankActivity.this, "服务器错误");
+                }
 
             }
         });
+    }
+
+    public RankBean getRankBean(){
+        return rankBean;
     }
 }
