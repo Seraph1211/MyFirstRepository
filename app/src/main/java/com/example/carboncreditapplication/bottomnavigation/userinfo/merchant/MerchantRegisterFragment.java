@@ -148,6 +148,8 @@ public class MerchantRegisterFragment extends Fragment {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                int code = response.code();
+                Log.d(TAG, "sendEmailSecurityCode code="+code);
                 String responseContent = response.body().string();
                 Log.d("MerchantRegister", "onResponse: responseContent="+responseContent);
 

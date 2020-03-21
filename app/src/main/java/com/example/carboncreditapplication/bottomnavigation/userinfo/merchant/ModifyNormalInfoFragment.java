@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,11 +18,13 @@ import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.beans.MerchantBean;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
+import com.example.carboncreditapplication.utils.ToastUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -62,22 +65,23 @@ public class ModifyNormalInfoFragment extends Fragment {
         switch (type){
             case MerchantInfoActivity.MERCHANT_NAME:{
                 formerInfo = merchantBean.getMerchantName();
-                editInfo.setHint(formerInfo);
+                editInfo.setText(formerInfo);
                 break;
             }
             case MerchantInfoActivity.MERCHANT_PHONE:{
                 formerInfo = merchantBean.getMerchantPhoneNumber();
-                editInfo.setHint(formerInfo);
+                editInfo.setInputType(InputType.TYPE_CLASS_PHONE);
+                editInfo.setText(formerInfo);
                 break;
             }
             case MerchantInfoActivity.MERCHANT_ADDRESS:{
                 formerInfo = merchantBean.getMerchantAddress();
-                editInfo.setHint(formerInfo);
+                editInfo.setText(formerInfo);
                 break;
             }
             case MerchantInfoActivity.MERCHANT_INTRODUCTION:{
                 formerInfo = merchantBean.getMerchantIntroduce();
-                editInfo.setHint(formerInfo);
+                editInfo.setText(formerInfo);
                 break;
             }
         }
@@ -86,7 +90,7 @@ public class ModifyNormalInfoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 newInfo = editInfo.getText().toString();
-                if(!TextUtils.isEmpty(newInfo)){
+                if(TextUtils.isEmpty(newInfo)){
                     Toast.makeText(getContext(), "修改内容不能为空！", Toast.LENGTH_SHORT).show();
                 }else if(newInfo.equals(formerInfo)){
                     Toast.makeText(getContext(), "未作任何修改！", Toast.LENGTH_SHORT).show();
@@ -99,6 +103,7 @@ public class ModifyNormalInfoFragment extends Fragment {
                         }
                         case MerchantInfoActivity.MERCHANT_PHONE:{
                             merchantBean.setMerchantPhoneNumber(newInfo);
+
                             break;
                         }
                         case MerchantInfoActivity.MERCHANT_ADDRESS:{
@@ -117,6 +122,8 @@ public class ModifyNormalInfoFragment extends Fragment {
     }
 
     public void postMerchantBean(){
+
+        Log.d(TAG, "postMerchantBean: bean="+merchantBean);
         HttpUtils.postBean(HttpUtils.merchantModifyUrl, merchantBean, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -126,28 +133,41 @@ public class ModifyNormalInfoFragment extends Fragment {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String responseContent = response.body().string();
-                Log.d(TAG, "onResponse: "+responseContent);
+                int code = response.code();
+                Log.d(TAG, "postMerchantBean code="+code);
 
-                String modifyResult = "";
+                if(code==200){
+                    String responseContent = response.body().string();
+                    Log.d(TAG, "onResponse: "+responseContent);
 
-                try {
-                    JSONObject jsonObject = new JSONObject(responseContent);
-                    modifyResult = jsonObject.getString("modifyResult");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                    String modifyResult = "";
 
-                if(!TextUtils.isEmpty(modifyResult)){
-                    if(modifyResult.equals("true")){
-                        MySharedPreferencesUtils.saveMerchantInfo(getContext(), merchantBean);
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getContext(), "修改成功", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        activity.finish();  //结束活动
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseContent);
+                        modifyResult = jsonObject.getString("modifyResult");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    if(!TextUtils.isEmpty(modifyResult)){
+                        if(modifyResult.equals("true")){
+                            MySharedPreferencesUtils.saveMerchantInfo(getContext(), merchantBean);
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getContext(), "修改成功", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            activity.finish();  //结束活动
+                        }else {
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getContext(), "修改失败", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                        }
                     }else {
                         activity.runOnUiThread(new Runnable() {
                             @Override
@@ -158,14 +178,9 @@ public class ModifyNormalInfoFragment extends Fragment {
 
                     }
                 }else {
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getContext(), "修改失败", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
+                    ToastUtils.showToast(getContext(), "服务器错误");
                 }
+
             }
         });
     }

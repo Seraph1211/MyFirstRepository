@@ -84,6 +84,15 @@ public class CouponResultBean {
             private int user_store_id;
             private int user_type;
             private int value;
+            private int remaining;
+
+            public void setRemaining(int remaining){
+                this.remaining = remaining;
+            }
+
+            public int getRemaining(){
+                return remaining;
+            }
 
             public int getCoupon__type() {
                 return coupon__type;

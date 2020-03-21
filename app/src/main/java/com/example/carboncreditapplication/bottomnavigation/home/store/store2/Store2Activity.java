@@ -16,10 +16,11 @@ import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.beans.CarbonCreditsInfoBean;
 import com.example.carboncreditapplication.beans.CommodityBean;
 import com.example.carboncreditapplication.bottomnavigation.home.sign.SignInActivity;
-import com.example.carboncreditapplication.bottomnavigation.home.store.StoreRecyclerViewAdapter;
+import com.example.carboncreditapplication.bottomnavigation.home.store.CommodityItemAdapter;
 import com.example.carboncreditapplication.bottomnavigation.userinfo.cardpackage.CardPackageActivity;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
+import com.example.carboncreditapplication.utils.UserInfo;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -69,7 +70,7 @@ public class Store2Activity extends AppCompatActivity implements View.OnClickLis
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         commodityRecyclerView.setLayoutManager(layoutManager);
         initData();
-        commodityRecyclerView.setAdapter(new StoreRecyclerViewAdapter(this, commodityBeanList));
+        commodityRecyclerView.setAdapter(new CommodityItemAdapter(this, commodityBeanList));
 
 
     }
@@ -91,7 +92,8 @@ public class Store2Activity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void queryAvailableCredits(){
-        HttpUtils.getInfo(HttpUtils.carbonCreditsInfoUrl, new Callback() {
+        HttpUtils.getInfo(HttpUtils.carbonCreditsInfoUrl+"&mileage_walk_today="+MySharedPreferencesUtils.getInt(Store2Activity.this, "step_count_today")*0.00065,
+                new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.d(TAG, "onFailure: ");

@@ -57,9 +57,9 @@ public class MerchantActivity extends AppCompatActivity {
 
         initView();
 
-        //queryMerchantInfo();
+        queryMerchantInfo();
 
-        setFragment(new MerchantHomeFragment());
+        //setFragment(new MerchantRegisterFragment());
     }
 
     public void initView(){
@@ -107,10 +107,7 @@ public class MerchantActivity extends AppCompatActivity {
             //则新建一个token（为空）并用sp存起来
             MySharedPreferencesUtils.putString(MerchantActivity.this, "token", "");
         }
-        int userId = MySharedPreferencesUtils.getInt(context, "user_id");
-        if(userId==-1){
-            MySharedPreferencesUtils.putInt(context, "user_id", UserInfo.userId);
-        }
+        int userId = UserInfo.userId;
 
         //map.put("user_id", userId);
         map.put("token", token);
@@ -123,39 +120,44 @@ public class MerchantActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                int code = response.code();
+                Log.d(TAG, "queryMerchantInfo code="+code);
+
                 String responseContent = response.body().string();
                 Log.d(TAG, "onResponse: responseContent="+responseContent);
 
-                String result = null;
-                //使用JSONObject解析服务器返回的json字符串
-                if (!TextUtils.isEmpty(responseContent)){
-                    try {
-                        JSONObject jsonObject = new JSONObject(responseContent);
-                        result = jsonObject.getString("merchantResult");
-                        if(!TextUtils.isEmpty(result)){
-                            if(result.equals("已注册") || result.equals("未注册")){
-                                base64Code = jsonObject.getString("image");
+                if(code==200){
+
+
+                    String result = null;
+                    //使用JSONObject解析服务器返回的json字符串
+                    if (!TextUtils.isEmpty(responseContent)){
+                        try {
+                            JSONObject jsonObject = new JSONObject(responseContent);
+                            result = jsonObject.getString("merchantResult");
+                            if(!TextUtils.isEmpty(result)){
+                                if(result.equals("已注册") || result.equals("未注册")){
+                                    base64Code = jsonObject.getString("image");
+                                }
                             }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.d(TAG, "onResponse: 使用JSONObject解析数据时出错！");
+                            Toast.makeText(MerchantActivity.this, "从服务器获取数据失败!", Toast.LENGTH_SHORT).show();
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Log.d(TAG, "onResponse: 使用JSONObject解析数据时出错！");
-                        Toast.makeText(MerchantActivity.this, "从服务器获取数据失败!", Toast.LENGTH_SHORT).show();
+
+                        setFragment(result);
+                        setFragment(new MerchantRegisterFragment());
+
+                    }else {
+                        MerchantActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(MerchantActivity.this, "访问网络数据失败，请重试", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
-
-                    setFragment(result);
-                    //setFragment(new MerchantRegisterFragment());
-
-                }else {
-                    MerchantActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(MerchantActivity.this, "访问网络数据失败，请重试", Toast.LENGTH_SHORT).show();
-                        }
-                    });
                 }
-
-
 
             }
         });

@@ -41,6 +41,8 @@ public class PedometerService extends Service implements SensorEventListener {
                 //在子线程中执行具体的逻辑操作
                 startPedometer();
                 Log.d(TAG, "run: "+SystemClock.elapsedRealtime());
+
+                //MySharedPreferencesUtils.putInt(getBaseContext(), "sign_in_today", 0);  //签到重置
             }
         }).start();
 
@@ -92,7 +94,10 @@ public class PedometerService extends Service implements SensorEventListener {
                 //本地存储了 上一次获取的“从系统重启到现在的总步数”
                 stepCountToday = tempStep - previousStepCount;  //计算今日步数
                 postStepCount(stepCountToday);  //提交今日步数
-                MySharedPreferencesUtils.putInt(getBaseContext(), "sign_in_today", 0);
+
+                MySharedPreferencesUtils.putInt(PedometerService.this, "step_count_today", stepCountToday);  //保存今日步数
+            }else {  //首次使用app
+                MySharedPreferencesUtils.putInt(PedometerService.this, "step_count_today", 0);  //保存今日步数
             }
 
             MySharedPreferencesUtils.putInt(PedometerService.this, "previous_step", tempStep);

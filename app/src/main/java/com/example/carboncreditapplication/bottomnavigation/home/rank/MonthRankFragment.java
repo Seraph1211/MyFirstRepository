@@ -15,8 +15,11 @@ import android.view.ViewGroup;
 
 import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.beans.RankBean;
+import com.example.carboncreditapplication.bottomnavigation.home.report.MonthReportActivity;
 import com.example.carboncreditapplication.utils.HttpUtils;
+import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
 import com.example.carboncreditapplication.utils.ToastUtils;
+import com.example.carboncreditapplication.utils.UserInfo;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -73,7 +76,9 @@ public class MonthRankFragment extends Fragment {
     }
 
     public void queryMonthRankingList(){
-        HttpUtils.getInfo(HttpUtils.userRankingInfoUrl + "&rank_type=" + 0, new Callback() {
+        HttpUtils.getInfo(HttpUtils.userRankingInfoUrl+"?user_id="+ UserInfo.userId
+                +"&city_id=" + MySharedPreferencesUtils.getString(getContext(), "city_id")
+                + "&rank_type=" + 0, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtils.showToast(getContext(), "服务器故障");

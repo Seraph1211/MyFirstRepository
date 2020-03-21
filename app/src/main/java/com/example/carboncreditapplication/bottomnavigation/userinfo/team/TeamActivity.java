@@ -135,7 +135,7 @@ public class TeamActivity extends AppCompatActivity {
 
     public void setTeamIdFromServer(){
 
-        HttpUtils.getInfo(HttpUtils.userInfoUrl, new Callback() {
+        HttpUtils.getInfo(HttpUtils.userInfoUrl+"?user_id="+UserInfo.userId, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtils.showToast(TeamActivity.this, "服务器错误");

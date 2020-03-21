@@ -10,9 +10,12 @@ import android.widget.TextView;
 
 import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.beans.MonthReportBean;
+import com.example.carboncreditapplication.utils.DateUtils;
 import com.example.carboncreditapplication.utils.HttpUtils;
+import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
 import com.example.carboncreditapplication.utils.StatusBarUtils;
 import com.example.carboncreditapplication.utils.ToastUtils;
+import com.example.carboncreditapplication.utils.UserInfo;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -354,7 +357,10 @@ public class MonthReportActivity extends AppCompatActivity {
      */
     public void queryReportInfo(){
         Log.d(TAG, "queryReportInfo: url="+HttpUtils.monthlyReportInfoUrl);
-        HttpUtils.getInfo(HttpUtils.monthlyReportInfoUrl, new Callback() {
+        HttpUtils.getInfo(HttpUtils.monthlyReportInfoUrl+"?user_id="+UserInfo.userId
+                        +"&city_id=" + MySharedPreferencesUtils.getString(MonthReportActivity.this, "city_id")
+                        + "&start_month="+ DateUtils.getLastMonth()+"&end_month="+DateUtils.getMonth(),
+                        new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtils.showToast(MonthReportActivity.this, "服务器故障");

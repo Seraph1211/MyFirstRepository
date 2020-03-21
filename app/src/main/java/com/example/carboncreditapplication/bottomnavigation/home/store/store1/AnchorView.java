@@ -1,7 +1,6 @@
 package com.example.carboncreditapplication.bottomnavigation.home.store.store1;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,13 +10,11 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.load.resource.bitmap.RecyclableBufferedInputStream;
 import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.beans.CommodityBean;
-import com.example.carboncreditapplication.bottomnavigation.home.store.StoreRecyclerViewAdapter;
+import com.example.carboncreditapplication.bottomnavigation.home.store.CommodityItemAdapter;
 
 import java.util.List;
-import java.util.Random;
 
 public class AnchorView extends LinearLayout {
 
@@ -48,7 +45,7 @@ public class AnchorView extends LinearLayout {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         rvGoods.setLayoutManager(layoutManager);
-        rvGoods.setAdapter(new StoreRecyclerViewAdapter(context, commodityBeanList));
+        rvGoods.setAdapter(new CommodityItemAdapter(context, commodityBeanList));
 
     }
 

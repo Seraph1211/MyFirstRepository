@@ -1,5 +1,6 @@
 package com.example.carboncreditapplication.bottomnavigation.home.sign;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,19 +16,26 @@ import com.example.carboncreditapplication.beans.CarbonCreditsInfoBean;
 import com.example.carboncreditapplication.beans.UserInfoBean;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
+import com.example.carboncreditapplication.utils.NetworkUtil;
 import com.example.carboncreditapplication.utils.StatusBarUtils;
 import com.example.carboncreditapplication.utils.ToastUtils;
 import com.example.carboncreditapplication.utils.UserInfo;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+/**
+ * 不从本地读取签到信息，从服务器获取
+ */
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "SignInActivity";
+
+    private SwipeRefreshLayout srSignIn;
 
     private ImageView[] checkImageList = new ImageView[7]; //存放7张check图片的数组，累计签到n次，点亮n张图片
     private Button buttonSignIn;  //签到按钮
@@ -74,29 +82,20 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         buttonSignIn.setOnClickListener(this);
         buttonBack.setOnClickListener(this);
 
+        initSwipeRefresh();
+
        initData();
 
     }
 
     public void initData(){
-        carbonCreditsAvailable = MySharedPreferencesUtils.getInt(SignInActivity.this, "carbon_credits_available");
-        signInNumber = MySharedPreferencesUtils.getInt(SignInActivity.this, "sign_in_num");
-        signInToday = MySharedPreferencesUtils.getInt(SignInActivity.this, "sign_in_today");
-
-
-        /* 获取可用碳积分
-        if(carbonCreditsAvailable != -2){
-            textAvailableCredits.setText(String.valueOf(carbonCreditsAvailable));
-        }else {
-            queryCarbonCreditsInfo();
-        }
-         */
-
-        if(signInNumber==-2 || signInToday==-2){
-            queryUserInfo();
-        }else {
-            textSignInNum.setText(signInNumber+"天");
-        }
+        srSignIn.post(new Runnable() {
+            @Override
+            public void run() {
+                srSignIn.setRefreshing(true);
+            }
+        });
+        queryUserInfo();
         reloadCheckImages();
     }
 
@@ -138,14 +137,23 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     //从服务端获取用户已连续签到的天数、今日是否已经签到
     public void queryUserInfo(){
-        HttpUtils.getInfo(HttpUtils.userInfoUrl, new Callback() {
+        if(!NetworkUtil.isNetworkAvailable(SignInActivity.this)){
+            ToastUtils.showToast(SignInActivity.this, "未连接网络");
+            finishSwipeRefresh();
+            return;
+        }
+
+        HttpUtils.getInfo(HttpUtils.userInfoUrl+"?user_id="+UserInfo.userId, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.d(TAG, "onFailure: ");
+                finishSwipeRefresh();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                finishSwipeRefresh();
+
                 int code = response.code();
                 Log.d(TAG, "onResponse: code="+code);
 
@@ -175,7 +183,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     //从服务器获取用户可用碳积分
     public void queryCarbonCreditsInfo(){
-        HttpUtils.getInfo(HttpUtils.carbonCreditsInfoUrl, new Callback() {
+        HttpUtils.getInfo(HttpUtils.carbonCreditsInfoUrl+"&mileage_walk_today="+MySharedPreferencesUtils.getInt(SignInActivity.this, "step_count_today")*0.00065,
+                new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.d(TAG, "onFailure: ");
@@ -214,7 +223,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         });
     }
 
-
     public void signInToServer(){
         HttpUtils.getInfo(HttpUtils.userSignInUrl + "?user_id=" + UserInfo.userId, new Callback() {
             @Override
@@ -246,6 +254,42 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
             }
         });
+    }
+
+    public void initSwipeRefresh(){
+        srSignIn = findViewById(R.id.sr_sign_in);
+
+        /*
+        srHome.post(new Runnable() {
+            @Override
+            public void run() {
+                srHome.setRefreshing(true);
+            }
+        });
+         */
+
+        srSignIn.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                queryCarbonCreditsInfo();
+                queryUserInfo();
+            }
+        });
+    }
+
+    /**
+     * 结束刷新
+     */
+    public void finishSwipeRefresh(){
+        if(srSignIn.isRefreshing()){
+            srSignIn.post(new Runnable() {
+                @Override
+                public void run() {
+                    srSignIn.setRefreshing(false);
+                }
+            });
+
+        }
     }
 
 }

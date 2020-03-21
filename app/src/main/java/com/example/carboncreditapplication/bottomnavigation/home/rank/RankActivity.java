@@ -102,6 +102,8 @@ public class RankActivity extends AppCompatActivity implements TabLayout.OnTabSe
         }
     }
 
+
+    //废弃
     public void queryRankInfo(){
         Log.d(TAG, "queryRankInfo: ");
         HttpUtils.getInfo(HttpUtils.userRankingInfoUrl, new Callback() {

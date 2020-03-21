@@ -33,6 +33,7 @@ import com.example.carboncreditapplication.bottomnavigation.home.store.store1.St
 import com.example.carboncreditapplication.pedometer.PedometerService;
 import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
+import com.example.carboncreditapplication.utils.UserInfo;
 import com.google.gson.Gson;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
@@ -163,7 +164,7 @@ public class BottomNavigationActivity extends AppCompatActivity {
     public void queryUserInfo(){
         //CustomProgressDialogUtils.showLoading(BottomNavigationActivity.this);
 
-        HttpUtils.getInfo(HttpUtils.userInfoUrl, 1, new Callback() {
+        HttpUtils.getInfo(HttpUtils.userInfoUrl+"?user_id="+UserInfo.userId, 1, new Callback() {
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(Call call, IOException e) {
@@ -205,7 +206,8 @@ public class BottomNavigationActivity extends AppCompatActivity {
     public void queryCarbonCreditsInfo(){
        // CustomProgressDialogUtils.showLoading(BottomNavigationActivity.this);
 
-        HttpUtils.getInfo(HttpUtils.carbonCreditsInfoUrl, 1, new Callback() {
+        HttpUtils.getInfo(HttpUtils.carbonCreditsInfoUrl+"&mileage_walk_today="+MySharedPreferencesUtils.getInt(BottomNavigationActivity.this, "step_count_today")*0.00065,
+                1, new Callback() {
             @SuppressLint("LongLogTag")
             @Override
             public void onFailure(Call call, IOException e) {

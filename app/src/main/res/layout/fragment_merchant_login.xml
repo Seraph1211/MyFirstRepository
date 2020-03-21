@@ -51,7 +51,7 @@
             android:id="@+id/imageSecurityCodeLogin"
             android:layout_width="80dp"
             android:layout_height="40dp"
-            android:src="@android:color/holo_blue_bright"/>
+            android:src="@drawable/code"/>
 
     </LinearLayout>
 

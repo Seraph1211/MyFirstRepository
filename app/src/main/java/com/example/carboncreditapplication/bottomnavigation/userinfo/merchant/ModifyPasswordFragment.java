@@ -84,7 +84,7 @@ public class ModifyPasswordFragment extends Fragment {
         map.put("oldPassword", formerPassword);
         map.put("merchantPassword", newPassword);
 
-        HttpUtils.postMap(HttpUtils.merchantModifyPasswordUrl, map, new Callback() {
+        HttpUtils.postMap(HttpUtils.merchantModifyPasswordUrl+"&oldPassword="+formerPassword+"&merchantPassword="+newPassword, map, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.d(TAG, "onFailure: ");
@@ -93,6 +93,9 @@ public class ModifyPasswordFragment extends Fragment {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                int code = response.code();
+                Log.d(TAG, "modifyPassword code="+code);
+
                 String responseContent = response.body().string();
                 Log.d(TAG, "onResponse: "+responseContent);
 

@@ -51,6 +51,7 @@ public class ModifyMerchantInfoActivity extends AppCompatActivity {
 
     public void initData(){
         merchantBean = (MerchantBean) getIntent().getSerializableExtra("MerchantBean");
+        Log.d(TAG, "initData: bean="+merchantBean);
         type = getIntent().getIntExtra("type", -1);
     }
 

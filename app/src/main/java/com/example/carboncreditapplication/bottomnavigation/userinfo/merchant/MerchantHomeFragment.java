@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +15,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.beans.CouponResultBean;
 import com.example.carboncreditapplication.beans.MerchantBean;
-import com.example.carboncreditapplication.bottomnavigation.home.HomeFragment;
-import com.example.carboncreditapplication.utils.Base64Utils;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -32,10 +28,6 @@ import com.youth.banner.loader.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import lecho.lib.hellocharts.model.Line;
-
-import static android.support.constraint.Constraints.TAG;
 
 public class MerchantHomeFragment extends Fragment implements View.OnClickListener{
     View view;
@@ -87,10 +79,10 @@ public class MerchantHomeFragment extends Fragment implements View.OnClickListen
         imageUrlList.add(R.drawable.banner_3);
         imageUrlList.add(R.drawable.banner_4);
 
-        titleList.add("标题1");
-        titleList.add("标题2");
-        titleList.add("标题3");
-        titleList.add("标题4");
+        titleList.add("低碳环保，新能源出行");
+        titleList.add("健康生活，低碳出行");
+        titleList.add("爱护地球，人人有责");
+        titleList.add("3.30 地球一小时");
 
         banner = view.findViewById(R.id.bannerMerchantHome);
         banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
@@ -108,7 +100,8 @@ public class MerchantHomeFragment extends Fragment implements View.OnClickListen
     public void initRecyclerView(){
         for(int i=0; i<10; i++){
             CouponResultBean.ResultBean.CouponBean c = new CouponResultBean.ResultBean.CouponBean();
-            c.setCoupon_name("三花聚顶红包"+i+"号");
+            c.setCoupon_name("三花聚顶红包");
+            c.setValue(20);
             addedCouponList.add(c);
         }
 
@@ -155,7 +148,7 @@ public class MerchantHomeFragment extends Fragment implements View.OnClickListen
         @NonNull
         @Override
         public CouponViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            View view = LayoutInflater.from(context).inflate(R.layout.item_coupon, viewGroup, false);
+            View view = LayoutInflater.from(context).inflate(R.layout.item_coupon_merchant, viewGroup, false);
             CouponViewHolder viewHolder = new CouponViewHolder(context, view);
             return viewHolder;
         }
@@ -165,6 +158,7 @@ public class MerchantHomeFragment extends Fragment implements View.OnClickListen
 
             CouponResultBean.ResultBean.CouponBean couponBean = couponBeanList.get(i);
             couponViewHolder.textCouponName.setText(couponBean.getCoupon_name());
+            couponViewHolder.textCouponValue.setText(couponBean.getValue()+"");
             /*
              *过期时间、商家尚未设置
              * couponViewHolder.textCouponSill.setText(couponBean.getSill());

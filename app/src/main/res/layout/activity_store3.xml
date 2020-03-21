@@ -95,10 +95,10 @@
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tabLayoutStore3"
-                android:layout_marginTop="20dp"
-                android:background="#FFFFFF"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"/>
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:background="#FFFFFF" />
 
             <FrameLayout
                 android:id="@+id/frameStore3"

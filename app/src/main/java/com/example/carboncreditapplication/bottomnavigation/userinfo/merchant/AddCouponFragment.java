@@ -174,6 +174,7 @@ public class AddCouponFragment extends Fragment {
      * 向后台提交要添加的优惠券的相关数据
      */
     public void postCouponInfo(){
+
     }
 
     /**

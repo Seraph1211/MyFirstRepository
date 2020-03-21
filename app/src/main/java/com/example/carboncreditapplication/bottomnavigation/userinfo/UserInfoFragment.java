@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
 import com.example.carboncreditapplication.utils.NetworkUtil;
 import com.example.carboncreditapplication.utils.ToastUtils;
+import com.example.carboncreditapplication.utils.UserInfo;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -45,6 +47,8 @@ import okhttp3.Response;
 import static android.support.constraint.Constraints.TAG;
 
 public class UserInfoFragment extends Fragment implements View.OnClickListener{
+
+    private SwipeRefreshLayout srUserInfo;
 
     private TextView textUserName;  //用户昵称
     private CircleImageView imageHeadPortrait;  //用户头像
@@ -87,19 +91,52 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
         return view;
     }
 
-    public void queryUserInfo(){
-        CustomProgressDialogUtils.showLoading(getContext());
+    public void initSwipeRefresh(){
+        srUserInfo = view.findViewById(R.id.sr_user_info);
 
-      HttpUtils.getInfo(HttpUtils.userInfoUrl, new Callback() {
+        srUserInfo.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                queryCarbonCreditsInfo();
+                queryUserInfo();
+            }
+        });
+    }
+
+    /**
+     * 结束刷新
+     */
+    public void finishSwipeRefresh(){
+        if(srUserInfo.isRefreshing()){
+            srUserInfo.post(new Runnable() {
+                @Override
+                public void run() {
+                    srUserInfo.setRefreshing(false);
+                }
+            });
+        }
+    }
+
+    public void queryUserInfo(){
+        //CustomProgressDialogUtils.showLoading(getContext());
+        if(!NetworkUtil.isNetworkAvailable(getContext())){
+            ToastUtils.showToast(getContext(), "未连接网络");
+            finishSwipeRefresh();
+            return;
+        }
+
+      HttpUtils.getInfo(HttpUtils.userInfoUrl+"?user_id="+UserInfo.userId, new Callback() {
            @Override
            public void onFailure(Call call, IOException e) {
                ToastUtils.showToast(getContext(), "服务器错误");
                Log.d(TAG, "onFailure: 从服务器读取用户信息失败！");
+               finishSwipeRefresh();
            }
 
            @Override
            public void onResponse(Call call, Response response) throws IOException {
-               CustomProgressDialogUtils.stopLoading();
+               //CustomProgressDialogUtils.stopLoading();
+               finishSwipeRefresh();
 
                int code = response.code();
                Log.d(TAG, "onResponse: code="+code);
@@ -119,11 +156,13 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
                                textUserName.setText(userInfoBean.getResultBean().getNickname());  //设置用户昵称
                                Glide.with(UserInfoFragment.this)
                                        .load(userInfoBean.getResultBean().getUserImagePath())
-                                       .error(R.drawable.error)
-                                       .placeholder(R.drawable.girl)
+                                       .error(R.drawable.head_picture)
                                        .into(imageHeadPortrait);
+
+
                            }
                        });
+                       finishSwipeRefresh();
                    }
 
                }else {
@@ -135,14 +174,24 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
     }
 
     public void queryCarbonCreditsInfo(){
-        HttpUtils.getInfo(HttpUtils.carbonCreditsInfoUrl, new Callback() {
+        if(!NetworkUtil.isNetworkAvailable(getContext())){
+            ToastUtils.showToast(getContext(), "未连接网络");
+            finishSwipeRefresh();
+            return;
+        }
+
+        HttpUtils.getInfo(HttpUtils.carbonCreditsInfoUrl+"&mileage_walk_today="+MySharedPreferencesUtils.getInt(getContext(), "step_count_today")*0.00065,
+                new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.d(TAG, "onFailure: 从服务器读取碳积分信息失败！");
+                finishSwipeRefresh();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                finishSwipeRefresh();
+
                 int code = response.code();
                 Log.d(TAG, "onResponse: code="+code);
 
@@ -160,13 +209,14 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
                         availableCarbonCredits = carbonCreditsInfoBean.getResultBean().getCarbonCreditsAvailable();
                         totalCarbonCredits = carbonCreditsInfoBean.getResultBean().getCarbonCreditsTotal();
                         readyToGetCarbonCredits = carbonCreditsInfoBean.getResultBean().getCarbonCreditsToday();
-
+                        finishSwipeRefresh();
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 textUserTotalCarbonCredits.setText(String.valueOf(carbonCreditsInfoBean.getResultBean().getCarbonCreditsTotal()));  //设置用户总碳积分
                                 textUserReadyToGetCredits.setText(String.valueOf(carbonCreditsInfoBean.getResultBean().getCarbonCreditsToday()));  //设置用户待领取的碳积分
                                 textUserAvailableCredits.setText(String.valueOf(carbonCreditsInfoBean.getResultBean().getCarbonCreditsAvailable()));  //设置用户可用碳积分
+
                             }
                         });
                     }
@@ -208,6 +258,8 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
         clCallUs.setOnClickListener(this);
 
 
+        initSwipeRefresh();
+
         //userInfoBean = new UserInfoBean();
         //carbonCreditsInfoBean = new CarbonCreditsInfoBean();
     }
@@ -228,6 +280,12 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
                 ToastUtils.showToast(getContext(), "未连接网络");
                 return;
             }
+            srUserInfo.post(new Runnable() {
+                @Override
+                public void run() {
+                    srUserInfo.setRefreshing(true);
+                }
+            });
             queryUserInfo();
             queryCarbonCreditsInfo();
         }else{
@@ -238,8 +296,8 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
             textUserName.setText(userNickname);
             Glide.with(UserInfoFragment.this)
                     .load(userHeadPortrait)
-                    .error(R.drawable.error)
-                    .placeholder(R.drawable.girl)
+                    .error(R.drawable.head_picture)
+                    .placeholder(R.drawable.head_picture)
                     .into(imageHeadPortrait);
         }
     }
@@ -248,7 +306,7 @@ public class UserInfoFragment extends Fragment implements View.OnClickListener{
      * 一键领取待领取的碳积分
      */
     public void getCredits(){
-        HttpUtils.getInfo(HttpUtils.getCarbonCreditsUrl, new Callback() {
+        HttpUtils.getInfo(HttpUtils.getCarbonCreditsUrl+"?user_id="+UserInfo.userId, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtils.showToast(getContext(), "服务器故障");

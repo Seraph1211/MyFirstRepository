@@ -60,6 +60,7 @@ public class CardPackageRecyclerViewAdapter extends RecyclerView.Adapter<CardPac
     public void onBindViewHolder(@NonNull CardViewHolder cardViewHolder, final int i) {
         final CardPackageBean.ResultBean.CouponBagBean couponBagBean= cardInfoBeanList.get(i);
         cardViewHolder.textCardName.setText(couponBagBean.getCoupon_name());
+        cardViewHolder.textCardValue.setText(""+couponBagBean.getValue());
 
         /*尚未设置的属性  超多的 couponBagBean
         cardViewHolder.textCardValue.setText(String.);

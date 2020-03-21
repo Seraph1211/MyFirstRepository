@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import com.example.carboncreditapplication.utils.HttpUtils;
 import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
 import com.example.carboncreditapplication.utils.NetworkUtil;
 import com.example.carboncreditapplication.utils.ToastUtils;
+import com.example.carboncreditapplication.utils.UserInfo;
 import com.google.gson.Gson;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -49,6 +51,8 @@ public class HomeFragment extends Fragment {
 
     View view;
     private BottomNavigationActivity activity;
+
+    private SwipeRefreshLayout srHome;
 
     private TextView textSubwayMileagesTotal;
     private TextView textSubwayMileagesYesterday;
@@ -79,7 +83,7 @@ public class HomeFragment extends Fragment {
 
         initBanner();
         initView();
-        //initData();
+        initData();
 
         return view;
     }
@@ -100,6 +104,29 @@ public class HomeFragment extends Fragment {
         textBikeMileagesYesterday = view.findViewById(R.id.textBikeMileagesYesterday);
         textWalkMileagesTotal = view.findViewById(R.id.textWalkMileagesTotal);
         textWalkMileagesYesterday = view.findViewById(R.id.textWalkMileagesYesterday);
+
+        initSwipeRefresh();
+    }
+
+    public void initSwipeRefresh(){
+        srHome = view.findViewById(R.id.sr_home);
+
+        /*
+        srHome.post(new Runnable() {
+            @Override
+            public void run() {
+                srHome.setRefreshing(true);
+            }
+        });
+         */
+
+        srHome.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                queryCarbonCreditsInfo();
+                queryUserInfo();
+            }
+        });
     }
 
     public void initData(){
@@ -107,9 +134,21 @@ public class HomeFragment extends Fragment {
         hasCreditsInfo = MySharedPreferencesUtils.getBoolean(getContext(), "has_credits_info");
         Log.d(TAG, "initData: hasUserInfo="+hasUserInfo+" hasCreditsInfo="+hasCreditsInfo);
         if(!hasUserInfo){  //本地没有保存User模块的信息
+            srHome.post(new Runnable() {
+                @Override
+                public void run() {
+                    srHome.setRefreshing(true);
+                }
+            });
             queryUserInfo();
         }
         if (!hasCreditsInfo){ //本地没有保存Credits模块的信息（碳积分、里程）
+            srHome.post(new Runnable() {
+                @Override
+                public void run() {
+                    srHome.setRefreshing(true);
+                }
+            });
             queryCarbonCreditsInfo();
         }else {
             getMileageInfoFromSP();
@@ -126,10 +165,10 @@ public class HomeFragment extends Fragment {
         imageUrlList.add(R.drawable.banner_3);
         imageUrlList.add(R.drawable.banner_4);
 
-        titleList.add("标题1");
-        titleList.add("标题2");
-        titleList.add("标题3");
-        titleList.add("标题4");
+        titleList.add("低碳环保，新能源出行");
+        titleList.add("健康生活，低碳出行");
+        titleList.add("爱护地球，人人有责");
+        titleList.add("3.30 地球一小时");
 
         banner = view.findViewById(R.id.bannerHome);
         banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
@@ -145,24 +184,43 @@ public class HomeFragment extends Fragment {
     }
 
     /**
+     * 结束刷新
+     */
+    public void finishSwipeRefresh(){
+        if(srHome.isRefreshing()){
+            srHome.post(new Runnable() {
+                @Override
+                public void run() {
+                    srHome.setRefreshing(false);
+                }
+            });
+
+        }
+    }
+
+    /**
      * 从服务器获取用户信息并保存在本地
      */
     public void queryUserInfo(){
         //CustomProgressDialogUtils.showLoading(BottomNavigationActivity.this);
         if(!NetworkUtil.isNetworkAvailable(getContext())){
             ToastUtils.showToast(getContext(), "未连接网络");
+            finishSwipeRefresh();
             return;
         }
 
-        HttpUtils.getInfo(HttpUtils.userInfoUrl, new Callback() {
+        HttpUtils.getInfo(HttpUtils.userInfoUrl+"?user_id="+UserInfo.userId, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtils.showToast(getContext(), "服务器错误");
                 Log.d(TAG, "onFailure: 从服务器读取用户信息失败！");
+                finishSwipeRefresh();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                finishSwipeRefresh();
+
                 int code = response.code();
                 Log.d(TAG, "UserInfo: code="+code);
 
@@ -194,10 +252,12 @@ public class HomeFragment extends Fragment {
         // CustomProgressDialogUtils.showLoading(BottomNavigationActivity.this);
         if(!NetworkUtil.isNetworkAvailable(getContext())){
             ToastUtils.showToast(getContext(), "未连接网络");
+            finishSwipeRefresh();
             return;
         }
 
-        HttpUtils.getInfo(HttpUtils.carbonCreditsInfoUrl, new Callback() {
+        HttpUtils.getInfo(HttpUtils.carbonCreditsInfoUrl+"&mileage_walk_today="+MySharedPreferencesUtils.getInt(getContext(), "step_count_today")*0.00065,
+                new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 activity.runOnUiThread(new Runnable() {
@@ -207,11 +267,14 @@ public class HomeFragment extends Fragment {
                         Toast.makeText(activity, "服务器故障", Toast.LENGTH_SHORT).show();
                     }
                 });
+                finishSwipeRefresh();
                 Log.d(TAG, "onFailure: 从服务器读取碳积分信息失败！");
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                finishSwipeRefresh();
+
                 int code = response.code();
                 Log.d(TAG, "CarbonCredits code="+code);
 
@@ -225,7 +288,6 @@ public class HomeFragment extends Fragment {
                     if(msgCode.equals("0000")){  //获取数据成功
                         MySharedPreferencesUtils.saveUserInfo(getContext(), carbonCreditsInfoBean.getResultBean());
                         MySharedPreferencesUtils.putBoolean(getContext(), "has_credits_info", true);
-
                         reloadMileageInfo();
                     }else {  //失败，则提示用户错误信息
                         ToastUtils.showToast(getContext(), carbonCreditsInfoBean.getMsg_message());
@@ -246,6 +308,8 @@ public class HomeFragment extends Fragment {
         textBikeMileagesYesterday.setText(bikeMileagesYesterday+"");
         textWalkMileagesTotal.setText(walkMileagesTotal+"");
         textWalkMileagesYesterday.setText(walkMileagesYesterday+"");
+
+        finishSwipeRefresh();  //结束SwipeRefresh的刷新
     }
 
     public void getMileageInfoFromSP(){

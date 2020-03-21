@@ -35,7 +35,7 @@ public class CommodityBean implements Serializable {
         private int commodityId;  //商品id
 
         @SerializedName("commodity_picture")
-        private String commodityPicture;  //商品图片路径
+        private int commodityPicture;  //商品图片路径
 
         @SerializedName("commodity_name")
         private String commodityName;  //商品名称
@@ -53,6 +53,26 @@ public class CommodityBean implements Serializable {
         @SerializedName("discount_useful")
         private int discountUseful;  //可用优惠类型
 
+        private int remaining;  //剩余数量
+
+        private int carbonCreditsNeeds;  //所需碳积分
+
+        public int getCarbonCreditsNeeds() {
+            return carbonCreditsNeeds;
+        }
+
+        public void setCarbonCreditsNeeds(int carbonCreditsNeeds) {
+            this.carbonCreditsNeeds = carbonCreditsNeeds;
+        }
+
+        public int getRemaining() {
+            return remaining;
+        }
+
+        public void setRemaining(int remaining) {
+            this.remaining = remaining;
+        }
+
         public int getCommodityId() {
             return commodityId;
         }
@@ -61,11 +81,11 @@ public class CommodityBean implements Serializable {
             this.commodityId = commodityId;
         }
 
-        public String getCommodityPicture() {
+        public int getCommodityPicture() {
             return commodityPicture;
         }
 
-        public void setCommodityPicture(String commodityPicture) {
+        public void setCommodityPicture(int commodityPicture) {
             this.commodityPicture = commodityPicture;
         }
 

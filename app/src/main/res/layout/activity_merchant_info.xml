@@ -260,12 +260,12 @@
         android:background="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginTop="440dp"
+        android:layout_marginTop="40dp"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
         android:orientation="horizontal"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/linearMerchantInfo">
 
         <TextView
             android:layout_width="wrap_content"
@@ -292,7 +292,7 @@
             android:id="@+id/imageMerchantInfo6"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_marginTop="7.5dp"
+            android:layout_marginTop="17.5dp"
             android:layout_marginRight="5dp"
             android:background="@drawable/jump_to_8d8d8d"
             app:layout_constraintEnd_toEndOf="parent"

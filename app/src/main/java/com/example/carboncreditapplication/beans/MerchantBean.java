@@ -13,6 +13,7 @@ public class MerchantBean implements Serializable {
      * merchantName : zyx
      */
 
+    private int userId;
     private String merchantPhoneNumber;
     private String merchantImage;
     private String merchantEmail;
@@ -26,6 +27,14 @@ public class MerchantBean implements Serializable {
 
     public void setMerchantPhoneNumber(String merchantPhoneNumber) {
         this.merchantPhoneNumber = merchantPhoneNumber;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getMerchantImage() {

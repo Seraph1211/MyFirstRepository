@@ -8,7 +8,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
-        android:id="@+id/imageCommodity"
+        android:id="@+id/imageSecondHandGoods"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:src="@drawable/commodity"
@@ -16,21 +16,21 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
-        android:id="@+id/textCommodityName"
+        android:id="@+id/textSecondHandGoodsName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:text="Commodity Name"
         android:maxLines="2"
+        android:ellipsize="end"
         android:textSize="18sp"
-        android:textColor="@android:color/black"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/imageCommodity"/>
+        app:layout_constraintLeft_toRightOf="@id/imageSecondHandGoods"/>
 
 
 
     <TextView
-        android:id="@+id/text45"
+        android:id="@+id/text46"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -40,10 +40,10 @@
         android:textSize="16sp"
         android:textColor="@android:color/holo_red_light"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/imageCommodity"/>
+        app:layout_constraintLeft_toRightOf="@id/imageSecondHandGoods"/>
 
     <TextView
-        android:id="@+id/textCommodityPrice"
+        android:id="@+id/textSecondHandGoodsPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
@@ -51,10 +51,10 @@
         android:textSize="22sp"
         android:textColor="@android:color/holo_red_light"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/text45"/>
+        app:layout_constraintLeft_toRightOf="@id/text46"/>
 
     <TextView
-        android:id="@+id/text54"
+        android:id="@+id/text55"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="5dp"
@@ -63,10 +63,10 @@
         android:textSize="18sp"
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/textCommodityPrice"/>
+        app:layout_constraintLeft_toRightOf="@id/textSecondHandGoodsPrice"/>
 
     <TextView
-        android:id="@+id/textCommodityCreditsCost"
+        android:id="@+id/textSecondHandCreditsCost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
@@ -74,7 +74,7 @@
         android:textSize="22sp"
         android:textColor="@android:color/holo_orange_light"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/text54"/>
+        app:layout_constraintLeft_toRightOf="@id/text55"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -84,6 +84,6 @@
         android:textColor="@android:color/darker_gray"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/textCommodityCreditsCost"/>
+        app:layout_constraintLeft_toRightOf="@id/textSecondHandCreditsCost"/>
 
 </android.support.constraint.ConstraintLayout>

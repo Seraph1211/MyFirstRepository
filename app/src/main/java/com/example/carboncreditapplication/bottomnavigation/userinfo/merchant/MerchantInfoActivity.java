@@ -74,6 +74,14 @@ public class MerchantInfoActivity extends AppCompatActivity implements View.OnCl
         initData();
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart: name="+bean.getMerchantName());
+        Log.d(TAG, "onRestart: bean="+bean);
+
+        initData();
+    }
 
     public void initView(){
         name = findViewById(R.id.constraintLayoutMerchantInfoName);
@@ -98,6 +106,7 @@ public class MerchantInfoActivity extends AppCompatActivity implements View.OnCl
     }
 
     public void initData(){
+        bean.setUserId(2);
         merchantId = MySharedPreferencesUtils.getInt(MerchantInfoActivity.this, "merchant_id");
         merchantName = MySharedPreferencesUtils.getString(MerchantInfoActivity.this, "merchant_name");
         merchantPhone = MySharedPreferencesUtils.getString(MerchantInfoActivity.this, "merchant_phone");

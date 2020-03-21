@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.example.carboncreditapplication.R;
 import com.example.carboncreditapplication.bottomnavigation.userinfo.team.NoTeamFragment;
 import com.example.carboncreditapplication.utils.HttpUtils;
+import com.example.carboncreditapplication.utils.MySharedPreferencesUtils;
 import com.example.carboncreditapplication.utils.StatusBarUtils;
 import com.example.carboncreditapplication.utils.ToastUtils;
 
@@ -73,6 +74,8 @@ public class Store3Activity extends AppCompatActivity implements TabLayout.OnTab
         tabLayout = findViewById(R.id.tabLayoutStore3);
         tvAvailableCredits = findViewById(R.id.textCreditsStore3);
         btnShoppingRecord = findViewById(R.id.buttonToShoppingCredits);
+
+        tvAvailableCredits.setText(MySharedPreferencesUtils.getInt(Store3Activity.this, "carbon_credits_available")+"");
 
         initTab();
 
